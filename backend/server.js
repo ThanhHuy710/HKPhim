@@ -1,5 +1,5 @@
 import express from "express"; // Framework để tạo server HTTP
-import taskRoute from "./src/routes/tasksRouters.js"; // Định nghĩa các endpoint liên quan đến tasks
+import taskRoute from "./src/routes/films.js"; // Định nghĩa các endpoint liên quan đến tasks
 import { connectDB } from "./src/config/db.js"; // Hàm kết nối đến database
 import dotenv from "dotenv"; // Đọc biến môi trường từ file .env
 import cors from "cors"; // Cho phép truy cập từ domain khác (Cross-Origin Resource Sharing)

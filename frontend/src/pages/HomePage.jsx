@@ -4,7 +4,6 @@ import { toast } from "sonner";
 
 export default function HomePage() {
   const [films, setFilms] = useState([]);
-
   useEffect(() => {
     const fetchFilms = async () => {
       try {
