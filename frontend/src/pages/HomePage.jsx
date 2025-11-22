@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import api from "../lib/axios"; // axios instance
 import { toast } from "sonner";
-
+import Hls from 'hls.js';
 export default function HomePage() {
+  //list phim
   const [films, setFilms] = useState([]);
   useEffect(() => {
     const fetchFilms = async () => {
@@ -17,8 +18,22 @@ export default function HomePage() {
 
     fetchFilms();
   }, []);
+  //show phim
+  const videoRef = useRef();
 
+  useEffect(() => {
+    const video = videoRef.current;
+    const hls = new Hls();
+
+    hls.loadSource('https://s4.phim1280.tv/20250325/15U0OSx5/index.m3u8');
+    hls.attachMedia(video);
+
+    return () => {
+      hls.destroy();
+    };
+  }, []);
   return (
+    <>  
     <div >
       <h2> Danh sách phim</h2>
       <ul>
@@ -29,5 +44,10 @@ export default function HomePage() {
         ))}
       </ul>
     </div>
+    <div>
+       <video ref={videoRef} controls width="100%" />
+    </div>
+    </>
+
   );
 }
