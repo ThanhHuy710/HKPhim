@@ -15,8 +15,8 @@ export default function HomePage() {
 
   const fetchFilms = async () => {
     try {
-      const res = await api.get("/tasks");
-      setFilms(res.data.films || []);
+      const res = await api.get("/films");
+      setFilms(res.data.data || []);
     } catch (error) {
       console.error("Lỗi:", error);
       toast.error("Không thể tải phim");

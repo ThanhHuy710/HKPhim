@@ -2,13 +2,7 @@ import { responseSuccess } from "../common/helper/function.helper.js";
 import { filmsService } from "../services/films.services.js";
 
 export const filmsController = {
-    findAll: async function (req, res, next) {
-      const result = await filmsService.findAll(req);
-      const response = responseSuccess(result, `Get all filmss successfully`);
-      res.status(response.statusCode).json(response);
-   },
-   
- 
+
    
    // CRUD
     create: async function (req, res, next) {
@@ -19,7 +13,7 @@ export const filmsController = {
 
    findAll: async function (req, res, next) {
       const result = await filmsService.findAll(req);
-      const response = responseSuccess(result, `Get all filmss successfully`);
+      const response = responseSuccess(result, `Get all films successfully`);
       res.status(response.statusCode).json(response);
    },
 

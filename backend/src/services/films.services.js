@@ -19,7 +19,11 @@ export const filmsService = {
                include: {
                   genres: true
                }
-            }
+            },
+            episodes: true,   
+            favorites: true,    
+            feedbacks: true,    
+            views: true         
          }
       });
       
@@ -28,20 +32,41 @@ export const filmsService = {
 
 
 
-    // CRUD
-   create: async function (req) {
-      return `This action create`;
-   },
+   // CRUD
+  create: async function (req) {
+    return await prisma.films.create({
+      data: req.body
+    });
+  },
 
-   findOne: async function (req) {
-      return `This action returns a id: ${req.params.id} films`;
-   },
+  findOne: async function (req) {
+    const id = Number(req.params.id);
+    return await prisma.films.findUnique({
+      where: { id },
+      include: {
+        film_genres: { include: { genres: true } },
+        episodes: true,
+        favorites: true,
+        feedbacks: true,
+        views: true
+      }
+    });
+  },
 
-   update: async function (req) {
-      return `This action updates a id: ${req.params.id} films`;
-   },
+  update: async function (req) {
+    const id = Number(req.params.id);
+    return await prisma.films.update({
+      where: { id },
+      data: req.body
+    });
+  },
 
-   remove: async function (req) {
-      return `This action removes a id: ${req.params.id} films`;
-   },
+  remove: async function (req) {
+    const id = Number(req.params.id);
+    return await prisma.films.delete({
+      where: { id }
+    });
+  }
+
+
 };
