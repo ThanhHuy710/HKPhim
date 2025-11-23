@@ -1,53 +1,62 @@
-import { useEffect, useRef, useState } from "react";
-import api from "../lib/axios"; // axios instance
+import { useEffect, useState } from "react";
+import api from "../lib/axios";
 import { toast } from "sonner";
-import Hls from 'hls.js';
-export default function HomePage() {
-  //list phim
-  const [films, setFilms] = useState([]);
-  useEffect(() => {
-    const fetchFilms = async () => {
-      try {
-        const res = await api.get("/tasks"); // gọi API backend
-        setFilms(res.data.films); // lưu danh sách phim vào state
-      } catch (error) {
-        console.error("Lỗi khi truy xuất Films:", error);
-        toast.error("Không thể tải danh sách phim.");
-      }
-    };
+import Layout from "../components/layout/Layout";
+import HeroSection from "../components/HeroSection";
+import MovieRow from "../components/MovieRow";
 
+export default function HomePage() {
+  const [films, setFilms] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
     fetchFilms();
   }, []);
-  //show phim
-  const videoRef = useRef();
 
-  useEffect(() => {
-    const video = videoRef.current;
-    const hls = new Hls();
+  const fetchFilms = async () => {
+    try {
+      const res = await api.get("/tasks");
+      setFilms(res.data.films || []);
+    } catch (error) {
+      console.error("Lỗi:", error);
+      toast.error("Không thể tải phim");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    hls.loadSource('https://s4.phim1280.tv/20250325/15U0OSx5/index.m3u8');
-    hls.attachMedia(video);
+  if (loading) {
+    return (
+      <Layout>
+        <div className="loading-page">Đang tải...</div>
+      </Layout>
+    );
+  }
 
-    return () => {
-      hls.destroy();
-    };
-  }, []);
   return (
-    <>  
-    <div >
-      <h2> Danh sách phim</h2>
-      <ul>
-        {films.map((films) => (
-          <li key={films.id}>
-            <strong>{films.title}</strong> ({films.year})  {films.country}
-          </li>
-        ))}
-      </ul>
-    </div>
-    <div>
-       <video ref={videoRef} controls width="100%" />
-    </div>
-    </>
-
+    <Layout>
+      <HeroSection />
+      
+      <div className="movie-sections">
+        <MovieRow 
+          title="Phim Hot" 
+          films={films.slice(0, 10)}
+          viewAllLink="/phim-hot"
+        />
+        
+        <MovieRow 
+          title="Phổ Biến" 
+          films={films.slice(10, 20)}
+          viewAllLink="/phim-pho-bien"
+        />
+        
+        <MovieRow 
+          title="Mới Cập Nhật" 
+          films={films.slice(20, 30)}
+          viewAllLink="/moi-cap-nhat"
+        />
+      </div>
+    </Layout>
   );
 }
+

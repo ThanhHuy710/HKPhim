@@ -1,0 +1,186 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/common/prisma/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model cart {
+  id       Int      @id @default(autoincrement())
+  user_id  Int?
+  plan_id  Int?
+  added_at DateTime @default(now()) @db.Timestamp(0)
+  users    users?   @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "cart_ibfk_1")
+  plans    plans?   @relation(fields: [plan_id], references: [id], onDelete: Cascade, map: "cart_ibfk_2")
+
+  @@index([plan_id], map: "plan_id")
+  @@index([user_id], map: "user_id")
+}
+
+model episodes {
+  id           Int           @id @default(autoincrement())
+  film_id      Int?
+  episode_name String?       @db.VarChar(255)
+  video_url    String?       @db.Text
+  sub_url      String?       @db.Text
+  created_at   DateTime      @default(now()) @db.Timestamp(0)
+  updated_at   DateTime      @default(now()) @db.Timestamp(0)
+  films        films?        @relation(fields: [film_id], references: [id], onDelete: Cascade, map: "episodes_ibfk_1")
+  video_files  video_files[]
+  views        views[]
+
+  @@index([film_id], map: "film_id")
+}
+
+model favorites {
+  id       Int      @id @default(autoincrement())
+  film_id  Int?
+  user_id  Int?
+  added_at DateTime @default(now()) @db.Timestamp(0)
+  films    films?   @relation(fields: [film_id], references: [id], onDelete: Cascade, map: "favorites_ibfk_1")
+  users    users?   @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "favorites_ibfk_2")
+
+  @@unique([user_id, film_id], map: "unique_favorite")
+  @@index([film_id], map: "film_id")
+}
+
+model feedbacks {
+  id         Int      @id @default(autoincrement())
+  film_id    Int?
+  user_id    Int?
+  comment    String?  @db.Text
+  rating     Int?
+  created_at DateTime @default(now()) @db.Timestamp(0)
+  updated_at DateTime @default(now()) @db.Timestamp(0)
+  films      films?   @relation(fields: [film_id], references: [id], onDelete: Cascade, map: "feedbacks_ibfk_1")
+  users      users?   @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "feedbacks_ibfk_2")
+
+  @@index([film_id], map: "film_id")
+  @@index([user_id], map: "user_id")
+}
+
+model film_genres {
+  id        Int     @id @default(autoincrement())
+  genres_id Int?
+  film_id   Int?
+  genres    genres? @relation(fields: [genres_id], references: [id], onDelete: Cascade, map: "film_genres_ibfk_1")
+  films     films?  @relation(fields: [film_id], references: [id], onDelete: Cascade, map: "film_genres_ibfk_2")
+
+  @@index([film_id], map: "film_id")
+  @@index([genres_id], map: "genres_id")
+}
+
+model films {
+  id               Int           @id @default(autoincrement())
+  title            String?       @db.VarChar(255)
+  poster_url       String?       @db.Text
+  description      String?       @db.Text
+  year             Int?
+  country          String?       @db.VarChar(100)
+  duration         String?       @db.VarChar(50)
+  poster_video_url String?       @db.Text
+  actor            String?       @db.Text
+  is_series        Boolean?
+  directeur        String?       @db.VarChar(255)
+  age_rating       String?       @db.VarChar(20)
+  created_at       DateTime      @default(now()) @db.Timestamp(0)
+  updated_at       DateTime      @default(now()) @db.Timestamp(0)
+  view_count       Int?          @default(0)
+  average_rating   Decimal?      @default(0.00) @db.Decimal(3, 2)
+  episodes         episodes[]
+  favorites        favorites[]
+  feedbacks        feedbacks[]
+  film_genres      film_genres[]
+  views            views[]
+}
+
+model genres {
+  id          Int           @id @default(autoincrement())
+  name        String?       @db.VarChar(100)
+  created_at  DateTime      @default(now()) @db.Timestamp(0)
+  updated_at  DateTime      @default(now()) @db.Timestamp(0)
+  film_genres film_genres[]
+}
+
+model invoices {
+  id             Int       @id @default(autoincrement())
+  user_id        Int?
+  plan_id        Int?
+  total_price    Decimal?  @db.Decimal(10, 2)
+  payment_method String?   @db.VarChar(50)
+  status         String?   @db.VarChar(50)
+  start_date     DateTime? @db.Date
+  end_date       DateTime? @db.Date
+  created_at     DateTime  @default(now()) @db.Timestamp(0)
+  users          users?    @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "invoices_ibfk_1")
+  plans          plans?    @relation(fields: [plan_id], references: [id], onDelete: Cascade, map: "invoices_ibfk_2")
+
+  @@index([plan_id], map: "plan_id")
+  @@index([user_id], map: "user_id")
+}
+
+model plans {
+  id            Int        @id @default(autoincrement())
+  name          String?    @db.VarChar(255)
+  price         Decimal?   @db.Decimal(10, 2)
+  duration_days Int?
+  created_at    DateTime   @default(now()) @db.Timestamp(0)
+  updated_at    DateTime   @default(now()) @db.Timestamp(0)
+  cart          cart[]
+  invoices      invoices[]
+  users         users[]
+}
+
+model users {
+  id          Int         @id @default(autoincrement())
+  plan_id     Int?
+  username    String?     @db.VarChar(255)
+  password    String?     @db.VarChar(255)
+  role        String?     @db.VarChar(50)
+  fullname    String?     @db.VarChar(255)
+  phonenumber String?     @db.VarChar(20)
+  email       String?     @db.VarChar(255)
+  city        String?     @db.VarChar(255)
+  gender      String?     @db.VarChar(50)
+  interest    String?     @db.VarChar(255)
+  birthday    DateTime?   @db.Date
+  created_at  DateTime    @default(now()) @db.Timestamp(0)
+  updated_at  DateTime    @default(now()) @db.Timestamp(0)
+  cart        cart[]
+  favorites   favorites[]
+  feedbacks   feedbacks[]
+  invoices    invoices[]
+  plans       plans?      @relation(fields: [plan_id], references: [id], map: "users_ibfk_1")
+  views       views[]
+
+  @@index([plan_id], map: "plan_id")
+}
+
+model video_files {
+  id         Int       @id @default(autoincrement())
+  episode_id Int?
+  quality    String?   @db.VarChar(50)
+  file_url   String?   @db.Text
+  episodes   episodes? @relation(fields: [episode_id], references: [id], onDelete: Cascade, map: "video_files_ibfk_1")
+
+  @@index([episode_id], map: "episode_id")
+}
+
+model views {
+  id         Int       @id @default(autoincrement())
+  film_id    Int?
+  episode_id Int?
+  user_id    Int?
+  viewed_at  DateTime  @default(now()) @db.Timestamp(0)
+  progress   Int?
+  films      films?    @relation(fields: [film_id], references: [id], onDelete: Cascade, map: "views_ibfk_1")
+  episodes   episodes? @relation(fields: [episode_id], references: [id], onDelete: Cascade, map: "views_ibfk_2")
+  users      users?    @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "views_ibfk_3")
+
+  @@index([episode_id], map: "episode_id")
+  @@index([film_id], map: "film_id")
+  @@index([user_id], map: "user_id")
+}
