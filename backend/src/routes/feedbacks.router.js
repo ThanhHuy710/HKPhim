@@ -3,7 +3,6 @@ import { feedbacksController } from '../controllers/feedbacks.controller.js';
 
 const feedbacksRouter = express.Router();
 
-feedbacksRouter.get('/', feedbacksController.findAll);
 
 // Tạo route CRUD
 feedbacksRouter.post('/', feedbacksController.create);

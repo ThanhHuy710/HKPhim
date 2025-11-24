@@ -3,7 +3,6 @@ import { episodesController } from '../controllers/episodes.controller.js';
 
 const episodesRouter = express.Router();
 
-episodesRouter.get('/', episodesController.findAll);
 
 // Tạo route CRUD
 episodesRouter.post('/', episodesController.create);

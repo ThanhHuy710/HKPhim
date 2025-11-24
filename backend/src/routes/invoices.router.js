@@ -3,7 +3,6 @@ import { invoicesController } from '../controllers/invoices.controller.js';
 
 const invoicesRouter = express.Router();
 
-invoicesRouter.get('/', invoicesController.findAll);
 
 // Tạo route CRUD
 invoicesRouter.post('/', invoicesController.create);

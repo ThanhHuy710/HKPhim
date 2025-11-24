@@ -3,7 +3,6 @@ import { filmsController } from '../controllers/films.controller.js';
 
 const filmsRouter = express.Router();
 
-filmsRouter.get('/', filmsController.findAll);
 
 // Tạo route CRUD
 filmsRouter.post('/', filmsController.create);

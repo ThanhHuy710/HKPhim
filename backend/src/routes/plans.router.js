@@ -3,8 +3,6 @@ import { plansController } from '../controllers/plans.controller.js';
 
 const plansRouter = express.Router();
 
-plansRouter.get('/', plansController.findAll);
-
 // Tạo route CRUD
 plansRouter.post('/', plansController.create);
 plansRouter.get('/', plansController.findAll);

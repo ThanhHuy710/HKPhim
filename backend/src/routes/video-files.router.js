@@ -3,7 +3,6 @@ import { videoFilesController } from '../controllers/video-files.controller.js';
 
 const videoFilesRouter = express.Router();
 
-videoFilesRouter.get('/', videoFilesController.findAll);
 
 // Tạo route CRUD
 videoFilesRouter.post('/', videoFilesController.create);

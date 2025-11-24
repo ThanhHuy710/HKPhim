@@ -3,7 +3,6 @@ import { viewsController } from '../controllers/views.controller.js';
 
 const viewsRouter = express.Router();
 
-viewsRouter.get('/', viewsController.findAll);
 
 // Tạo route CRUD
 viewsRouter.post('/', viewsController.create);

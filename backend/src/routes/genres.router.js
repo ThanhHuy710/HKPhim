@@ -3,7 +3,6 @@ import { genresController } from '../controllers/genres.controller.js';
 
 const genresRouter = express.Router();
 
-genresRouter.get('/', genresController.findAll);
 
 // Tạo route CRUD
 genresRouter.post('/', genresController.create);

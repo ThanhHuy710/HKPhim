@@ -3,7 +3,6 @@ import { favoritesController } from '../controllers/favorites.controller.js';
 
 const favoritesRouter = express.Router();
 
-favoritesRouter.get('/', favoritesController.findAll);
 
 // Tạo route CRUD
 favoritesRouter.post('/', favoritesController.create);

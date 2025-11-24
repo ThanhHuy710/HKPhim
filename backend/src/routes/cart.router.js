@@ -3,7 +3,6 @@ import { cartController } from '../controllers/cart.controller.js';
 
 const cartRouter = express.Router();
 
-cartRouter.get('/', cartController.findAll);
 
 // Tạo route CRUD
 cartRouter.post('/', cartController.create);

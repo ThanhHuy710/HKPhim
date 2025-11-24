@@ -3,7 +3,6 @@ import { usersController } from '../controllers/users.controller.js';
 
 const usersRouter = express.Router();
 
-usersRouter.get('/', usersController.findAll);
 
 // Tạo route CRUD
 usersRouter.post('/', usersController.create);
