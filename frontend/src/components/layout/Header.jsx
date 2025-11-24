@@ -16,37 +16,35 @@ export default function Header() {
   };
 
   return (
-    <header className="header">
-      <div className="header-wrapper">
+    <header className="bg-black text-white shadow-md">
+      <div className="max-w-[1440px] mx-auto px-4 py-3 flex items-center">
         {/* Logo */}
-        <Link to="/" className="header-logo">
-          {/* TODO: Thay thế bằng logo thực tế - có thể là <img src="/logo.png" /> */}
-          <span className="logo-text">HKphim</span>
+        <Link to="/" className="">
+          <img src="../../../public/images/Logo.png" alt="HKphim Logo" className="h-12 w-12" />
         </Link>
 
-        {/* Navigation Menu */}
-        <nav className="header-nav">
-          <Link to="/phim-moi" className="nav-link">Phim mới</Link>
-          <Link to="/phim-bo" className="nav-link">Phim bộ</Link>
-          <Link to="/phim-le" className="nav-link">Phim lẻ</Link>
-          
-          {/* Thể loại Dropdown */}
-          <div 
-            className="nav-dropdown"
+        {/* Navigation */}
+        <nav className="hidden md:flex space-x-6 ml-12 flex-1">
+          <Link to="/phim-moi" className="hover:text-yellow-400">Phim mới</Link>
+          <Link to="/phim-bo" className="hover:text-yellow-400">Phim bộ</Link>
+          <Link to="/phim-le" className="hover:text-yellow-400">Phim lẻ</Link>
+
+          {/* Dropdown Thể loại chưa làm*/}
+          <div
+            className="relative"
             onMouseEnter={() => setShowGenres(true)}
             onMouseLeave={() => setShowGenres(false)}
           >
-            <button className="nav-link nav-link-dropdown">
-              Thể loại <ChevronDown size={14} />
+            <button className="flex items-center hover:text-yellow-400">
+              Thể loại <ChevronDown size={14} className="ml-1" />
             </button>
             {showGenres && (
-              <div className="dropdown-menu">
-                {/* TODO: Lấy từ API - GET /api/genres để lấy danh sách đầy đủ */}
-                {GENRES.map((genre, index) => (
-                  <Link 
-                    key={index}
-                    to={`/the-loai/${genre.toLowerCase().replace(/\s+/g, '-')}`}
-                    className="dropdown-item"
+              <div className="absolute mt-2 bg-gray-800 rounded shadow-lg p-2">
+                {GENRES.map((genre, i) => (
+                  <Link
+                    key={i}
+                    to={`/the-loai/${genre.toLowerCase().replace(/\s+/g, "-")}`}
+                    className="block px-3 py-1 hover:bg-gray-700 rounded"
                   >
                     {genre}
                   </Link>
@@ -55,23 +53,22 @@ export default function Header() {
             )}
           </div>
 
-          {/* Quốc gia Dropdown */}
-          <div 
-            className="nav-dropdown"
+          {/* Dropdown Quốc gia chưa làm*/}
+          <div
+            className="relative"
             onMouseEnter={() => setShowCountries(true)}
             onMouseLeave={() => setShowCountries(false)}
           >
-            <button className="nav-link nav-link-dropdown">
-              Quốc gia <ChevronDown size={14} />
+            <button className="flex items-center hover:text-yellow-400">
+              Quốc gia <ChevronDown size={14} className="ml-1" />
             </button>
             {showCountries && (
-              <div className="dropdown-menu">
-                {/* TODO: Có thể lấy từ API hoặc dùng constants như hiện tại */}
-                {COUNTRIES.map((country, index) => (
-                  <Link 
-                    key={index}
-                    to={`/quoc-gia/${country.toLowerCase().replace(/\s+/g, '-')}`}
-                    className="dropdown-item"
+              <div className="absolute mt-2 bg-gray-800 rounded shadow-lg p-2">
+                {COUNTRIES.map((country, i) => (
+                  <Link
+                    key={i}
+                    to={`/quoc-gia/${country.toLowerCase().replace(/\s+/g, "-")}`}
+                    className="block px-3 py-1 hover:bg-gray-700 rounded"
                   >
                     {country}
                   </Link>
@@ -81,22 +78,25 @@ export default function Header() {
           </div>
         </nav>
 
-        {/* Search Bar */}
-        <form onSubmit={handleSearch} className="header-search">
+        {/* Search */}
+        <form onSubmit={handleSearch} className="flex items-center bg-gray-600 rounded px-2 py-1 mr-10 ml-5 w-1/4 h-10">
+          <button type="submit" className="mr-4 hover:text-white">
+            <Search size={18} />
+          </button>
           <input
             type="text"
             placeholder="Tìm kiếm phim..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="search-input"
+            className="bg-transparent text-sm text-white placeholder-gray-400 focus:outline-none"
           />
-          <button type="submit" className="search-btn">
-            <Search size={18} />
-          </button>
         </form>
 
-        {/* Login Button */}
-        <Link to="/login" className="login-btn">
+        {/* Login */}
+        <Link
+          to="/login"
+          className="ml-4 px-4 py-2 bg-red-600 text-white-900 rounded hover:bg-red-800 font-semibold "
+        >
           Đăng nhập
         </Link>
       </div>
