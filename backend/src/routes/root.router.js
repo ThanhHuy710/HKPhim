@@ -12,10 +12,11 @@ import viewsRouter from "./views.router.js";
 import favoritesRouter from "./favorites.router.js";
 import feedbacksRouter from "./feedbacks.router.js";
 import genresRouter from "./genres.router.js";
+import authRouter from "./auth.router.js";
 
 const rootRouter = express.Router();
 
-// rootRouter.use("/auth", authRouter);
+rootRouter.use("/auth", authRouter);
 rootRouter.use("/users", usersRouter);
 rootRouter.use("/plans", plansRouter);
 rootRouter.use("/cart", cartRouter);
