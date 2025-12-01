@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import api from "../lib/axios";
 import { toast } from "sonner";
 import Layout from "../components/layout/Layout";
-import HeroSection from "../components/HeroSection";
+import Banner from "../components/Banner";
 import MovieRow from "../components/MovieRow";
 
 export default function HomePage() {
@@ -35,25 +35,32 @@ export default function HomePage() {
 
   return (
     <Layout>
-      <HeroSection />
+      <Banner />
       
       <div className="movie-sections">
+        {/* //viewcount */}
         <MovieRow 
           title="Phim Hot" 
-          films={films.slice(0, 10)}
+          films={films}
           viewAllLink="/phim-hot"
         />
-        
+        {/* //average rating */}
         <MovieRow 
-          title="Phổ Biến" 
-          films={films.slice(10, 20)}
-          viewAllLink="/phim-pho-bien"
+          title="Đánh giá cao" 
+          films={films}
+          viewAllLink="/danh-gia-cao"
         />
-        
+        {/* //recommended */}
         <MovieRow 
-          title="Mới Cập Nhật" 
-          films={films.slice(20, 30)}
-          viewAllLink="/moi-cap-nhat"
+          title="Dành cho bạn" 
+          films={films}
+          viewAllLink="/danh-cho-ban"
+        />
+        {/* //favourite */}
+        <MovieRow 
+          title="Top yêu thích" 
+          films={films}
+          viewAllLink="/top-yeu-thich"
         />
       </div>
     </Layout>

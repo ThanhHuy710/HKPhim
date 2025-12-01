@@ -1,107 +1,153 @@
-import { useParams } from "react-router";
-import { useState, useEffect } from "react";
-import { toast } from "sonner";
-import { Star, Clock, Calendar, Globe } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import api from "../lib/axios";
-import VideoPlayer from "../components/VideoPlayer";
+import { toast } from "sonner";
 import Layout from "../components/layout/Layout";
-
+import ReactPlayer from "react-player";
+import MovieCard from "../components/MovieCard";
+import SeasonAndEpisodes from "../components/SeasonAndEpisodes";
 export default function MovieDetail() {
   const { id } = useParams();
   const [film, setFilm] = useState(null);
-  const [episodes, setEpisodes] = useState([]);
-  const [selectedEpisode, setSelectedEpisode] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const [films, setFilms] = useState([]);
   useEffect(() => {
-    const fetchFilm = async () => {
-      try {
-        // TODO: Backend cần trả về thêm:
-        // - episodes array nếu is_series = true
-        // - related_films array (phim cùng thể loại hoặc quốc gia)
-        // - feedbacks/comments array
-        const res = await api.get(`/tasks/${id}`);
-        setFilm(res.data.film);
-        
-        // TODO: Nếu backend chưa có, cần thêm API:
-        // GET /api/films/:id/episodes - Lấy danh sách tập phim
-        if (res.data.episodes) {
-          setEpisodes(res.data.episodes);
-          setSelectedEpisode(res.data.episodes[0]);
-        }
-      } catch (error) {
-        toast.error("Không thể tải thông tin phim");
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchFilm();
+    fetchFilms();
   }, [id]);
 
-  if (loading) return <Layout><div className="loading">Đang tải...</div></Layout>;
-  if (!film) return <Layout><div>Không tìm thấy phim</div></Layout>;
+  const fetchFilm = async () => {
+    try {
+      const res = await api.get(`/films/${id}`);
+      setFilm(res.data.data || null);
+    } catch (error) {
+      console.error("Lỗi:", error);
+      toast.error("Không thể tải phim");
+    } finally {
+      setLoading(false);
+    }
+  };
+  const fetchFilms = async () => {
+    try {
+      const res = await api.get("/films");
+      setFilms(res.data.data || []);
+    } catch (error) {
+      console.error("Lỗi:", error);
+      toast.error("Không thể tải phim");
+    } finally {
+      setLoading(false);
+    }
+  };
+  if (loading) {
+    return (
+      <Layout>
+        <div className="loading-page">Đang tải...</div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
-      <div className="movie-detail">
-        {/* Video Player */}
-        <div className="video-section">
-          <VideoPlayer 
-            videoUrl={selectedEpisode?.video_url || film.poster_video_url}
-            subtitleUrl={selectedEpisode?.sub_url}
+      <div className="grid grid-cols-6 grid-rows-10 gap-4 text-white">
+        <div className="col-span-4 row-span-4 min-h-[600px]">
+          {/* //error */}
+          <ReactPlayer
+            url={film.poster_video_url}
+            width="100%"
+            height="100%"
+            controls
           />
         </div>
-
-        {/* Episodes */}
-        {episodes.length > 0 && (
-          <div className="episodes-section">
-            <h3>Danh sách tập</h3>
-            <div className="episodes-grid">
-              {episodes.map(ep => (
-                <button
-                  key={ep.id}
-                  className={`episode-btn ${selectedEpisode?.id === ep.id ? 'active' : ''}`}
-                  onClick={() => setSelectedEpisode(ep)}
-                >
-                  {ep.episode_name}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Movie Info */}
-        <div className="movie-info-detail">
-          <h1>{film.title}</h1>
-          
-          <div className="movie-stats">
-            <span className="rating">
-              <Star fill="gold" color="gold" size={20} />
-              {film.average_rating || 0}
-            </span>
-            <span><Clock size={16} /> {film.duration}</span>
-            <span><Calendar size={16} /> {film.year}</span>
-            <span><Globe size={16} /> {film.country}</span>
-          </div>
-
-          <div className="movie-description">
-            <h3>Mô tả</h3>
-            <p>{film.description}</p>
-          </div>
-
-          <div className="movie-meta-info">
-            <p><strong>Đạo diễn:</strong> {film.directeur}</p>
-            <p><strong>Diễn viên:</strong> {film.actor}</p>
-            <p><strong>Độ tuổi:</strong> {film.age_rating}</p>
+        <div className="col-span-2 row-span-7 col-start-5 ">
+          <h1 className="text-xs md:text-2xl">Phim dành cho bạn</h1>
+          <div className="flex flex-wrap">
+            {films.slice(0, 6).map((film) => (
+              <div key={film.id} className="w-1/2 p-2">
+                <MovieCard film={film} />
+              </div>
+            ))}
           </div>
         </div>
+        <div className="col-span-2 row-span-6 row-start-5">
+          <div className="flex flex-col space-y-4 text-white">
+            {/* Tên phim */}
+            <h1 className="text-3xl font-bold">{film.title}</h1>
 
-        {/* TODO: Thêm các sections sau:
-          - Phim liên quan (related films)
-          - Comments/Feedbacks section (cần API: GET /api/films/:id/feedbacks, POST /api/feedbacks)
-          - Thêm vào yêu thích button (POST /api/favorites)
-        */}
+            {/* Nếu là phim bộ thì hiển thị phần */}
+            
+            <div>
+              <h2 className="text-xl font-semibold mb-2">Mô tả</h2>
+              <p className="text-gray-300">{film.description}</p>
+            </div>
+            <div className="flex gap-6">
+              <p>
+                <span className="font-semibold">Quốc gia:</span> {film.country}
+              </p>
+              <p>
+                <span className="font-semibold">Thời lượng:</span>{" "}
+                {film.duration}
+              </p>
+            </div>
+            <div>
+              <h2 className="text-xl font-semibold mb-2">Diễn viên</h2>
+              <p className="text-gray-300">{film.actor}</p>
+            </div>
+          </div>
+        </div>
+        <div className="col-span-2 row-span-6 col-start-3 row-start-5">
+          {/* button */}
+          <div className="flex flex-nowrap gap-8">
+            <Link to={`/watch/${film.id}?episode=${film.episodes[0].id}`}>
+              <button
+                type="button"
+                className="px-6 py-2.5 cursor-pointer text-white text-sm tracking-wider font-medium border-0 outline-0 outline-none bg-blue-700 hover:bg-blue-800 active:bg-blue-700"
+              >
+                Xem Ngay
+              </button>
+            </Link>
+            <Link className="flex flex-col items-center cursor-pointer hover:text-blue-400">
+              <img
+                src="../public/images/Comment.png"
+                alt="Comment "
+                className="w-6 h-6"
+              />
+              <p className="text-sm">Bình luận</p>
+            </Link>
+            <Link className="flex flex-col items-center cursor-pointer hover:text-blue-400">
+              <img
+                src="../public/images/AddToList.png"
+                alt="Comment "
+                className="w-6 h-6"
+              />
+              <p className="text-sm">Yêu thích</p>
+            </Link>
+            <Link className="flex flex-col items-center cursor-pointer hover:text-blue-400">
+              <img
+                src="../public/images/Share.png"
+                alt="Comment "
+                className="w-6 h-6"
+              />
+              <p className="text-sm">chia sẻ</p>
+            </Link>
+          </div>
+          {/* button */}
+
+          {/* Tập Phim */}
+          <h1>Tập phim</h1>
+          <hr className="border-t-2 border-gray-600 my-4 w-full" />
+
+          {/* Tập Phim */}
+          <div className="flex flex-col gap-4">
+            <div className="flex gap-5">
+              <img
+                src="../public/images/SessionMovie.png"
+                alt=""
+                className="w-9 h-9"
+              />
+              <SeasonAndEpisodes film={film}></SeasonAndEpisodes>
+            </div>
+          </div>
+        </div>
       </div>
     </Layout>
   );
