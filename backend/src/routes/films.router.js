@@ -3,7 +3,7 @@ import { filmsController } from '../controllers/films.controller.js';
 
 const filmsRouter = express.Router();
 
-
+filmsRouter.get('/:id/:season', filmsController.findSeasons);
 // Tạo route CRUD
 filmsRouter.post('/', filmsController.create);
 filmsRouter.get('/', filmsController.findAll);

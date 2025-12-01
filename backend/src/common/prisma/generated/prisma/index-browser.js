@@ -164,6 +164,7 @@ exports.Prisma.Film_genresScalarFieldEnum = {
 exports.Prisma.FilmsScalarFieldEnum = {
   id: 'id',
   title: 'title',
+  season: 'season',
   poster_url: 'poster_url',
   description: 'description',
   year: 'year',
@@ -177,7 +178,8 @@ exports.Prisma.FilmsScalarFieldEnum = {
   created_at: 'created_at',
   updated_at: 'updated_at',
   view_count: 'view_count',
-  average_rating: 'average_rating'
+  average_rating: 'average_rating',
+  original_name: 'original_name'
 };
 
 exports.Prisma.GenresScalarFieldEnum = {
@@ -225,13 +227,6 @@ exports.Prisma.UsersScalarFieldEnum = {
   updated_at: 'updated_at'
 };
 
-exports.Prisma.Video_filesScalarFieldEnum = {
-  id: 'id',
-  episode_id: 'episode_id',
-  quality: 'quality',
-  file_url: 'file_url'
-};
-
 exports.Prisma.ViewsScalarFieldEnum = {
   id: 'id',
   film_id: 'film_id',
@@ -270,7 +265,8 @@ exports.Prisma.filmsOrderByRelevanceFieldEnum = {
   poster_video_url: 'poster_video_url',
   actor: 'actor',
   directeur: 'directeur',
-  age_rating: 'age_rating'
+  age_rating: 'age_rating',
+  original_name: 'original_name'
 };
 
 exports.Prisma.genresOrderByRelevanceFieldEnum = {
@@ -298,11 +294,6 @@ exports.Prisma.usersOrderByRelevanceFieldEnum = {
   interest: 'interest'
 };
 
-exports.Prisma.video_filesOrderByRelevanceFieldEnum = {
-  quality: 'quality',
-  file_url: 'file_url'
-};
-
 
 exports.Prisma.ModelName = {
   cart: 'cart',
@@ -315,7 +306,6 @@ exports.Prisma.ModelName = {
   invoices: 'invoices',
   plans: 'plans',
   users: 'users',
-  video_files: 'video_files',
   views: 'views'
 };
 
