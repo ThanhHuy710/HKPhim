@@ -133,7 +133,7 @@ export default function MovieDetail() {
           {/* button */}
 
           {/* Tập Phim */}
-          <h1>Tập phim</h1>
+          <h1 className="mt-3">Tập phim</h1>
           <hr className="border-t-2 border-gray-600 my-4 w-full" />
 
           {/* Tập Phim */}

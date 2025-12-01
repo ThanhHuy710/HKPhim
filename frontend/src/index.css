@@ -1,5 +1,4 @@
 @import "tailwindcss";
-<<<<<<< HEAD
 @config "../tailwind.config.js";
 
 /* Ensure the app root can expand to full viewport height */
@@ -24,5 +23,3 @@ body {
 .scrollbar-hide::-webkit-scrollbar {
 	display: none; /* Chrome, Safari */
 }
-=======
->>>>>>> 0345a8637dbc548c9c823a3dcf008ecc6c4a24b3

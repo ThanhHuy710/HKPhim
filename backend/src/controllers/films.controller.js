@@ -4,30 +4,25 @@ import { filmsService } from "../services/films.services.js";
 export const filmsController = {
   //find list season
   // filmsController.js
-  findSeasons: async function (req, res, next) {
+  async findSeasons(req, res, next) {
     try {
       const filmId = Number(req.params.id);
-      const requestedSeason = req.params.season
-        ? Number(req.params.season)
-        : null;
-      if (!filmId)
-        return res
-          .status(400)
-          .json({ success: false, message: "Invalid film id" });
+      const requestedSeason = req.params.season ? Number(req.params.season) : null;
+      if (!filmId) {
+        return res.status(400).json({ success: false, message: "Invalid film id" });
+      }
 
       const film = await filmsService.findById(filmId);
-      if (!film)
-        return res
-          .status(404)
-          .json({ success: false, message: "Film not found" });
+      if (!film) {
+        return res.status(404).json({ success: false, message: "Film not found" });
+      }
 
-      const key = film.original_name;
-      if (!key)
-        return res
-          .status(200)
-          .json({ success: true, data: [], message: "No grouping key" });
+      const key = film.original_name ?? film.title;
+      if (!key) {
+        return res.status(200).json({ success: true, data: [], message: "No grouping key" });
+      }
 
-      const seasons = await filmsService.findAll({
+      const seasons = await filmsService.findByFilter({
         filter: { original_name: key },
         orderBy: { season: "asc" },
       });
@@ -40,12 +35,12 @@ export const filmsController = {
       return res.status(200).json({
         success: true,
         data: seasons,
-        currentSeason:
-          exists && requestedSeason !== null ? requestedSeason : null,
+        currentSeason: exists && requestedSeason !== null ? requestedSeason : null,
         message: exists ? "OK" : `Season #${requestedSeason} not found`,
       });
     } catch (err) {
-      next(err);
+      console.error("findSeasons error:", err);
+      return res.status(500).json({ success: false, message: "Internal Server Error", error: err.message });
     }
   },
   // CRUD

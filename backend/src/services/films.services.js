@@ -30,8 +30,25 @@ export const filmsService = {
       return films;
    },
 
-
-
+   async findById(id) {
+    return prisma.films.findUnique({
+      where: { id: Number(id) },
+      select: { id: true, title: true, original_name: true, season: true },
+    });
+  },
+  async findByFilter({ filter = {}, orderBy = { season: "asc" } } = {}) {
+    return prisma.films.findMany({
+      where: filter,
+      orderBy,
+      select: {
+        id: true,
+        title: true,
+        season: true,
+        original_name: true,
+        _count: { select: { episodes: true } },
+      },
+    });
+  },
    // CRUD
   create: async function (req) {
     return await prisma.films.create({

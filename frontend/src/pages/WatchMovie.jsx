@@ -1,10 +1,11 @@
-import { useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import api from "../lib/axios";
 import { toast } from "sonner";
 import Layout from "../components/layout/Layout";
 import MovieCard from "../components/MovieCard";
 import VideoPlayer from "../components/VideoPlayer";
+import SeasonAndEpisodes from "../components/SeasonAndEpisodes";
 export default function WatchMovie() {
   const { id } = useParams();
   const { search } = useLocation();
@@ -52,7 +53,11 @@ export default function WatchMovie() {
     <Layout>
       <div className="grid grid-cols-6 grid-rows-10 gap-4 text-white">
         <div className="col-span-4 row-span-4 min-h-[600px]">
-          <VideoPlayer videoUrl={film.episodes.find(ep => ep.id === Number(episodeId))?.video_url}></VideoPlayer>
+          <VideoPlayer
+            videoUrl={
+              film.episodes.find((ep) => ep.id === Number(episodeId))?.video_url
+            }
+          ></VideoPlayer>
         </div>
         <div className="col-span-2 row-span-7 col-start-5 ">
           <h1 className="text-xs md:text-2xl">Phim dành cho bạn</h1>
@@ -69,8 +74,7 @@ export default function WatchMovie() {
             {/* Tên phim */}
             <h1 className="text-3xl font-bold">{film.title}</h1>
 
-            {/* Nếu là phim bộ thì hiển thị phần */}
-            {film.is_series && <p className="text-lg">Phần 1</p>}
+            {/*  */}
             <div className="flex flex-wrap gap-2">
               {film.film_genres.map((fg) => (
                 <span
@@ -102,7 +106,7 @@ export default function WatchMovie() {
         </div>
         <div className="col-span-2 row-span-6 col-start-3 row-start-5">
           {/* button */}
-          <div className="flex flex-nowrap gap-8">
+          <div className="flex flex-nowrap gap-8 justify-end mb-2">
             <Link className="flex flex-col items-center cursor-pointer hover:text-blue-400">
               <img
                 src="../public/images/Comment.png"
@@ -137,19 +141,15 @@ export default function WatchMovie() {
           {/* Tập Phim */}
           <div className="flex flex-col gap-4">
             <div className="flex gap-5">
-              <img src="../public/images/SessionMovie.png" alt="" className="w-9 h-9" />
-              {film.is_series && <p className="text-lg">Phần {film.season}</p>}  
-            </div>
-            <div className="flex flex-wrap gap-5">
-              {film.episodes.map((ep) => (
-                <Link to={`/watch/${film.id}?episode=${ep.id}`}
-                  key={ep.id}>
-                  {ep.episode_name}
-                </Link>
-              ))}
+              <img
+                src="../public/images/SessionMovie.png"
+                alt=""
+                className="w-9 h-9"
+              />
+              <SeasonAndEpisodes film={film}></SeasonAndEpisodes>
             </div>
           </div>
-          </div>
+        </div>
       </div>
     </Layout>
   );

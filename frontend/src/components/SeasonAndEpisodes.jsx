@@ -8,7 +8,6 @@ export default function SeasonAndEpisodes({ film }) {
   const [loading, setLoading] = useState(true);
   const [seasons, setSeasons] = useState([]); // khởi tạo mảng
   const [selectedFilmId, setSelectedFilmId] = useState(film?.id ?? null);
-  const [episodes, setEpisodes] = useState([]);
 
   const fetchSeasons = async (filmObj) => {
     if (!filmObj?.id) return;
@@ -30,20 +29,6 @@ export default function SeasonAndEpisodes({ film }) {
     }
   };
 
-  const fetchEpisodes = async (filmId) => {
-    if (!filmId) {
-      setEpisodes([]);
-      return;
-    }
-    try {
-      const res = await api.get(`/films/${filmId}/episodes`);
-      setEpisodes(res.data.data || []);
-    } catch (error) {
-      console.error("Lỗi fetchEpisodes:", error);
-      toast.error("Không thể tải tập phim");
-      setEpisodes([]);
-    }
-  };
 
   useEffect(() => {
     if (!film) return;
@@ -51,17 +36,13 @@ export default function SeasonAndEpisodes({ film }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [film?.id]);
 
-  useEffect(() => {
-    if (!selectedFilmId) return;
-    fetchEpisodes(selectedFilmId);
-  }, [selectedFilmId]);
 
   // handler chọn option (không dùng Link trong option)
   const handleChange = (e) => {
     const id = Number(e.target.value);
     setSelectedFilmId(id);
     // nếu muốn điều hướng tới trang xem ngay:
-    navigate(`/watch/${id}`);
+    navigate(`/film/${id}`);
   };
 
   // render
@@ -78,33 +59,21 @@ export default function SeasonAndEpisodes({ film }) {
           >
             {seasons.map((s) => (
               <option key={s.id} value={s.id}>
-                {s.season ? `Phần ${s.season}` : s.title ?? "Phim lẻ"}
-                {s._count?.episodes ? ` (${s._count.episodes} tập)` : ""}
+                {s.season!==0 ? `Phần ${s.season}` : "Phim lẻ"}
               </option>
             ))}
           </select>
         ) : (
           <div>Không có phần khác</div>
         )}
-      </div>
-
-      <div>
-        {episodes.length ? (
-          <ul className="space-y-2">
-            {episodes.map((ep) => (
-              <li key={ep.id}>
-                <Link
-                  to={`/watch/${selectedFilmId}?episode=${ep.id}`}
-                  className="text-sm text-blue-300 hover:underline"
-                >
+          <div className="flex flex-wrap gap-5 mt-5">
+              {film.episodes.map((ep) => (
+                <Link to={`/watch/${film.id}?episode=${ep.id}`}
+                  key={ep.id}>
                   {ep.episode_name}
                 </Link>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <div>Không có tập cho phần này</div>
-        )}
+              ))}
+            </div>
       </div>
     </div>
   );
