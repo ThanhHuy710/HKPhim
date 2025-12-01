@@ -13,13 +13,13 @@ export const videoFilesService = {
       orderBy: { id: "asc" },
       include: {
         episodes: true,
-      }
+      },
     });
   },
 
   create: async function (req) {
     return await prisma.video_files.create({
-      data: req.body
+      data: req.body,
     });
   },
 
@@ -29,7 +29,7 @@ export const videoFilesService = {
       where: { id },
       include: {
         episodes: true,
-      }
+      },
     });
   },
 
@@ -37,14 +37,14 @@ export const videoFilesService = {
     const id = Number(req.params.id);
     return await prisma.video_files.update({
       where: { id },
-      data: req.body
+      data: req.body,
     });
   },
 
   remove: async function (req) {
     const id = Number(req.params.id);
     return await prisma.video_files.delete({
-      where: { id }
+      where: { id },
     });
-  }
+  },
 };

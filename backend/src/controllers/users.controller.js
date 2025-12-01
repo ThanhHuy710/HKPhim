@@ -30,5 +30,5 @@ export const usersController = {
     const result = await usersService.remove(req);
     const response = responseSuccess(result, `Remove user #${req.params.id} successfully`);
     res.status(response.statusCode).json(response);
-  }
+  },
 };

@@ -14,14 +14,14 @@ export const episodesService = {
       include: {
         films: true,
         video_files: true,
-        views: true
-      }
+        views: true,
+      },
     });
   },
 
   create: async function (req) {
     return await prisma.episodes.create({
-      data: req.body
+      data: req.body,
     });
   },
 
@@ -32,8 +32,8 @@ export const episodesService = {
       include: {
         films: true,
         video_files: true,
-        views: true
-      }
+        views: true,
+      },
     });
   },
 
@@ -41,14 +41,14 @@ export const episodesService = {
     const id = Number(req.params.id);
     return await prisma.episodes.update({
       where: { id },
-      data: req.body
+      data: req.body,
     });
   },
 
   remove: async function (req) {
     const id = Number(req.params.id);
     return await prisma.episodes.delete({
-      where: { id }
+      where: { id },
     });
-  }
+  },
 };

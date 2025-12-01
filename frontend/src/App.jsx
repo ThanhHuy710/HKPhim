@@ -5,6 +5,7 @@ import HomePage from "./pages/HomePage.jsx";
 import MovieDetail from "./pages/MovieDetail.jsx";
 import SearchPage from "./pages/SearchPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
+import RegisterPage from "./pages/RegisterPage.jsx";
 import NotFound from "./pages/NotFound.jsx";
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
           <Route path="/phim/:id" element={<MovieDetail />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

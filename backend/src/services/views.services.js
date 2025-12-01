@@ -14,14 +14,14 @@ export const viewsService = {
       include: {
         films: true,
         episodes: true,
-        users: true
-      }
+        users: true,
+      },
     });
   },
 
   create: async function (req) {
     return await prisma.views.create({
-      data: req.body
+      data: req.body,
     });
   },
 
@@ -32,8 +32,8 @@ export const viewsService = {
       include: {
         films: true,
         episodes: true,
-        users: true
-      }
+        users: true,
+      },
     });
   },
 
@@ -41,14 +41,14 @@ export const viewsService = {
     const id = Number(req.params.id);
     return await prisma.views.update({
       where: { id },
-      data: req.body
+      data: req.body,
     });
   },
 
   remove: async function (req) {
     const id = Number(req.params.id);
     return await prisma.views.delete({
-      where: { id }
+      where: { id },
     });
-  }
+  },
 };

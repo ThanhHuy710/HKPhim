@@ -12,15 +12,15 @@ export const cartService = {
       skip: offset,
       orderBy: { id: "asc" },
       include: {
-        users: true,  
-        plans: true  
-      }
+        users: true,
+        plans: true,
+      },
     });
   },
 
   create: async function (req) {
     return await prisma.cart.create({
-      data: req.body
+      data: req.body,
     });
   },
 
@@ -30,8 +30,8 @@ export const cartService = {
       where: { id },
       include: {
         users: true,
-        plans: true
-      }
+        plans: true,
+      },
     });
   },
 
@@ -39,14 +39,14 @@ export const cartService = {
     const id = Number(req.params.id);
     return await prisma.cart.update({
       where: { id },
-      data: req.body
+      data: req.body,
     });
   },
 
   remove: async function (req) {
     const id = Number(req.params.id);
     return await prisma.cart.delete({
-      where: { id }
+      where: { id },
     });
-  }
+  },
 };
