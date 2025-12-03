@@ -4,7 +4,8 @@ import { AuthProvider } from "./contexts/AuthContext";
 import HomePage from "./pages/HomePage.jsx";
 import MovieDetail from "./pages/MovieDetail.jsx";
 import SearchPage from "./pages/SearchPage.jsx";
-import LoginPage from "./pages/LoginPage.jsx";
+import AuthPage from "./pages/AuthPage.jsx";
+import GoogleCallback from "./pages/GoogleCallback.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import WatchMovie from "./pages/WatchMovie.jsx";
 
@@ -18,7 +19,8 @@ function App() {
           <Route path="/film/:id" element={<MovieDetail />} />
           <Route path="/watch/:id" element={<WatchMovie />} />
           <Route path="/search" element={<SearchPage />} />
-          <Route path="/login" element={<LoginPage />} />
+          <Route path="/auth" element={<AuthPage />} />
+          <Route path="/google/callback" element={<GoogleCallback />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

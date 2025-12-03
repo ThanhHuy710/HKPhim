@@ -70,7 +70,7 @@ export const authService = {
     const { accessToken, refreshToken } = tokenService.createToken(req.user.id);
     console.log({ accessToken, refreshToken });
 
-    return `http://localhost:5173?accessToken=${accessToken}&refreshToken=${refreshToken}`;
+    return `http://localhost:5173/google/callback?accessToken=${accessToken}&refreshToken=${refreshToken}`;
   },
   refreshToken: async function (req) {
     const { accessToken, refreshToken } = req.body;

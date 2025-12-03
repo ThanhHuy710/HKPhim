@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import axios from "axios";
 
 const AuthContext = createContext(null);
 
@@ -7,14 +8,49 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check if user is logged in
-    const storedUser = localStorage.getItem("user");
-    const token = localStorage.getItem("token");
-    
-    if (storedUser && token) {
-      setUser(JSON.parse(storedUser));
-    }
-    setLoading(false);
+    const initAuth = async () => {
+      // Kiểm tra có refreshToken không (user đã chọn "Nhớ tôi")
+      const refreshToken = localStorage.getItem("refreshToken");
+      const storedUser = localStorage.getItem("user");
+      const token = localStorage.getItem("token");
+
+      if (refreshToken) {
+        // Nếu có refreshToken → tự động refresh để lấy accessToken mới
+        try {
+          const res = await axios.post(
+            "http://localhost:5001/api/auth/refresh-token",
+            { refreshToken }
+          );
+
+          const newAccessToken = res.data.data.accessToken;
+          localStorage.setItem("token", newAccessToken);
+
+          // Lấy thông tin user mới
+          const userRes = await axios.get(
+            "http://localhost:5001/api/auth/get-info",
+            {
+              headers: { Authorization: `Bearer ${newAccessToken}` },
+            }
+          );
+
+          setUser(userRes.data.data);
+          localStorage.setItem("user", JSON.stringify(userRes.data.data));
+        } catch (error) {
+          // RefreshToken hết hạn hoặc không hợp lệ → xóa hết
+          console.error("Auto login failed:", error);
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+          localStorage.removeItem("refreshToken");
+        }
+      } else if (storedUser && token) {
+        // Không có refreshToken nhưng có token cũ → load từ localStorage
+        setUser(JSON.parse(storedUser));
+      }
+
+      setLoading(false);
+    };
+
+    initAuth();
   }, []);
 
   const login = (userData, token) => {
