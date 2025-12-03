@@ -1,72 +1,22 @@
 import { useEffect, useRef } from "react";
 import Hls from "hls.js";
-import { toast } from "sonner";
 
-export default function VideoPlayer({ videoUrl, subtitleUrl }) {
+export default function VideoPlayer({ videoUrl }) {
   const videoRef = useRef(null);
-  const hlsRef = useRef(null);
 
   useEffect(() => {
-    if (!videoUrl || !videoRef.current) return;
-
     const video = videoRef.current;
+    const hls = new Hls();
 
-    // HLS support
-    if (Hls.isSupported()) {
-      const hls = new Hls({
-        enableWorker: true,
-        lowLatencyMode: true,
-      });
-      
-      hlsRef.current = hls;
-      hls.loadSource(videoUrl);
-      hls.attachMedia(video);
+    hls.loadSource(videoUrl);
+    hls.attachMedia(video);
 
-      hls.on(Hls.Events.MANIFEST_PARSED, () => {
-        video.play().catch(err => {
-          console.error("Autoplay error:", err);
-        });
-      });
-
-      hls.on(Hls.Events.ERROR, (event, data) => {
-        if (data.fatal) {
-          toast.error("Lỗi khi tải video");
-        }
-      });
-    } 
-    // Native HLS support (Safari)
-    else if (video.canPlayType("application/vnd.apple.mpegurl")) {
-      video.src = videoUrl;
-    }
-
-    // Cleanup
     return () => {
-      if (hlsRef.current) {
-        hlsRef.current.destroy();
-      }
+      hls.destroy();
     };
   }, [videoUrl]);
 
   return (
-    <div className="video-player">
-      <video
-        ref={videoRef}
-        controls
-        controlsList="nodownload"
-        className="video-element"
-        poster="/poster-placeholder.jpg"
-      >
-        {subtitleUrl && (
-          <track
-            kind="subtitles"
-            src={subtitleUrl}
-            srcLang="vi"
-            label="Tiếng Việt"
-            default
-          />
-        )}
-        Trình duyệt của bạn không hỗ trợ video.
-      </video>
-    </div>
+     <video ref={videoRef} controls width="100%" />
   );
 }
