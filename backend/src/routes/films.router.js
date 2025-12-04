@@ -4,6 +4,12 @@ import { filmsController } from '../controllers/films.controller.js';
 const filmsRouter = express.Router();
 
 filmsRouter.get("/:id/seasons", filmsController.findSeasons);
+filmsRouter.get("/criteria", filmsController.getByCriteria);
+filmsRouter.get("/single-movies",filmsController.findSingleMovies);
+filmsRouter.get("/series", filmsController.findSeries);
+filmsRouter.get("/genre/:genre", filmsController.findByGenre);
+filmsRouter.get("/title/:title", filmsController.findByTitle);
+filmsRouter.get("/year/:year", filmsController.findByYear);
 // Tạo route CRUD
 filmsRouter.post('/', filmsController.create);
 filmsRouter.get('/', filmsController.findAll);

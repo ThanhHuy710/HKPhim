@@ -92,7 +92,7 @@ model films {
   average_rating   Decimal?      @default(0.00) @db.Decimal(3, 2)
   original_name    String?       @db.VarChar(255)
   episodes         episodes[]
-  favorites        favorites[]
+  favorites        favorites[]  
   feedbacks        feedbacks[]
   film_genres      film_genres[]
   views            views[]

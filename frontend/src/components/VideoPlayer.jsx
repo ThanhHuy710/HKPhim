@@ -17,6 +17,12 @@ export default function VideoPlayer({ videoUrl }) {
   }, [videoUrl]);
 
   return (
-     <video ref={videoRef} controls width="100%" />
+    <video
+      ref={videoRef}
+      autoPlay={false}
+      controls={true}
+      width="100%"
+      height="auto"
+    />
   );
 }

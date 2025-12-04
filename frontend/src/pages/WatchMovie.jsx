@@ -52,12 +52,15 @@ export default function WatchMovie() {
   return (
     <Layout>
       <div className="grid grid-cols-6 grid-rows-10 gap-4 text-white">
-        <div className="col-span-4 row-span-4 min-h-[600px]">
-          <VideoPlayer
+        <div className="col-span-4 row-span-4 h-full flex items-center justify-center">
+          <div className="border-3 border-gray-600 rounded-lg opacity-75">
+            <VideoPlayer
             videoUrl={
               film.episodes.find((ep) => ep.id === Number(episodeId))?.video_url
             }
           ></VideoPlayer>
+          </div>
+          
         </div>
         <div className="col-span-2 row-span-7 col-start-5 ">
           <h1 className="text-xs md:text-2xl">Phim dành cho bạn</h1>

@@ -6,10 +6,7 @@ export const responseSuccess = (data,message="ok", statusCode=200) => {
         message: message,
         data: data
     }
-
 }
-
-
 export const responseError = (message="Internal Sever Error", statusCode=500,stack) => {
     return {
         status: "error",

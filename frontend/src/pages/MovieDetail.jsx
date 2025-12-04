@@ -3,7 +3,6 @@ import { Link, useParams } from "react-router-dom";
 import api from "../lib/axios";
 import { toast } from "sonner";
 import Layout from "../components/layout/Layout";
-import ReactPlayer from "react-player";
 import MovieCard from "../components/MovieCard";
 import SeasonAndEpisodes from "../components/SeasonAndEpisodes";
 export default function MovieDetail() {
@@ -38,6 +37,11 @@ export default function MovieDetail() {
       setLoading(false);
     }
   };
+  const getEmbedUrl = (url) => {
+  // lấy VIDEO_ID từ link gốc
+  const match = url.match(/v=([^&]+)/);
+  return match ? `https://www.youtube.com/embed/${match[1]}` : url;
+};
   if (loading) {
     return (
       <Layout>
@@ -50,13 +54,15 @@ export default function MovieDetail() {
     <Layout>
       <div className="grid grid-cols-6 grid-rows-10 gap-4 text-white">
         <div className="col-span-4 row-span-4 min-h-[600px]">
-          {/* //error */}
-          <ReactPlayer
-            url={film.poster_video_url}
+          {/**/}
+          <iframe
             width="100%"
             height="100%"
-            controls
-          />
+            src={getEmbedUrl(film.poster_video_url)}
+            title="YouTube video"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          ></iframe>
         </div>
         <div className="col-span-2 row-span-7 col-start-5 ">
           <h1 className="text-xs md:text-2xl">Phim dành cho bạn</h1>
@@ -74,7 +80,7 @@ export default function MovieDetail() {
             <h1 className="text-3xl font-bold">{film.title}</h1>
 
             {/* Nếu là phim bộ thì hiển thị phần */}
-            
+
             <div>
               <h2 className="text-xl font-semibold mb-2">Mô tả</h2>
               <p className="text-gray-300">{film.description}</p>

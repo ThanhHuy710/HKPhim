@@ -7,6 +7,7 @@ import SearchPage from "./pages/SearchPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import WatchMovie from "./pages/WatchMovie.jsx";
+import ListPage from "./pages/ListPage.jsx";
 
 function App() {
   return (
@@ -17,7 +18,8 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/film/:id" element={<MovieDetail />} />
           <Route path="/watch/:id" element={<WatchMovie />} />
-          <Route path="/search" element={<SearchPage />} />
+          <Route path="/search/:type" element={<ListPage />} />
+          <Route path="/search/genre/:genre" element={<ListPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
