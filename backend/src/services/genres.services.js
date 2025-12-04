@@ -13,13 +13,13 @@ export const genresService = {
       orderBy: { id: "asc" },
       include: {
         film_genres: true,
-      }
+      },
     });
   },
 
   create: async function (req) {
     return await prisma.genres.create({
-      data: req.body
+      data: req.body,
     });
   },
 
@@ -29,7 +29,7 @@ export const genresService = {
       where: { id },
       include: {
         film_genres: true,
-      }
+      },
     });
   },
 
@@ -37,14 +37,14 @@ export const genresService = {
     const id = Number(req.params.id);
     return await prisma.genres.update({
       where: { id },
-      data: req.body
+      data: req.body,
     });
   },
 
   remove: async function (req) {
     const id = Number(req.params.id);
     return await prisma.genres.delete({
-      where: { id }
+      where: { id },
     });
-  }
+  },
 };

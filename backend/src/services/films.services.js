@@ -28,7 +28,6 @@ export const filmsService = {
 
     return films;
   },
-
   async findById(id) {
     return await prisma.films.findUnique({
       where: { id: Number(id) },

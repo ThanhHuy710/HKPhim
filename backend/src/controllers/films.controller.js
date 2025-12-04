@@ -179,5 +179,5 @@ export const filmsController = {
       `Remove films #${req.params.id} successfully`
     );
     res.status(response.statusCode).json(response);
-  },
+  }
 };

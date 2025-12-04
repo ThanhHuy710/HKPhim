@@ -12,20 +12,20 @@ export const usersService = {
       skip: offset,
       orderBy: { id: "asc" },
       include: {
-          cart : true, 
-          favorites: true,
-          feedbacks: true,
-          invoices: true,
-          plans:true,
-          views: true
-      }
+        cart: true,
+        favorites: true,
+        feedbacks: true,
+        invoices: true,
+        plans: true,
+        views: true,
+      },
     });
   },
 
   //CRUD
   create: async function (req) {
     return await prisma.users.create({
-      data: req.body
+      data: req.body,
     });
   },
 
@@ -39,8 +39,8 @@ export const usersService = {
         favorites: true,
         feedbacks: true,
         invoices: true,
-        views: true
-      }
+        views: true,
+      },
     });
   },
 
@@ -48,14 +48,14 @@ export const usersService = {
     const id = Number(req.params.id);
     return await prisma.users.update({
       where: { id },
-      data: req.body
+      data: req.body,
     });
   },
 
   remove: async function (req) {
     const id = Number(req.params.id);
     return await prisma.users.delete({
-      where: { id }
+      where: { id },
     });
-  }
+  },
 };

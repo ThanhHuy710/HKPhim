@@ -219,6 +219,7 @@ exports.Prisma.UsersScalarFieldEnum = {
   fullname: 'fullname',
   phonenumber: 'phonenumber',
   email: 'email',
+  avatar: 'avatar',
   city: 'city',
   gender: 'gender',
   interest: 'interest',
@@ -289,6 +290,7 @@ exports.Prisma.usersOrderByRelevanceFieldEnum = {
   fullname: 'fullname',
   phonenumber: 'phonenumber',
   email: 'email',
+  avatar: 'avatar',
   city: 'city',
   gender: 'gender',
   interest: 'interest'

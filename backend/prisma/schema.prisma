@@ -143,7 +143,8 @@ model users {
   role        String?     @db.VarChar(50)
   fullname    String?     @db.VarChar(255)
   phonenumber String?     @db.VarChar(20)
-  email       String?     @db.VarChar(255)
+  email       String?     @unique(map: "email") @db.VarChar(255)
+  avatar      String?     @db.Text
   city        String?     @db.VarChar(255)
   gender      String?     @db.VarChar(50)
   interest    String?     @db.VarChar(255)

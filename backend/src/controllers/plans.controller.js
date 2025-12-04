@@ -30,5 +30,5 @@ export const plansController = {
     const result = await plansService.remove(req);
     const response = responseSuccess(result, `Remove plan #${req.params.id} successfully`);
     res.status(response.statusCode).json(response);
-  }
+  },
 };

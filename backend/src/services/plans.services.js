@@ -14,14 +14,14 @@ export const plansService = {
       include: {
         cart: true,
         users: true,
-        invoices: true
-      }
+        invoices: true,
+      },
     });
   },
 
   create: async function (req) {
     return await prisma.plans.create({
-      data: req.body
+      data: req.body,
     });
   },
 
@@ -32,8 +32,8 @@ export const plansService = {
       include: {
         cart: true,
         users: true,
-        invoices: true
-      }
+        invoices: true,
+      },
     });
   },
 
@@ -41,14 +41,14 @@ export const plansService = {
     const id = Number(req.params.id);
     return await prisma.plans.update({
       where: { id },
-      data: req.body
+      data: req.body,
     });
   },
 
   remove: async function (req) {
     const id = Number(req.params.id);
     return await prisma.plans.delete({
-      where: { id }
+      where: { id },
     });
-  }
+  },
 };

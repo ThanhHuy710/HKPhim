@@ -13,14 +13,14 @@ export const favoritesService = {
       orderBy: { id: "asc" },
       include: {
         films: true,
-        users: true
-      }
+        users: true,
+      },
     });
   },
 
   create: async function (req) {
     return await prisma.favorites.create({
-      data: req.body
+      data: req.body,
     });
   },
 
@@ -30,8 +30,8 @@ export const favoritesService = {
       where: { id },
       include: {
         films: true,
-        users: true
-      }
+        users: true,
+      },
     });
   },
 
@@ -39,14 +39,14 @@ export const favoritesService = {
     const id = Number(req.params.id);
     return await prisma.favorites.update({
       where: { id },
-      data: req.body
+      data: req.body,
     });
   },
 
   remove: async function (req) {
     const id = Number(req.params.id);
     return await prisma.favorites.delete({
-      where: { id }
+      where: { id },
     });
-  }
+  },
 };

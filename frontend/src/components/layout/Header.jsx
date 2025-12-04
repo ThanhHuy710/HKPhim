@@ -1,10 +1,13 @@
 import { Link } from "react-router";
-import { Search, ChevronDown } from "lucide-react";
+import { Search, ChevronDown, User, LogOut } from "lucide-react";
+import { useAuth } from "../../contexts/AuthContext";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import api from "../../lib/axios";
 
 export default function Header() {
+  const { user, logout } = useAuth();
+
   const [openGenre, setOpenGenre] = useState(false);
   const [openCountry, setOpenCountry] = useState(false);
   const [genres, setGenres] = useState([]);
@@ -37,11 +40,7 @@ export default function Header() {
       <div className="max-w-[1440px] px-4 py-3 flex items-center">
         {/* Logo */}
         <Link to="/" className="">
-          <img
-            src="../../../public/images/Logo.png"
-            alt="HKphim Logo"
-            className="h-12 w-12"
-          />
+          <img src="/images/Logo.png" alt="HKphim Logo" className="h-16 w-40" />
         </Link>
 
         {/* Navigation */}
@@ -116,13 +115,39 @@ export default function Header() {
           />
         </form>
 
-        {/* Login */}
-        <Link
-          to="/login"
-          className="md-ml-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-800 font-semibold "
-        >
-          Đăng nhập
-        </Link>
+        {/* User Menu hoặc Login */}
+        {user ? (
+          <div className="ml-4 flex items-center gap-3">
+            <div className="flex items-center gap-2">
+              {user.avatar ? (
+                <img
+                  src={user.avatar}
+                  alt={user.fullname}
+                  className="w-10 h-10 rounded-full object-cover border-2 border-yellow-400"
+                />
+              ) : (
+                <div className="w-10 h-10 rounded-full bg-linear-to-br from-yellow-400 to-orange-500 flex items-center justify-center border-2 border-yellow-400">
+                  <User size={20} className="text-white" />
+                </div>
+              )}
+              <span className="text-sm font-medium">{user.fullname}</span>
+            </div>
+            <button
+              onClick={logout}
+              className="px-3 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-all duration-200 flex items-center gap-1"
+            >
+              <LogOut size={16} />
+              <span className="text-sm">Đăng xuất</span>
+            </button>
+          </div>
+        ) : (
+          <Link
+            to="/auth"
+            className="ml-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-800 font-semibold"
+          >
+            Đăng nhập
+          </Link>
+        )}
       </div>
     </header>
   );
