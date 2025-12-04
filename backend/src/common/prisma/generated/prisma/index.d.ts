@@ -64,11 +64,6 @@ export type plans = $Result.DefaultSelection<Prisma.$plansPayload>
  */
 export type users = $Result.DefaultSelection<Prisma.$usersPayload>
 /**
- * Model video_files
- * 
- */
-export type video_files = $Result.DefaultSelection<Prisma.$video_filesPayload>
-/**
  * Model views
  * 
  */
@@ -291,16 +286,6 @@ export class PrismaClient<
     * ```
     */
   get users(): Prisma.usersDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.video_files`: Exposes CRUD operations for the **video_files** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Video_files
-    * const video_files = await prisma.video_files.findMany()
-    * ```
-    */
-  get video_files(): Prisma.video_filesDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.views`: Exposes CRUD operations for the **views** model.
@@ -762,7 +747,6 @@ export namespace Prisma {
     invoices: 'invoices',
     plans: 'plans',
     users: 'users',
-    video_files: 'video_files',
     views: 'views'
   };
 
@@ -782,7 +766,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "cart" | "episodes" | "favorites" | "feedbacks" | "film_genres" | "films" | "genres" | "invoices" | "plans" | "users" | "video_files" | "views"
+      modelProps: "cart" | "episodes" | "favorites" | "feedbacks" | "film_genres" | "films" | "genres" | "invoices" | "plans" | "users" | "views"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1446,72 +1430,6 @@ export namespace Prisma {
           }
         }
       }
-      video_files: {
-        payload: Prisma.$video_filesPayload<ExtArgs>
-        fields: Prisma.video_filesFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.video_filesFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$video_filesPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.video_filesFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$video_filesPayload>
-          }
-          findFirst: {
-            args: Prisma.video_filesFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$video_filesPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.video_filesFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$video_filesPayload>
-          }
-          findMany: {
-            args: Prisma.video_filesFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$video_filesPayload>[]
-          }
-          create: {
-            args: Prisma.video_filesCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$video_filesPayload>
-          }
-          createMany: {
-            args: Prisma.video_filesCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          delete: {
-            args: Prisma.video_filesDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$video_filesPayload>
-          }
-          update: {
-            args: Prisma.video_filesUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$video_filesPayload>
-          }
-          deleteMany: {
-            args: Prisma.video_filesDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.video_filesUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          upsert: {
-            args: Prisma.video_filesUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$video_filesPayload>
-          }
-          aggregate: {
-            args: Prisma.Video_filesAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateVideo_files>
-          }
-          groupBy: {
-            args: Prisma.video_filesGroupByArgs<ExtArgs>
-            result: $Utils.Optional<Video_filesGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.video_filesCountArgs<ExtArgs>
-            result: $Utils.Optional<Video_filesCountAggregateOutputType> | number
-          }
-        }
-      }
       views: {
         payload: Prisma.$viewsPayload<ExtArgs>
         fields: Prisma.viewsFieldRefs
@@ -1684,7 +1602,6 @@ export namespace Prisma {
     invoices?: invoicesOmit
     plans?: plansOmit
     users?: usersOmit
-    video_files?: video_filesOmit
     views?: viewsOmit
   }
 
@@ -1766,12 +1683,10 @@ export namespace Prisma {
    */
 
   export type EpisodesCountOutputType = {
-    video_files: number
     views: number
   }
 
   export type EpisodesCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    video_files?: boolean | EpisodesCountOutputTypeCountVideo_filesArgs
     views?: boolean | EpisodesCountOutputTypeCountViewsArgs
   }
 
@@ -1784,13 +1699,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the EpisodesCountOutputType
      */
     select?: EpisodesCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * EpisodesCountOutputType without action
-   */
-  export type EpisodesCountOutputTypeCountVideo_filesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: video_filesWhereInput
   }
 
   /**
@@ -3240,7 +3148,6 @@ export namespace Prisma {
     created_at?: boolean
     updated_at?: boolean
     films?: boolean | episodes$filmsArgs<ExtArgs>
-    video_files?: boolean | episodes$video_filesArgs<ExtArgs>
     views?: boolean | episodes$viewsArgs<ExtArgs>
     _count?: boolean | EpisodesCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["episodes"]>
@@ -3260,7 +3167,6 @@ export namespace Prisma {
   export type episodesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "film_id" | "episode_name" | "video_url" | "sub_url" | "created_at" | "updated_at", ExtArgs["result"]["episodes"]>
   export type episodesInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     films?: boolean | episodes$filmsArgs<ExtArgs>
-    video_files?: boolean | episodes$video_filesArgs<ExtArgs>
     views?: boolean | episodes$viewsArgs<ExtArgs>
     _count?: boolean | EpisodesCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -3269,7 +3175,6 @@ export namespace Prisma {
     name: "episodes"
     objects: {
       films: Prisma.$filmsPayload<ExtArgs> | null
-      video_files: Prisma.$video_filesPayload<ExtArgs>[]
       views: Prisma.$viewsPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -3621,7 +3526,6 @@ export namespace Prisma {
   export interface Prisma__episodesClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     films<T extends episodes$filmsArgs<ExtArgs> = {}>(args?: Subset<T, episodes$filmsArgs<ExtArgs>>): Prisma__filmsClient<$Result.GetResult<Prisma.$filmsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    video_files<T extends episodes$video_filesArgs<ExtArgs> = {}>(args?: Subset<T, episodes$video_filesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$video_filesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     views<T extends episodes$viewsArgs<ExtArgs> = {}>(args?: Subset<T, episodes$viewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$viewsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -4018,30 +3922,6 @@ export namespace Prisma {
      */
     include?: filmsInclude<ExtArgs> | null
     where?: filmsWhereInput
-  }
-
-  /**
-   * episodes.video_files
-   */
-  export type episodes$video_filesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the video_files
-     */
-    select?: video_filesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the video_files
-     */
-    omit?: video_filesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: video_filesInclude<ExtArgs> | null
-    where?: video_filesWhereInput
-    orderBy?: video_filesOrderByWithRelationInput | video_filesOrderByWithRelationInput[]
-    cursor?: video_filesWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: Video_filesScalarFieldEnum | Video_filesScalarFieldEnum[]
   }
 
   /**
@@ -7133,6 +7013,7 @@ export namespace Prisma {
 
   export type FilmsAvgAggregateOutputType = {
     id: number | null
+    season: number | null
     year: number | null
     view_count: number | null
     average_rating: Decimal | null
@@ -7140,6 +7021,7 @@ export namespace Prisma {
 
   export type FilmsSumAggregateOutputType = {
     id: number | null
+    season: number | null
     year: number | null
     view_count: number | null
     average_rating: Decimal | null
@@ -7148,6 +7030,7 @@ export namespace Prisma {
   export type FilmsMinAggregateOutputType = {
     id: number | null
     title: string | null
+    season: number | null
     poster_url: string | null
     description: string | null
     year: number | null
@@ -7162,11 +7045,13 @@ export namespace Prisma {
     updated_at: Date | null
     view_count: number | null
     average_rating: Decimal | null
+    original_name: string | null
   }
 
   export type FilmsMaxAggregateOutputType = {
     id: number | null
     title: string | null
+    season: number | null
     poster_url: string | null
     description: string | null
     year: number | null
@@ -7181,11 +7066,13 @@ export namespace Prisma {
     updated_at: Date | null
     view_count: number | null
     average_rating: Decimal | null
+    original_name: string | null
   }
 
   export type FilmsCountAggregateOutputType = {
     id: number
     title: number
+    season: number
     poster_url: number
     description: number
     year: number
@@ -7200,12 +7087,14 @@ export namespace Prisma {
     updated_at: number
     view_count: number
     average_rating: number
+    original_name: number
     _all: number
   }
 
 
   export type FilmsAvgAggregateInputType = {
     id?: true
+    season?: true
     year?: true
     view_count?: true
     average_rating?: true
@@ -7213,6 +7102,7 @@ export namespace Prisma {
 
   export type FilmsSumAggregateInputType = {
     id?: true
+    season?: true
     year?: true
     view_count?: true
     average_rating?: true
@@ -7221,6 +7111,7 @@ export namespace Prisma {
   export type FilmsMinAggregateInputType = {
     id?: true
     title?: true
+    season?: true
     poster_url?: true
     description?: true
     year?: true
@@ -7235,11 +7126,13 @@ export namespace Prisma {
     updated_at?: true
     view_count?: true
     average_rating?: true
+    original_name?: true
   }
 
   export type FilmsMaxAggregateInputType = {
     id?: true
     title?: true
+    season?: true
     poster_url?: true
     description?: true
     year?: true
@@ -7254,11 +7147,13 @@ export namespace Prisma {
     updated_at?: true
     view_count?: true
     average_rating?: true
+    original_name?: true
   }
 
   export type FilmsCountAggregateInputType = {
     id?: true
     title?: true
+    season?: true
     poster_url?: true
     description?: true
     year?: true
@@ -7273,6 +7168,7 @@ export namespace Prisma {
     updated_at?: true
     view_count?: true
     average_rating?: true
+    original_name?: true
     _all?: true
   }
 
@@ -7365,6 +7261,7 @@ export namespace Prisma {
   export type FilmsGroupByOutputType = {
     id: number
     title: string | null
+    season: number
     poster_url: string | null
     description: string | null
     year: number | null
@@ -7379,6 +7276,7 @@ export namespace Prisma {
     updated_at: Date
     view_count: number | null
     average_rating: Decimal | null
+    original_name: string | null
     _count: FilmsCountAggregateOutputType | null
     _avg: FilmsAvgAggregateOutputType | null
     _sum: FilmsSumAggregateOutputType | null
@@ -7403,6 +7301,7 @@ export namespace Prisma {
   export type filmsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     title?: boolean
+    season?: boolean
     poster_url?: boolean
     description?: boolean
     year?: boolean
@@ -7417,6 +7316,7 @@ export namespace Prisma {
     updated_at?: boolean
     view_count?: boolean
     average_rating?: boolean
+    original_name?: boolean
     episodes?: boolean | films$episodesArgs<ExtArgs>
     favorites?: boolean | films$favoritesArgs<ExtArgs>
     feedbacks?: boolean | films$feedbacksArgs<ExtArgs>
@@ -7430,6 +7330,7 @@ export namespace Prisma {
   export type filmsSelectScalar = {
     id?: boolean
     title?: boolean
+    season?: boolean
     poster_url?: boolean
     description?: boolean
     year?: boolean
@@ -7444,9 +7345,10 @@ export namespace Prisma {
     updated_at?: boolean
     view_count?: boolean
     average_rating?: boolean
+    original_name?: boolean
   }
 
-  export type filmsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "poster_url" | "description" | "year" | "country" | "duration" | "poster_video_url" | "actor" | "is_series" | "directeur" | "age_rating" | "created_at" | "updated_at" | "view_count" | "average_rating", ExtArgs["result"]["films"]>
+  export type filmsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "season" | "poster_url" | "description" | "year" | "country" | "duration" | "poster_video_url" | "actor" | "is_series" | "directeur" | "age_rating" | "created_at" | "updated_at" | "view_count" | "average_rating" | "original_name", ExtArgs["result"]["films"]>
   export type filmsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     episodes?: boolean | films$episodesArgs<ExtArgs>
     favorites?: boolean | films$favoritesArgs<ExtArgs>
@@ -7468,6 +7370,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: number
       title: string | null
+      season: number
       poster_url: string | null
       description: string | null
       year: number | null
@@ -7482,6 +7385,7 @@ export namespace Prisma {
       updated_at: Date
       view_count: number | null
       average_rating: Prisma.Decimal | null
+      original_name: string | null
     }, ExtArgs["result"]["films"]>
     composites: {}
   }
@@ -7858,6 +7762,7 @@ export namespace Prisma {
   interface filmsFieldRefs {
     readonly id: FieldRef<"films", 'Int'>
     readonly title: FieldRef<"films", 'String'>
+    readonly season: FieldRef<"films", 'Int'>
     readonly poster_url: FieldRef<"films", 'String'>
     readonly description: FieldRef<"films", 'String'>
     readonly year: FieldRef<"films", 'Int'>
@@ -7872,6 +7777,7 @@ export namespace Prisma {
     readonly updated_at: FieldRef<"films", 'DateTime'>
     readonly view_count: FieldRef<"films", 'Int'>
     readonly average_rating: FieldRef<"films", 'Decimal'>
+    readonly original_name: FieldRef<"films", 'String'>
   }
     
 
@@ -12695,981 +12601,6 @@ export namespace Prisma {
 
 
   /**
-   * Model video_files
-   */
-
-  export type AggregateVideo_files = {
-    _count: Video_filesCountAggregateOutputType | null
-    _avg: Video_filesAvgAggregateOutputType | null
-    _sum: Video_filesSumAggregateOutputType | null
-    _min: Video_filesMinAggregateOutputType | null
-    _max: Video_filesMaxAggregateOutputType | null
-  }
-
-  export type Video_filesAvgAggregateOutputType = {
-    id: number | null
-    episode_id: number | null
-  }
-
-  export type Video_filesSumAggregateOutputType = {
-    id: number | null
-    episode_id: number | null
-  }
-
-  export type Video_filesMinAggregateOutputType = {
-    id: number | null
-    episode_id: number | null
-    quality: string | null
-    file_url: string | null
-  }
-
-  export type Video_filesMaxAggregateOutputType = {
-    id: number | null
-    episode_id: number | null
-    quality: string | null
-    file_url: string | null
-  }
-
-  export type Video_filesCountAggregateOutputType = {
-    id: number
-    episode_id: number
-    quality: number
-    file_url: number
-    _all: number
-  }
-
-
-  export type Video_filesAvgAggregateInputType = {
-    id?: true
-    episode_id?: true
-  }
-
-  export type Video_filesSumAggregateInputType = {
-    id?: true
-    episode_id?: true
-  }
-
-  export type Video_filesMinAggregateInputType = {
-    id?: true
-    episode_id?: true
-    quality?: true
-    file_url?: true
-  }
-
-  export type Video_filesMaxAggregateInputType = {
-    id?: true
-    episode_id?: true
-    quality?: true
-    file_url?: true
-  }
-
-  export type Video_filesCountAggregateInputType = {
-    id?: true
-    episode_id?: true
-    quality?: true
-    file_url?: true
-    _all?: true
-  }
-
-  export type Video_filesAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which video_files to aggregate.
-     */
-    where?: video_filesWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of video_files to fetch.
-     */
-    orderBy?: video_filesOrderByWithRelationInput | video_filesOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: video_filesWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` video_files from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` video_files.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned video_files
-    **/
-    _count?: true | Video_filesCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: Video_filesAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: Video_filesSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: Video_filesMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: Video_filesMaxAggregateInputType
-  }
-
-  export type GetVideo_filesAggregateType<T extends Video_filesAggregateArgs> = {
-        [P in keyof T & keyof AggregateVideo_files]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateVideo_files[P]>
-      : GetScalarType<T[P], AggregateVideo_files[P]>
-  }
-
-
-
-
-  export type video_filesGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: video_filesWhereInput
-    orderBy?: video_filesOrderByWithAggregationInput | video_filesOrderByWithAggregationInput[]
-    by: Video_filesScalarFieldEnum[] | Video_filesScalarFieldEnum
-    having?: video_filesScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: Video_filesCountAggregateInputType | true
-    _avg?: Video_filesAvgAggregateInputType
-    _sum?: Video_filesSumAggregateInputType
-    _min?: Video_filesMinAggregateInputType
-    _max?: Video_filesMaxAggregateInputType
-  }
-
-  export type Video_filesGroupByOutputType = {
-    id: number
-    episode_id: number | null
-    quality: string | null
-    file_url: string | null
-    _count: Video_filesCountAggregateOutputType | null
-    _avg: Video_filesAvgAggregateOutputType | null
-    _sum: Video_filesSumAggregateOutputType | null
-    _min: Video_filesMinAggregateOutputType | null
-    _max: Video_filesMaxAggregateOutputType | null
-  }
-
-  type GetVideo_filesGroupByPayload<T extends video_filesGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<Video_filesGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof Video_filesGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], Video_filesGroupByOutputType[P]>
-            : GetScalarType<T[P], Video_filesGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type video_filesSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    episode_id?: boolean
-    quality?: boolean
-    file_url?: boolean
-    episodes?: boolean | video_files$episodesArgs<ExtArgs>
-  }, ExtArgs["result"]["video_files"]>
-
-
-
-  export type video_filesSelectScalar = {
-    id?: boolean
-    episode_id?: boolean
-    quality?: boolean
-    file_url?: boolean
-  }
-
-  export type video_filesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "episode_id" | "quality" | "file_url", ExtArgs["result"]["video_files"]>
-  export type video_filesInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    episodes?: boolean | video_files$episodesArgs<ExtArgs>
-  }
-
-  export type $video_filesPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "video_files"
-    objects: {
-      episodes: Prisma.$episodesPayload<ExtArgs> | null
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: number
-      episode_id: number | null
-      quality: string | null
-      file_url: string | null
-    }, ExtArgs["result"]["video_files"]>
-    composites: {}
-  }
-
-  type video_filesGetPayload<S extends boolean | null | undefined | video_filesDefaultArgs> = $Result.GetResult<Prisma.$video_filesPayload, S>
-
-  type video_filesCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<video_filesFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: Video_filesCountAggregateInputType | true
-    }
-
-  export interface video_filesDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['video_files'], meta: { name: 'video_files' } }
-    /**
-     * Find zero or one Video_files that matches the filter.
-     * @param {video_filesFindUniqueArgs} args - Arguments to find a Video_files
-     * @example
-     * // Get one Video_files
-     * const video_files = await prisma.video_files.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends video_filesFindUniqueArgs>(args: SelectSubset<T, video_filesFindUniqueArgs<ExtArgs>>): Prisma__video_filesClient<$Result.GetResult<Prisma.$video_filesPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one Video_files that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {video_filesFindUniqueOrThrowArgs} args - Arguments to find a Video_files
-     * @example
-     * // Get one Video_files
-     * const video_files = await prisma.video_files.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends video_filesFindUniqueOrThrowArgs>(args: SelectSubset<T, video_filesFindUniqueOrThrowArgs<ExtArgs>>): Prisma__video_filesClient<$Result.GetResult<Prisma.$video_filesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Video_files that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {video_filesFindFirstArgs} args - Arguments to find a Video_files
-     * @example
-     * // Get one Video_files
-     * const video_files = await prisma.video_files.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends video_filesFindFirstArgs>(args?: SelectSubset<T, video_filesFindFirstArgs<ExtArgs>>): Prisma__video_filesClient<$Result.GetResult<Prisma.$video_filesPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Video_files that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {video_filesFindFirstOrThrowArgs} args - Arguments to find a Video_files
-     * @example
-     * // Get one Video_files
-     * const video_files = await prisma.video_files.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends video_filesFindFirstOrThrowArgs>(args?: SelectSubset<T, video_filesFindFirstOrThrowArgs<ExtArgs>>): Prisma__video_filesClient<$Result.GetResult<Prisma.$video_filesPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more Video_files that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {video_filesFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Video_files
-     * const video_files = await prisma.video_files.findMany()
-     * 
-     * // Get first 10 Video_files
-     * const video_files = await prisma.video_files.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const video_filesWithIdOnly = await prisma.video_files.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends video_filesFindManyArgs>(args?: SelectSubset<T, video_filesFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$video_filesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a Video_files.
-     * @param {video_filesCreateArgs} args - Arguments to create a Video_files.
-     * @example
-     * // Create one Video_files
-     * const Video_files = await prisma.video_files.create({
-     *   data: {
-     *     // ... data to create a Video_files
-     *   }
-     * })
-     * 
-     */
-    create<T extends video_filesCreateArgs>(args: SelectSubset<T, video_filesCreateArgs<ExtArgs>>): Prisma__video_filesClient<$Result.GetResult<Prisma.$video_filesPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many Video_files.
-     * @param {video_filesCreateManyArgs} args - Arguments to create many Video_files.
-     * @example
-     * // Create many Video_files
-     * const video_files = await prisma.video_files.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends video_filesCreateManyArgs>(args?: SelectSubset<T, video_filesCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Delete a Video_files.
-     * @param {video_filesDeleteArgs} args - Arguments to delete one Video_files.
-     * @example
-     * // Delete one Video_files
-     * const Video_files = await prisma.video_files.delete({
-     *   where: {
-     *     // ... filter to delete one Video_files
-     *   }
-     * })
-     * 
-     */
-    delete<T extends video_filesDeleteArgs>(args: SelectSubset<T, video_filesDeleteArgs<ExtArgs>>): Prisma__video_filesClient<$Result.GetResult<Prisma.$video_filesPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one Video_files.
-     * @param {video_filesUpdateArgs} args - Arguments to update one Video_files.
-     * @example
-     * // Update one Video_files
-     * const video_files = await prisma.video_files.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends video_filesUpdateArgs>(args: SelectSubset<T, video_filesUpdateArgs<ExtArgs>>): Prisma__video_filesClient<$Result.GetResult<Prisma.$video_filesPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more Video_files.
-     * @param {video_filesDeleteManyArgs} args - Arguments to filter Video_files to delete.
-     * @example
-     * // Delete a few Video_files
-     * const { count } = await prisma.video_files.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends video_filesDeleteManyArgs>(args?: SelectSubset<T, video_filesDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Video_files.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {video_filesUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Video_files
-     * const video_files = await prisma.video_files.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends video_filesUpdateManyArgs>(args: SelectSubset<T, video_filesUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create or update one Video_files.
-     * @param {video_filesUpsertArgs} args - Arguments to update or create a Video_files.
-     * @example
-     * // Update or create a Video_files
-     * const video_files = await prisma.video_files.upsert({
-     *   create: {
-     *     // ... data to create a Video_files
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Video_files we want to update
-     *   }
-     * })
-     */
-    upsert<T extends video_filesUpsertArgs>(args: SelectSubset<T, video_filesUpsertArgs<ExtArgs>>): Prisma__video_filesClient<$Result.GetResult<Prisma.$video_filesPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of Video_files.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {video_filesCountArgs} args - Arguments to filter Video_files to count.
-     * @example
-     * // Count the number of Video_files
-     * const count = await prisma.video_files.count({
-     *   where: {
-     *     // ... the filter for the Video_files we want to count
-     *   }
-     * })
-    **/
-    count<T extends video_filesCountArgs>(
-      args?: Subset<T, video_filesCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], Video_filesCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Video_files.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {Video_filesAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends Video_filesAggregateArgs>(args: Subset<T, Video_filesAggregateArgs>): Prisma.PrismaPromise<GetVideo_filesAggregateType<T>>
-
-    /**
-     * Group by Video_files.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {video_filesGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends video_filesGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: video_filesGroupByArgs['orderBy'] }
-        : { orderBy?: video_filesGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, video_filesGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetVideo_filesGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the video_files model
-   */
-  readonly fields: video_filesFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for video_files.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__video_filesClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    episodes<T extends video_files$episodesArgs<ExtArgs> = {}>(args?: Subset<T, video_files$episodesArgs<ExtArgs>>): Prisma__episodesClient<$Result.GetResult<Prisma.$episodesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the video_files model
-   */
-  interface video_filesFieldRefs {
-    readonly id: FieldRef<"video_files", 'Int'>
-    readonly episode_id: FieldRef<"video_files", 'Int'>
-    readonly quality: FieldRef<"video_files", 'String'>
-    readonly file_url: FieldRef<"video_files", 'String'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * video_files findUnique
-   */
-  export type video_filesFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the video_files
-     */
-    select?: video_filesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the video_files
-     */
-    omit?: video_filesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: video_filesInclude<ExtArgs> | null
-    /**
-     * Filter, which video_files to fetch.
-     */
-    where: video_filesWhereUniqueInput
-  }
-
-  /**
-   * video_files findUniqueOrThrow
-   */
-  export type video_filesFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the video_files
-     */
-    select?: video_filesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the video_files
-     */
-    omit?: video_filesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: video_filesInclude<ExtArgs> | null
-    /**
-     * Filter, which video_files to fetch.
-     */
-    where: video_filesWhereUniqueInput
-  }
-
-  /**
-   * video_files findFirst
-   */
-  export type video_filesFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the video_files
-     */
-    select?: video_filesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the video_files
-     */
-    omit?: video_filesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: video_filesInclude<ExtArgs> | null
-    /**
-     * Filter, which video_files to fetch.
-     */
-    where?: video_filesWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of video_files to fetch.
-     */
-    orderBy?: video_filesOrderByWithRelationInput | video_filesOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for video_files.
-     */
-    cursor?: video_filesWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` video_files from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` video_files.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of video_files.
-     */
-    distinct?: Video_filesScalarFieldEnum | Video_filesScalarFieldEnum[]
-  }
-
-  /**
-   * video_files findFirstOrThrow
-   */
-  export type video_filesFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the video_files
-     */
-    select?: video_filesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the video_files
-     */
-    omit?: video_filesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: video_filesInclude<ExtArgs> | null
-    /**
-     * Filter, which video_files to fetch.
-     */
-    where?: video_filesWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of video_files to fetch.
-     */
-    orderBy?: video_filesOrderByWithRelationInput | video_filesOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for video_files.
-     */
-    cursor?: video_filesWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` video_files from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` video_files.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of video_files.
-     */
-    distinct?: Video_filesScalarFieldEnum | Video_filesScalarFieldEnum[]
-  }
-
-  /**
-   * video_files findMany
-   */
-  export type video_filesFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the video_files
-     */
-    select?: video_filesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the video_files
-     */
-    omit?: video_filesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: video_filesInclude<ExtArgs> | null
-    /**
-     * Filter, which video_files to fetch.
-     */
-    where?: video_filesWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of video_files to fetch.
-     */
-    orderBy?: video_filesOrderByWithRelationInput | video_filesOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing video_files.
-     */
-    cursor?: video_filesWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` video_files from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` video_files.
-     */
-    skip?: number
-    distinct?: Video_filesScalarFieldEnum | Video_filesScalarFieldEnum[]
-  }
-
-  /**
-   * video_files create
-   */
-  export type video_filesCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the video_files
-     */
-    select?: video_filesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the video_files
-     */
-    omit?: video_filesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: video_filesInclude<ExtArgs> | null
-    /**
-     * The data needed to create a video_files.
-     */
-    data?: XOR<video_filesCreateInput, video_filesUncheckedCreateInput>
-  }
-
-  /**
-   * video_files createMany
-   */
-  export type video_filesCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many video_files.
-     */
-    data: video_filesCreateManyInput | video_filesCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * video_files update
-   */
-  export type video_filesUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the video_files
-     */
-    select?: video_filesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the video_files
-     */
-    omit?: video_filesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: video_filesInclude<ExtArgs> | null
-    /**
-     * The data needed to update a video_files.
-     */
-    data: XOR<video_filesUpdateInput, video_filesUncheckedUpdateInput>
-    /**
-     * Choose, which video_files to update.
-     */
-    where: video_filesWhereUniqueInput
-  }
-
-  /**
-   * video_files updateMany
-   */
-  export type video_filesUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update video_files.
-     */
-    data: XOR<video_filesUpdateManyMutationInput, video_filesUncheckedUpdateManyInput>
-    /**
-     * Filter which video_files to update
-     */
-    where?: video_filesWhereInput
-    /**
-     * Limit how many video_files to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * video_files upsert
-   */
-  export type video_filesUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the video_files
-     */
-    select?: video_filesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the video_files
-     */
-    omit?: video_filesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: video_filesInclude<ExtArgs> | null
-    /**
-     * The filter to search for the video_files to update in case it exists.
-     */
-    where: video_filesWhereUniqueInput
-    /**
-     * In case the video_files found by the `where` argument doesn't exist, create a new video_files with this data.
-     */
-    create: XOR<video_filesCreateInput, video_filesUncheckedCreateInput>
-    /**
-     * In case the video_files was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<video_filesUpdateInput, video_filesUncheckedUpdateInput>
-  }
-
-  /**
-   * video_files delete
-   */
-  export type video_filesDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the video_files
-     */
-    select?: video_filesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the video_files
-     */
-    omit?: video_filesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: video_filesInclude<ExtArgs> | null
-    /**
-     * Filter which video_files to delete.
-     */
-    where: video_filesWhereUniqueInput
-  }
-
-  /**
-   * video_files deleteMany
-   */
-  export type video_filesDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which video_files to delete
-     */
-    where?: video_filesWhereInput
-    /**
-     * Limit how many video_files to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * video_files.episodes
-   */
-  export type video_files$episodesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the episodes
-     */
-    select?: episodesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the episodes
-     */
-    omit?: episodesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: episodesInclude<ExtArgs> | null
-    where?: episodesWhereInput
-  }
-
-  /**
-   * video_files without action
-   */
-  export type video_filesDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the video_files
-     */
-    select?: video_filesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the video_files
-     */
-    omit?: video_filesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: video_filesInclude<ExtArgs> | null
-  }
-
-
-  /**
    * Model views
    */
 
@@ -14796,6 +13727,7 @@ export namespace Prisma {
   export const FilmsScalarFieldEnum: {
     id: 'id',
     title: 'title',
+    season: 'season',
     poster_url: 'poster_url',
     description: 'description',
     year: 'year',
@@ -14809,7 +13741,8 @@ export namespace Prisma {
     created_at: 'created_at',
     updated_at: 'updated_at',
     view_count: 'view_count',
-    average_rating: 'average_rating'
+    average_rating: 'average_rating',
+    original_name: 'original_name'
   };
 
   export type FilmsScalarFieldEnum = (typeof FilmsScalarFieldEnum)[keyof typeof FilmsScalarFieldEnum]
@@ -14873,16 +13806,6 @@ export namespace Prisma {
   export type UsersScalarFieldEnum = (typeof UsersScalarFieldEnum)[keyof typeof UsersScalarFieldEnum]
 
 
-  export const Video_filesScalarFieldEnum: {
-    id: 'id',
-    episode_id: 'episode_id',
-    quality: 'quality',
-    file_url: 'file_url'
-  };
-
-  export type Video_filesScalarFieldEnum = (typeof Video_filesScalarFieldEnum)[keyof typeof Video_filesScalarFieldEnum]
-
-
   export const ViewsScalarFieldEnum: {
     id: 'id',
     film_id: 'film_id',
@@ -14936,7 +13859,8 @@ export namespace Prisma {
     poster_video_url: 'poster_video_url',
     actor: 'actor',
     directeur: 'directeur',
-    age_rating: 'age_rating'
+    age_rating: 'age_rating',
+    original_name: 'original_name'
   };
 
   export type filmsOrderByRelevanceFieldEnum = (typeof filmsOrderByRelevanceFieldEnum)[keyof typeof filmsOrderByRelevanceFieldEnum]
@@ -14978,14 +13902,6 @@ export namespace Prisma {
   };
 
   export type usersOrderByRelevanceFieldEnum = (typeof usersOrderByRelevanceFieldEnum)[keyof typeof usersOrderByRelevanceFieldEnum]
-
-
-  export const video_filesOrderByRelevanceFieldEnum: {
-    quality: 'quality',
-    file_url: 'file_url'
-  };
-
-  export type video_filesOrderByRelevanceFieldEnum = (typeof video_filesOrderByRelevanceFieldEnum)[keyof typeof video_filesOrderByRelevanceFieldEnum]
 
 
   /**
@@ -15105,7 +14021,6 @@ export namespace Prisma {
     created_at?: DateTimeFilter<"episodes"> | Date | string
     updated_at?: DateTimeFilter<"episodes"> | Date | string
     films?: XOR<FilmsNullableScalarRelationFilter, filmsWhereInput> | null
-    video_files?: Video_filesListRelationFilter
     views?: ViewsListRelationFilter
   }
 
@@ -15118,7 +14033,6 @@ export namespace Prisma {
     created_at?: SortOrder
     updated_at?: SortOrder
     films?: filmsOrderByWithRelationInput
-    video_files?: video_filesOrderByRelationAggregateInput
     views?: viewsOrderByRelationAggregateInput
     _relevance?: episodesOrderByRelevanceInput
   }
@@ -15135,7 +14049,6 @@ export namespace Prisma {
     created_at?: DateTimeFilter<"episodes"> | Date | string
     updated_at?: DateTimeFilter<"episodes"> | Date | string
     films?: XOR<FilmsNullableScalarRelationFilter, filmsWhereInput> | null
-    video_files?: Video_filesListRelationFilter
     views?: ViewsListRelationFilter
   }, "id">
 
@@ -15350,6 +14263,7 @@ export namespace Prisma {
     NOT?: filmsWhereInput | filmsWhereInput[]
     id?: IntFilter<"films"> | number
     title?: StringNullableFilter<"films"> | string | null
+    season?: IntFilter<"films"> | number
     poster_url?: StringNullableFilter<"films"> | string | null
     description?: StringNullableFilter<"films"> | string | null
     year?: IntNullableFilter<"films"> | number | null
@@ -15364,6 +14278,7 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"films"> | Date | string
     view_count?: IntNullableFilter<"films"> | number | null
     average_rating?: DecimalNullableFilter<"films"> | Decimal | DecimalJsLike | number | string | null
+    original_name?: StringNullableFilter<"films"> | string | null
     episodes?: EpisodesListRelationFilter
     favorites?: FavoritesListRelationFilter
     feedbacks?: FeedbacksListRelationFilter
@@ -15374,6 +14289,7 @@ export namespace Prisma {
   export type filmsOrderByWithRelationInput = {
     id?: SortOrder
     title?: SortOrderInput | SortOrder
+    season?: SortOrder
     poster_url?: SortOrderInput | SortOrder
     description?: SortOrderInput | SortOrder
     year?: SortOrderInput | SortOrder
@@ -15388,6 +14304,7 @@ export namespace Prisma {
     updated_at?: SortOrder
     view_count?: SortOrderInput | SortOrder
     average_rating?: SortOrderInput | SortOrder
+    original_name?: SortOrderInput | SortOrder
     episodes?: episodesOrderByRelationAggregateInput
     favorites?: favoritesOrderByRelationAggregateInput
     feedbacks?: feedbacksOrderByRelationAggregateInput
@@ -15402,6 +14319,7 @@ export namespace Prisma {
     OR?: filmsWhereInput[]
     NOT?: filmsWhereInput | filmsWhereInput[]
     title?: StringNullableFilter<"films"> | string | null
+    season?: IntFilter<"films"> | number
     poster_url?: StringNullableFilter<"films"> | string | null
     description?: StringNullableFilter<"films"> | string | null
     year?: IntNullableFilter<"films"> | number | null
@@ -15416,6 +14334,7 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"films"> | Date | string
     view_count?: IntNullableFilter<"films"> | number | null
     average_rating?: DecimalNullableFilter<"films"> | Decimal | DecimalJsLike | number | string | null
+    original_name?: StringNullableFilter<"films"> | string | null
     episodes?: EpisodesListRelationFilter
     favorites?: FavoritesListRelationFilter
     feedbacks?: FeedbacksListRelationFilter
@@ -15426,6 +14345,7 @@ export namespace Prisma {
   export type filmsOrderByWithAggregationInput = {
     id?: SortOrder
     title?: SortOrderInput | SortOrder
+    season?: SortOrder
     poster_url?: SortOrderInput | SortOrder
     description?: SortOrderInput | SortOrder
     year?: SortOrderInput | SortOrder
@@ -15440,6 +14360,7 @@ export namespace Prisma {
     updated_at?: SortOrder
     view_count?: SortOrderInput | SortOrder
     average_rating?: SortOrderInput | SortOrder
+    original_name?: SortOrderInput | SortOrder
     _count?: filmsCountOrderByAggregateInput
     _avg?: filmsAvgOrderByAggregateInput
     _max?: filmsMaxOrderByAggregateInput
@@ -15453,6 +14374,7 @@ export namespace Prisma {
     NOT?: filmsScalarWhereWithAggregatesInput | filmsScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"films"> | number
     title?: StringNullableWithAggregatesFilter<"films"> | string | null
+    season?: IntWithAggregatesFilter<"films"> | number
     poster_url?: StringNullableWithAggregatesFilter<"films"> | string | null
     description?: StringNullableWithAggregatesFilter<"films"> | string | null
     year?: IntNullableWithAggregatesFilter<"films"> | number | null
@@ -15467,6 +14389,7 @@ export namespace Prisma {
     updated_at?: DateTimeWithAggregatesFilter<"films"> | Date | string
     view_count?: IntNullableWithAggregatesFilter<"films"> | number | null
     average_rating?: DecimalNullableWithAggregatesFilter<"films"> | Decimal | DecimalJsLike | number | string | null
+    original_name?: StringNullableWithAggregatesFilter<"films"> | string | null
   }
 
   export type genresWhereInput = {
@@ -15795,59 +14718,6 @@ export namespace Prisma {
     updated_at?: DateTimeWithAggregatesFilter<"users"> | Date | string
   }
 
-  export type video_filesWhereInput = {
-    AND?: video_filesWhereInput | video_filesWhereInput[]
-    OR?: video_filesWhereInput[]
-    NOT?: video_filesWhereInput | video_filesWhereInput[]
-    id?: IntFilter<"video_files"> | number
-    episode_id?: IntNullableFilter<"video_files"> | number | null
-    quality?: StringNullableFilter<"video_files"> | string | null
-    file_url?: StringNullableFilter<"video_files"> | string | null
-    episodes?: XOR<EpisodesNullableScalarRelationFilter, episodesWhereInput> | null
-  }
-
-  export type video_filesOrderByWithRelationInput = {
-    id?: SortOrder
-    episode_id?: SortOrderInput | SortOrder
-    quality?: SortOrderInput | SortOrder
-    file_url?: SortOrderInput | SortOrder
-    episodes?: episodesOrderByWithRelationInput
-    _relevance?: video_filesOrderByRelevanceInput
-  }
-
-  export type video_filesWhereUniqueInput = Prisma.AtLeast<{
-    id?: number
-    AND?: video_filesWhereInput | video_filesWhereInput[]
-    OR?: video_filesWhereInput[]
-    NOT?: video_filesWhereInput | video_filesWhereInput[]
-    episode_id?: IntNullableFilter<"video_files"> | number | null
-    quality?: StringNullableFilter<"video_files"> | string | null
-    file_url?: StringNullableFilter<"video_files"> | string | null
-    episodes?: XOR<EpisodesNullableScalarRelationFilter, episodesWhereInput> | null
-  }, "id">
-
-  export type video_filesOrderByWithAggregationInput = {
-    id?: SortOrder
-    episode_id?: SortOrderInput | SortOrder
-    quality?: SortOrderInput | SortOrder
-    file_url?: SortOrderInput | SortOrder
-    _count?: video_filesCountOrderByAggregateInput
-    _avg?: video_filesAvgOrderByAggregateInput
-    _max?: video_filesMaxOrderByAggregateInput
-    _min?: video_filesMinOrderByAggregateInput
-    _sum?: video_filesSumOrderByAggregateInput
-  }
-
-  export type video_filesScalarWhereWithAggregatesInput = {
-    AND?: video_filesScalarWhereWithAggregatesInput | video_filesScalarWhereWithAggregatesInput[]
-    OR?: video_filesScalarWhereWithAggregatesInput[]
-    NOT?: video_filesScalarWhereWithAggregatesInput | video_filesScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"video_files"> | number
-    episode_id?: IntNullableWithAggregatesFilter<"video_files"> | number | null
-    quality?: StringNullableWithAggregatesFilter<"video_files"> | string | null
-    file_url?: StringNullableWithAggregatesFilter<"video_files"> | string | null
-  }
-
   export type viewsWhereInput = {
     AND?: viewsWhereInput | viewsWhereInput[]
     OR?: viewsWhereInput[]
@@ -15967,7 +14837,6 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     films?: filmsCreateNestedOneWithoutEpisodesInput
-    video_files?: video_filesCreateNestedManyWithoutEpisodesInput
     views?: viewsCreateNestedManyWithoutEpisodesInput
   }
 
@@ -15979,7 +14848,6 @@ export namespace Prisma {
     sub_url?: string | null
     created_at?: Date | string
     updated_at?: Date | string
-    video_files?: video_filesUncheckedCreateNestedManyWithoutEpisodesInput
     views?: viewsUncheckedCreateNestedManyWithoutEpisodesInput
   }
 
@@ -15990,7 +14858,6 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     films?: filmsUpdateOneWithoutEpisodesNestedInput
-    video_files?: video_filesUpdateManyWithoutEpisodesNestedInput
     views?: viewsUpdateManyWithoutEpisodesNestedInput
   }
 
@@ -16002,7 +14869,6 @@ export namespace Prisma {
     sub_url?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    video_files?: video_filesUncheckedUpdateManyWithoutEpisodesNestedInput
     views?: viewsUncheckedUpdateManyWithoutEpisodesNestedInput
   }
 
@@ -16183,6 +15049,7 @@ export namespace Prisma {
 
   export type filmsCreateInput = {
     title?: string | null
+    season?: number
     poster_url?: string | null
     description?: string | null
     year?: number | null
@@ -16197,6 +15064,7 @@ export namespace Prisma {
     updated_at?: Date | string
     view_count?: number | null
     average_rating?: Decimal | DecimalJsLike | number | string | null
+    original_name?: string | null
     episodes?: episodesCreateNestedManyWithoutFilmsInput
     favorites?: favoritesCreateNestedManyWithoutFilmsInput
     feedbacks?: feedbacksCreateNestedManyWithoutFilmsInput
@@ -16207,6 +15075,7 @@ export namespace Prisma {
   export type filmsUncheckedCreateInput = {
     id?: number
     title?: string | null
+    season?: number
     poster_url?: string | null
     description?: string | null
     year?: number | null
@@ -16221,6 +15090,7 @@ export namespace Prisma {
     updated_at?: Date | string
     view_count?: number | null
     average_rating?: Decimal | DecimalJsLike | number | string | null
+    original_name?: string | null
     episodes?: episodesUncheckedCreateNestedManyWithoutFilmsInput
     favorites?: favoritesUncheckedCreateNestedManyWithoutFilmsInput
     feedbacks?: feedbacksUncheckedCreateNestedManyWithoutFilmsInput
@@ -16230,6 +15100,7 @@ export namespace Prisma {
 
   export type filmsUpdateInput = {
     title?: NullableStringFieldUpdateOperationsInput | string | null
+    season?: IntFieldUpdateOperationsInput | number
     poster_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     year?: NullableIntFieldUpdateOperationsInput | number | null
@@ -16244,6 +15115,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     view_count?: NullableIntFieldUpdateOperationsInput | number | null
     average_rating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    original_name?: NullableStringFieldUpdateOperationsInput | string | null
     episodes?: episodesUpdateManyWithoutFilmsNestedInput
     favorites?: favoritesUpdateManyWithoutFilmsNestedInput
     feedbacks?: feedbacksUpdateManyWithoutFilmsNestedInput
@@ -16254,6 +15126,7 @@ export namespace Prisma {
   export type filmsUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     title?: NullableStringFieldUpdateOperationsInput | string | null
+    season?: IntFieldUpdateOperationsInput | number
     poster_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     year?: NullableIntFieldUpdateOperationsInput | number | null
@@ -16268,6 +15141,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     view_count?: NullableIntFieldUpdateOperationsInput | number | null
     average_rating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    original_name?: NullableStringFieldUpdateOperationsInput | string | null
     episodes?: episodesUncheckedUpdateManyWithoutFilmsNestedInput
     favorites?: favoritesUncheckedUpdateManyWithoutFilmsNestedInput
     feedbacks?: feedbacksUncheckedUpdateManyWithoutFilmsNestedInput
@@ -16278,6 +15152,7 @@ export namespace Prisma {
   export type filmsCreateManyInput = {
     id?: number
     title?: string | null
+    season?: number
     poster_url?: string | null
     description?: string | null
     year?: number | null
@@ -16292,10 +15167,12 @@ export namespace Prisma {
     updated_at?: Date | string
     view_count?: number | null
     average_rating?: Decimal | DecimalJsLike | number | string | null
+    original_name?: string | null
   }
 
   export type filmsUpdateManyMutationInput = {
     title?: NullableStringFieldUpdateOperationsInput | string | null
+    season?: IntFieldUpdateOperationsInput | number
     poster_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     year?: NullableIntFieldUpdateOperationsInput | number | null
@@ -16310,11 +15187,13 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     view_count?: NullableIntFieldUpdateOperationsInput | number | null
     average_rating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    original_name?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type filmsUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     title?: NullableStringFieldUpdateOperationsInput | string | null
+    season?: IntFieldUpdateOperationsInput | number
     poster_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     year?: NullableIntFieldUpdateOperationsInput | number | null
@@ -16329,6 +15208,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     view_count?: NullableIntFieldUpdateOperationsInput | number | null
     average_rating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    original_name?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type genresCreateInput = {
@@ -16674,51 +15554,6 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type video_filesCreateInput = {
-    quality?: string | null
-    file_url?: string | null
-    episodes?: episodesCreateNestedOneWithoutVideo_filesInput
-  }
-
-  export type video_filesUncheckedCreateInput = {
-    id?: number
-    episode_id?: number | null
-    quality?: string | null
-    file_url?: string | null
-  }
-
-  export type video_filesUpdateInput = {
-    quality?: NullableStringFieldUpdateOperationsInput | string | null
-    file_url?: NullableStringFieldUpdateOperationsInput | string | null
-    episodes?: episodesUpdateOneWithoutVideo_filesNestedInput
-  }
-
-  export type video_filesUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    episode_id?: NullableIntFieldUpdateOperationsInput | number | null
-    quality?: NullableStringFieldUpdateOperationsInput | string | null
-    file_url?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type video_filesCreateManyInput = {
-    id?: number
-    episode_id?: number | null
-    quality?: string | null
-    file_url?: string | null
-  }
-
-  export type video_filesUpdateManyMutationInput = {
-    quality?: NullableStringFieldUpdateOperationsInput | string | null
-    file_url?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type video_filesUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    episode_id?: NullableIntFieldUpdateOperationsInput | number | null
-    quality?: NullableStringFieldUpdateOperationsInput | string | null
-    file_url?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
   export type viewsCreateInput = {
     viewed_at?: Date | string
     progress?: number | null
@@ -16923,20 +15758,10 @@ export namespace Prisma {
     isNot?: filmsWhereInput | null
   }
 
-  export type Video_filesListRelationFilter = {
-    every?: video_filesWhereInput
-    some?: video_filesWhereInput
-    none?: video_filesWhereInput
-  }
-
   export type ViewsListRelationFilter = {
     every?: viewsWhereInput
     some?: viewsWhereInput
     none?: viewsWhereInput
-  }
-
-  export type video_filesOrderByRelationAggregateInput = {
-    _count?: SortOrder
   }
 
   export type viewsOrderByRelationAggregateInput = {
@@ -17195,6 +16020,7 @@ export namespace Prisma {
   export type filmsCountOrderByAggregateInput = {
     id?: SortOrder
     title?: SortOrder
+    season?: SortOrder
     poster_url?: SortOrder
     description?: SortOrder
     year?: SortOrder
@@ -17209,10 +16035,12 @@ export namespace Prisma {
     updated_at?: SortOrder
     view_count?: SortOrder
     average_rating?: SortOrder
+    original_name?: SortOrder
   }
 
   export type filmsAvgOrderByAggregateInput = {
     id?: SortOrder
+    season?: SortOrder
     year?: SortOrder
     view_count?: SortOrder
     average_rating?: SortOrder
@@ -17221,6 +16049,7 @@ export namespace Prisma {
   export type filmsMaxOrderByAggregateInput = {
     id?: SortOrder
     title?: SortOrder
+    season?: SortOrder
     poster_url?: SortOrder
     description?: SortOrder
     year?: SortOrder
@@ -17235,11 +16064,13 @@ export namespace Prisma {
     updated_at?: SortOrder
     view_count?: SortOrder
     average_rating?: SortOrder
+    original_name?: SortOrder
   }
 
   export type filmsMinOrderByAggregateInput = {
     id?: SortOrder
     title?: SortOrder
+    season?: SortOrder
     poster_url?: SortOrder
     description?: SortOrder
     year?: SortOrder
@@ -17254,10 +16085,12 @@ export namespace Prisma {
     updated_at?: SortOrder
     view_count?: SortOrder
     average_rating?: SortOrder
+    original_name?: SortOrder
   }
 
   export type filmsSumOrderByAggregateInput = {
     id?: SortOrder
+    season?: SortOrder
     year?: SortOrder
     view_count?: SortOrder
     average_rating?: SortOrder
@@ -17553,43 +16386,6 @@ export namespace Prisma {
     isNot?: episodesWhereInput | null
   }
 
-  export type video_filesOrderByRelevanceInput = {
-    fields: video_filesOrderByRelevanceFieldEnum | video_filesOrderByRelevanceFieldEnum[]
-    sort: SortOrder
-    search: string
-  }
-
-  export type video_filesCountOrderByAggregateInput = {
-    id?: SortOrder
-    episode_id?: SortOrder
-    quality?: SortOrder
-    file_url?: SortOrder
-  }
-
-  export type video_filesAvgOrderByAggregateInput = {
-    id?: SortOrder
-    episode_id?: SortOrder
-  }
-
-  export type video_filesMaxOrderByAggregateInput = {
-    id?: SortOrder
-    episode_id?: SortOrder
-    quality?: SortOrder
-    file_url?: SortOrder
-  }
-
-  export type video_filesMinOrderByAggregateInput = {
-    id?: SortOrder
-    episode_id?: SortOrder
-    quality?: SortOrder
-    file_url?: SortOrder
-  }
-
-  export type video_filesSumOrderByAggregateInput = {
-    id?: SortOrder
-    episode_id?: SortOrder
-  }
-
   export type viewsCountOrderByAggregateInput = {
     id?: SortOrder
     film_id?: SortOrder
@@ -17691,25 +16487,11 @@ export namespace Prisma {
     connect?: filmsWhereUniqueInput
   }
 
-  export type video_filesCreateNestedManyWithoutEpisodesInput = {
-    create?: XOR<video_filesCreateWithoutEpisodesInput, video_filesUncheckedCreateWithoutEpisodesInput> | video_filesCreateWithoutEpisodesInput[] | video_filesUncheckedCreateWithoutEpisodesInput[]
-    connectOrCreate?: video_filesCreateOrConnectWithoutEpisodesInput | video_filesCreateOrConnectWithoutEpisodesInput[]
-    createMany?: video_filesCreateManyEpisodesInputEnvelope
-    connect?: video_filesWhereUniqueInput | video_filesWhereUniqueInput[]
-  }
-
   export type viewsCreateNestedManyWithoutEpisodesInput = {
     create?: XOR<viewsCreateWithoutEpisodesInput, viewsUncheckedCreateWithoutEpisodesInput> | viewsCreateWithoutEpisodesInput[] | viewsUncheckedCreateWithoutEpisodesInput[]
     connectOrCreate?: viewsCreateOrConnectWithoutEpisodesInput | viewsCreateOrConnectWithoutEpisodesInput[]
     createMany?: viewsCreateManyEpisodesInputEnvelope
     connect?: viewsWhereUniqueInput | viewsWhereUniqueInput[]
-  }
-
-  export type video_filesUncheckedCreateNestedManyWithoutEpisodesInput = {
-    create?: XOR<video_filesCreateWithoutEpisodesInput, video_filesUncheckedCreateWithoutEpisodesInput> | video_filesCreateWithoutEpisodesInput[] | video_filesUncheckedCreateWithoutEpisodesInput[]
-    connectOrCreate?: video_filesCreateOrConnectWithoutEpisodesInput | video_filesCreateOrConnectWithoutEpisodesInput[]
-    createMany?: video_filesCreateManyEpisodesInputEnvelope
-    connect?: video_filesWhereUniqueInput | video_filesWhereUniqueInput[]
   }
 
   export type viewsUncheckedCreateNestedManyWithoutEpisodesInput = {
@@ -17733,20 +16515,6 @@ export namespace Prisma {
     update?: XOR<XOR<filmsUpdateToOneWithWhereWithoutEpisodesInput, filmsUpdateWithoutEpisodesInput>, filmsUncheckedUpdateWithoutEpisodesInput>
   }
 
-  export type video_filesUpdateManyWithoutEpisodesNestedInput = {
-    create?: XOR<video_filesCreateWithoutEpisodesInput, video_filesUncheckedCreateWithoutEpisodesInput> | video_filesCreateWithoutEpisodesInput[] | video_filesUncheckedCreateWithoutEpisodesInput[]
-    connectOrCreate?: video_filesCreateOrConnectWithoutEpisodesInput | video_filesCreateOrConnectWithoutEpisodesInput[]
-    upsert?: video_filesUpsertWithWhereUniqueWithoutEpisodesInput | video_filesUpsertWithWhereUniqueWithoutEpisodesInput[]
-    createMany?: video_filesCreateManyEpisodesInputEnvelope
-    set?: video_filesWhereUniqueInput | video_filesWhereUniqueInput[]
-    disconnect?: video_filesWhereUniqueInput | video_filesWhereUniqueInput[]
-    delete?: video_filesWhereUniqueInput | video_filesWhereUniqueInput[]
-    connect?: video_filesWhereUniqueInput | video_filesWhereUniqueInput[]
-    update?: video_filesUpdateWithWhereUniqueWithoutEpisodesInput | video_filesUpdateWithWhereUniqueWithoutEpisodesInput[]
-    updateMany?: video_filesUpdateManyWithWhereWithoutEpisodesInput | video_filesUpdateManyWithWhereWithoutEpisodesInput[]
-    deleteMany?: video_filesScalarWhereInput | video_filesScalarWhereInput[]
-  }
-
   export type viewsUpdateManyWithoutEpisodesNestedInput = {
     create?: XOR<viewsCreateWithoutEpisodesInput, viewsUncheckedCreateWithoutEpisodesInput> | viewsCreateWithoutEpisodesInput[] | viewsUncheckedCreateWithoutEpisodesInput[]
     connectOrCreate?: viewsCreateOrConnectWithoutEpisodesInput | viewsCreateOrConnectWithoutEpisodesInput[]
@@ -17759,20 +16527,6 @@ export namespace Prisma {
     update?: viewsUpdateWithWhereUniqueWithoutEpisodesInput | viewsUpdateWithWhereUniqueWithoutEpisodesInput[]
     updateMany?: viewsUpdateManyWithWhereWithoutEpisodesInput | viewsUpdateManyWithWhereWithoutEpisodesInput[]
     deleteMany?: viewsScalarWhereInput | viewsScalarWhereInput[]
-  }
-
-  export type video_filesUncheckedUpdateManyWithoutEpisodesNestedInput = {
-    create?: XOR<video_filesCreateWithoutEpisodesInput, video_filesUncheckedCreateWithoutEpisodesInput> | video_filesCreateWithoutEpisodesInput[] | video_filesUncheckedCreateWithoutEpisodesInput[]
-    connectOrCreate?: video_filesCreateOrConnectWithoutEpisodesInput | video_filesCreateOrConnectWithoutEpisodesInput[]
-    upsert?: video_filesUpsertWithWhereUniqueWithoutEpisodesInput | video_filesUpsertWithWhereUniqueWithoutEpisodesInput[]
-    createMany?: video_filesCreateManyEpisodesInputEnvelope
-    set?: video_filesWhereUniqueInput | video_filesWhereUniqueInput[]
-    disconnect?: video_filesWhereUniqueInput | video_filesWhereUniqueInput[]
-    delete?: video_filesWhereUniqueInput | video_filesWhereUniqueInput[]
-    connect?: video_filesWhereUniqueInput | video_filesWhereUniqueInput[]
-    update?: video_filesUpdateWithWhereUniqueWithoutEpisodesInput | video_filesUpdateWithWhereUniqueWithoutEpisodesInput[]
-    updateMany?: video_filesUpdateManyWithWhereWithoutEpisodesInput | video_filesUpdateManyWithWhereWithoutEpisodesInput[]
-    deleteMany?: video_filesScalarWhereInput | video_filesScalarWhereInput[]
   }
 
   export type viewsUncheckedUpdateManyWithoutEpisodesNestedInput = {
@@ -18537,22 +17291,6 @@ export namespace Prisma {
     deleteMany?: viewsScalarWhereInput | viewsScalarWhereInput[]
   }
 
-  export type episodesCreateNestedOneWithoutVideo_filesInput = {
-    create?: XOR<episodesCreateWithoutVideo_filesInput, episodesUncheckedCreateWithoutVideo_filesInput>
-    connectOrCreate?: episodesCreateOrConnectWithoutVideo_filesInput
-    connect?: episodesWhereUniqueInput
-  }
-
-  export type episodesUpdateOneWithoutVideo_filesNestedInput = {
-    create?: XOR<episodesCreateWithoutVideo_filesInput, episodesUncheckedCreateWithoutVideo_filesInput>
-    connectOrCreate?: episodesCreateOrConnectWithoutVideo_filesInput
-    upsert?: episodesUpsertWithoutVideo_filesInput
-    disconnect?: episodesWhereInput | boolean
-    delete?: episodesWhereInput | boolean
-    connect?: episodesWhereUniqueInput
-    update?: XOR<XOR<episodesUpdateToOneWithWhereWithoutVideo_filesInput, episodesUpdateWithoutVideo_filesInput>, episodesUncheckedUpdateWithoutVideo_filesInput>
-  }
-
   export type filmsCreateNestedOneWithoutViewsInput = {
     create?: XOR<filmsCreateWithoutViewsInput, filmsUncheckedCreateWithoutViewsInput>
     connectOrCreate?: filmsCreateOrConnectWithoutViewsInput
@@ -18962,6 +17700,7 @@ export namespace Prisma {
 
   export type filmsCreateWithoutEpisodesInput = {
     title?: string | null
+    season?: number
     poster_url?: string | null
     description?: string | null
     year?: number | null
@@ -18976,6 +17715,7 @@ export namespace Prisma {
     updated_at?: Date | string
     view_count?: number | null
     average_rating?: Decimal | DecimalJsLike | number | string | null
+    original_name?: string | null
     favorites?: favoritesCreateNestedManyWithoutFilmsInput
     feedbacks?: feedbacksCreateNestedManyWithoutFilmsInput
     film_genres?: film_genresCreateNestedManyWithoutFilmsInput
@@ -18985,6 +17725,7 @@ export namespace Prisma {
   export type filmsUncheckedCreateWithoutEpisodesInput = {
     id?: number
     title?: string | null
+    season?: number
     poster_url?: string | null
     description?: string | null
     year?: number | null
@@ -18999,6 +17740,7 @@ export namespace Prisma {
     updated_at?: Date | string
     view_count?: number | null
     average_rating?: Decimal | DecimalJsLike | number | string | null
+    original_name?: string | null
     favorites?: favoritesUncheckedCreateNestedManyWithoutFilmsInput
     feedbacks?: feedbacksUncheckedCreateNestedManyWithoutFilmsInput
     film_genres?: film_genresUncheckedCreateNestedManyWithoutFilmsInput
@@ -19008,27 +17750,6 @@ export namespace Prisma {
   export type filmsCreateOrConnectWithoutEpisodesInput = {
     where: filmsWhereUniqueInput
     create: XOR<filmsCreateWithoutEpisodesInput, filmsUncheckedCreateWithoutEpisodesInput>
-  }
-
-  export type video_filesCreateWithoutEpisodesInput = {
-    quality?: string | null
-    file_url?: string | null
-  }
-
-  export type video_filesUncheckedCreateWithoutEpisodesInput = {
-    id?: number
-    quality?: string | null
-    file_url?: string | null
-  }
-
-  export type video_filesCreateOrConnectWithoutEpisodesInput = {
-    where: video_filesWhereUniqueInput
-    create: XOR<video_filesCreateWithoutEpisodesInput, video_filesUncheckedCreateWithoutEpisodesInput>
-  }
-
-  export type video_filesCreateManyEpisodesInputEnvelope = {
-    data: video_filesCreateManyEpisodesInput | video_filesCreateManyEpisodesInput[]
-    skipDuplicates?: boolean
   }
 
   export type viewsCreateWithoutEpisodesInput = {
@@ -19069,6 +17790,7 @@ export namespace Prisma {
 
   export type filmsUpdateWithoutEpisodesInput = {
     title?: NullableStringFieldUpdateOperationsInput | string | null
+    season?: IntFieldUpdateOperationsInput | number
     poster_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     year?: NullableIntFieldUpdateOperationsInput | number | null
@@ -19083,6 +17805,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     view_count?: NullableIntFieldUpdateOperationsInput | number | null
     average_rating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    original_name?: NullableStringFieldUpdateOperationsInput | string | null
     favorites?: favoritesUpdateManyWithoutFilmsNestedInput
     feedbacks?: feedbacksUpdateManyWithoutFilmsNestedInput
     film_genres?: film_genresUpdateManyWithoutFilmsNestedInput
@@ -19092,6 +17815,7 @@ export namespace Prisma {
   export type filmsUncheckedUpdateWithoutEpisodesInput = {
     id?: IntFieldUpdateOperationsInput | number
     title?: NullableStringFieldUpdateOperationsInput | string | null
+    season?: IntFieldUpdateOperationsInput | number
     poster_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     year?: NullableIntFieldUpdateOperationsInput | number | null
@@ -19106,36 +17830,11 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     view_count?: NullableIntFieldUpdateOperationsInput | number | null
     average_rating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    original_name?: NullableStringFieldUpdateOperationsInput | string | null
     favorites?: favoritesUncheckedUpdateManyWithoutFilmsNestedInput
     feedbacks?: feedbacksUncheckedUpdateManyWithoutFilmsNestedInput
     film_genres?: film_genresUncheckedUpdateManyWithoutFilmsNestedInput
     views?: viewsUncheckedUpdateManyWithoutFilmsNestedInput
-  }
-
-  export type video_filesUpsertWithWhereUniqueWithoutEpisodesInput = {
-    where: video_filesWhereUniqueInput
-    update: XOR<video_filesUpdateWithoutEpisodesInput, video_filesUncheckedUpdateWithoutEpisodesInput>
-    create: XOR<video_filesCreateWithoutEpisodesInput, video_filesUncheckedCreateWithoutEpisodesInput>
-  }
-
-  export type video_filesUpdateWithWhereUniqueWithoutEpisodesInput = {
-    where: video_filesWhereUniqueInput
-    data: XOR<video_filesUpdateWithoutEpisodesInput, video_filesUncheckedUpdateWithoutEpisodesInput>
-  }
-
-  export type video_filesUpdateManyWithWhereWithoutEpisodesInput = {
-    where: video_filesScalarWhereInput
-    data: XOR<video_filesUpdateManyMutationInput, video_filesUncheckedUpdateManyWithoutEpisodesInput>
-  }
-
-  export type video_filesScalarWhereInput = {
-    AND?: video_filesScalarWhereInput | video_filesScalarWhereInput[]
-    OR?: video_filesScalarWhereInput[]
-    NOT?: video_filesScalarWhereInput | video_filesScalarWhereInput[]
-    id?: IntFilter<"video_files"> | number
-    episode_id?: IntNullableFilter<"video_files"> | number | null
-    quality?: StringNullableFilter<"video_files"> | string | null
-    file_url?: StringNullableFilter<"video_files"> | string | null
   }
 
   export type viewsUpsertWithWhereUniqueWithoutEpisodesInput = {
@@ -19168,6 +17867,7 @@ export namespace Prisma {
 
   export type filmsCreateWithoutFavoritesInput = {
     title?: string | null
+    season?: number
     poster_url?: string | null
     description?: string | null
     year?: number | null
@@ -19182,6 +17882,7 @@ export namespace Prisma {
     updated_at?: Date | string
     view_count?: number | null
     average_rating?: Decimal | DecimalJsLike | number | string | null
+    original_name?: string | null
     episodes?: episodesCreateNestedManyWithoutFilmsInput
     feedbacks?: feedbacksCreateNestedManyWithoutFilmsInput
     film_genres?: film_genresCreateNestedManyWithoutFilmsInput
@@ -19191,6 +17892,7 @@ export namespace Prisma {
   export type filmsUncheckedCreateWithoutFavoritesInput = {
     id?: number
     title?: string | null
+    season?: number
     poster_url?: string | null
     description?: string | null
     year?: number | null
@@ -19205,6 +17907,7 @@ export namespace Prisma {
     updated_at?: Date | string
     view_count?: number | null
     average_rating?: Decimal | DecimalJsLike | number | string | null
+    original_name?: string | null
     episodes?: episodesUncheckedCreateNestedManyWithoutFilmsInput
     feedbacks?: feedbacksUncheckedCreateNestedManyWithoutFilmsInput
     film_genres?: film_genresUncheckedCreateNestedManyWithoutFilmsInput
@@ -19277,6 +17980,7 @@ export namespace Prisma {
 
   export type filmsUpdateWithoutFavoritesInput = {
     title?: NullableStringFieldUpdateOperationsInput | string | null
+    season?: IntFieldUpdateOperationsInput | number
     poster_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     year?: NullableIntFieldUpdateOperationsInput | number | null
@@ -19291,6 +17995,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     view_count?: NullableIntFieldUpdateOperationsInput | number | null
     average_rating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    original_name?: NullableStringFieldUpdateOperationsInput | string | null
     episodes?: episodesUpdateManyWithoutFilmsNestedInput
     feedbacks?: feedbacksUpdateManyWithoutFilmsNestedInput
     film_genres?: film_genresUpdateManyWithoutFilmsNestedInput
@@ -19300,6 +18005,7 @@ export namespace Prisma {
   export type filmsUncheckedUpdateWithoutFavoritesInput = {
     id?: IntFieldUpdateOperationsInput | number
     title?: NullableStringFieldUpdateOperationsInput | string | null
+    season?: IntFieldUpdateOperationsInput | number
     poster_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     year?: NullableIntFieldUpdateOperationsInput | number | null
@@ -19314,6 +18020,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     view_count?: NullableIntFieldUpdateOperationsInput | number | null
     average_rating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    original_name?: NullableStringFieldUpdateOperationsInput | string | null
     episodes?: episodesUncheckedUpdateManyWithoutFilmsNestedInput
     feedbacks?: feedbacksUncheckedUpdateManyWithoutFilmsNestedInput
     film_genres?: film_genresUncheckedUpdateManyWithoutFilmsNestedInput
@@ -19376,6 +18083,7 @@ export namespace Prisma {
 
   export type filmsCreateWithoutFeedbacksInput = {
     title?: string | null
+    season?: number
     poster_url?: string | null
     description?: string | null
     year?: number | null
@@ -19390,6 +18098,7 @@ export namespace Prisma {
     updated_at?: Date | string
     view_count?: number | null
     average_rating?: Decimal | DecimalJsLike | number | string | null
+    original_name?: string | null
     episodes?: episodesCreateNestedManyWithoutFilmsInput
     favorites?: favoritesCreateNestedManyWithoutFilmsInput
     film_genres?: film_genresCreateNestedManyWithoutFilmsInput
@@ -19399,6 +18108,7 @@ export namespace Prisma {
   export type filmsUncheckedCreateWithoutFeedbacksInput = {
     id?: number
     title?: string | null
+    season?: number
     poster_url?: string | null
     description?: string | null
     year?: number | null
@@ -19413,6 +18123,7 @@ export namespace Prisma {
     updated_at?: Date | string
     view_count?: number | null
     average_rating?: Decimal | DecimalJsLike | number | string | null
+    original_name?: string | null
     episodes?: episodesUncheckedCreateNestedManyWithoutFilmsInput
     favorites?: favoritesUncheckedCreateNestedManyWithoutFilmsInput
     film_genres?: film_genresUncheckedCreateNestedManyWithoutFilmsInput
@@ -19485,6 +18196,7 @@ export namespace Prisma {
 
   export type filmsUpdateWithoutFeedbacksInput = {
     title?: NullableStringFieldUpdateOperationsInput | string | null
+    season?: IntFieldUpdateOperationsInput | number
     poster_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     year?: NullableIntFieldUpdateOperationsInput | number | null
@@ -19499,6 +18211,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     view_count?: NullableIntFieldUpdateOperationsInput | number | null
     average_rating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    original_name?: NullableStringFieldUpdateOperationsInput | string | null
     episodes?: episodesUpdateManyWithoutFilmsNestedInput
     favorites?: favoritesUpdateManyWithoutFilmsNestedInput
     film_genres?: film_genresUpdateManyWithoutFilmsNestedInput
@@ -19508,6 +18221,7 @@ export namespace Prisma {
   export type filmsUncheckedUpdateWithoutFeedbacksInput = {
     id?: IntFieldUpdateOperationsInput | number
     title?: NullableStringFieldUpdateOperationsInput | string | null
+    season?: IntFieldUpdateOperationsInput | number
     poster_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     year?: NullableIntFieldUpdateOperationsInput | number | null
@@ -19522,6 +18236,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     view_count?: NullableIntFieldUpdateOperationsInput | number | null
     average_rating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    original_name?: NullableStringFieldUpdateOperationsInput | string | null
     episodes?: episodesUncheckedUpdateManyWithoutFilmsNestedInput
     favorites?: favoritesUncheckedUpdateManyWithoutFilmsNestedInput
     film_genres?: film_genresUncheckedUpdateManyWithoutFilmsNestedInput
@@ -19602,6 +18317,7 @@ export namespace Prisma {
 
   export type filmsCreateWithoutFilm_genresInput = {
     title?: string | null
+    season?: number
     poster_url?: string | null
     description?: string | null
     year?: number | null
@@ -19616,6 +18332,7 @@ export namespace Prisma {
     updated_at?: Date | string
     view_count?: number | null
     average_rating?: Decimal | DecimalJsLike | number | string | null
+    original_name?: string | null
     episodes?: episodesCreateNestedManyWithoutFilmsInput
     favorites?: favoritesCreateNestedManyWithoutFilmsInput
     feedbacks?: feedbacksCreateNestedManyWithoutFilmsInput
@@ -19625,6 +18342,7 @@ export namespace Prisma {
   export type filmsUncheckedCreateWithoutFilm_genresInput = {
     id?: number
     title?: string | null
+    season?: number
     poster_url?: string | null
     description?: string | null
     year?: number | null
@@ -19639,6 +18357,7 @@ export namespace Prisma {
     updated_at?: Date | string
     view_count?: number | null
     average_rating?: Decimal | DecimalJsLike | number | string | null
+    original_name?: string | null
     episodes?: episodesUncheckedCreateNestedManyWithoutFilmsInput
     favorites?: favoritesUncheckedCreateNestedManyWithoutFilmsInput
     feedbacks?: feedbacksUncheckedCreateNestedManyWithoutFilmsInput
@@ -19687,6 +18406,7 @@ export namespace Prisma {
 
   export type filmsUpdateWithoutFilm_genresInput = {
     title?: NullableStringFieldUpdateOperationsInput | string | null
+    season?: IntFieldUpdateOperationsInput | number
     poster_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     year?: NullableIntFieldUpdateOperationsInput | number | null
@@ -19701,6 +18421,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     view_count?: NullableIntFieldUpdateOperationsInput | number | null
     average_rating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    original_name?: NullableStringFieldUpdateOperationsInput | string | null
     episodes?: episodesUpdateManyWithoutFilmsNestedInput
     favorites?: favoritesUpdateManyWithoutFilmsNestedInput
     feedbacks?: feedbacksUpdateManyWithoutFilmsNestedInput
@@ -19710,6 +18431,7 @@ export namespace Prisma {
   export type filmsUncheckedUpdateWithoutFilm_genresInput = {
     id?: IntFieldUpdateOperationsInput | number
     title?: NullableStringFieldUpdateOperationsInput | string | null
+    season?: IntFieldUpdateOperationsInput | number
     poster_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     year?: NullableIntFieldUpdateOperationsInput | number | null
@@ -19724,6 +18446,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     view_count?: NullableIntFieldUpdateOperationsInput | number | null
     average_rating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    original_name?: NullableStringFieldUpdateOperationsInput | string | null
     episodes?: episodesUncheckedUpdateManyWithoutFilmsNestedInput
     favorites?: favoritesUncheckedUpdateManyWithoutFilmsNestedInput
     feedbacks?: feedbacksUncheckedUpdateManyWithoutFilmsNestedInput
@@ -19736,7 +18459,6 @@ export namespace Prisma {
     sub_url?: string | null
     created_at?: Date | string
     updated_at?: Date | string
-    video_files?: video_filesCreateNestedManyWithoutEpisodesInput
     views?: viewsCreateNestedManyWithoutEpisodesInput
   }
 
@@ -19747,7 +18469,6 @@ export namespace Prisma {
     sub_url?: string | null
     created_at?: Date | string
     updated_at?: Date | string
-    video_files?: video_filesUncheckedCreateNestedManyWithoutEpisodesInput
     views?: viewsUncheckedCreateNestedManyWithoutEpisodesInput
   }
 
@@ -20635,66 +19356,9 @@ export namespace Prisma {
     data: XOR<viewsUpdateManyMutationInput, viewsUncheckedUpdateManyWithoutUsersInput>
   }
 
-  export type episodesCreateWithoutVideo_filesInput = {
-    episode_name?: string | null
-    video_url?: string | null
-    sub_url?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    films?: filmsCreateNestedOneWithoutEpisodesInput
-    views?: viewsCreateNestedManyWithoutEpisodesInput
-  }
-
-  export type episodesUncheckedCreateWithoutVideo_filesInput = {
-    id?: number
-    film_id?: number | null
-    episode_name?: string | null
-    video_url?: string | null
-    sub_url?: string | null
-    created_at?: Date | string
-    updated_at?: Date | string
-    views?: viewsUncheckedCreateNestedManyWithoutEpisodesInput
-  }
-
-  export type episodesCreateOrConnectWithoutVideo_filesInput = {
-    where: episodesWhereUniqueInput
-    create: XOR<episodesCreateWithoutVideo_filesInput, episodesUncheckedCreateWithoutVideo_filesInput>
-  }
-
-  export type episodesUpsertWithoutVideo_filesInput = {
-    update: XOR<episodesUpdateWithoutVideo_filesInput, episodesUncheckedUpdateWithoutVideo_filesInput>
-    create: XOR<episodesCreateWithoutVideo_filesInput, episodesUncheckedCreateWithoutVideo_filesInput>
-    where?: episodesWhereInput
-  }
-
-  export type episodesUpdateToOneWithWhereWithoutVideo_filesInput = {
-    where?: episodesWhereInput
-    data: XOR<episodesUpdateWithoutVideo_filesInput, episodesUncheckedUpdateWithoutVideo_filesInput>
-  }
-
-  export type episodesUpdateWithoutVideo_filesInput = {
-    episode_name?: NullableStringFieldUpdateOperationsInput | string | null
-    video_url?: NullableStringFieldUpdateOperationsInput | string | null
-    sub_url?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    films?: filmsUpdateOneWithoutEpisodesNestedInput
-    views?: viewsUpdateManyWithoutEpisodesNestedInput
-  }
-
-  export type episodesUncheckedUpdateWithoutVideo_filesInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    film_id?: NullableIntFieldUpdateOperationsInput | number | null
-    episode_name?: NullableStringFieldUpdateOperationsInput | string | null
-    video_url?: NullableStringFieldUpdateOperationsInput | string | null
-    sub_url?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    views?: viewsUncheckedUpdateManyWithoutEpisodesNestedInput
-  }
-
   export type filmsCreateWithoutViewsInput = {
     title?: string | null
+    season?: number
     poster_url?: string | null
     description?: string | null
     year?: number | null
@@ -20709,6 +19373,7 @@ export namespace Prisma {
     updated_at?: Date | string
     view_count?: number | null
     average_rating?: Decimal | DecimalJsLike | number | string | null
+    original_name?: string | null
     episodes?: episodesCreateNestedManyWithoutFilmsInput
     favorites?: favoritesCreateNestedManyWithoutFilmsInput
     feedbacks?: feedbacksCreateNestedManyWithoutFilmsInput
@@ -20718,6 +19383,7 @@ export namespace Prisma {
   export type filmsUncheckedCreateWithoutViewsInput = {
     id?: number
     title?: string | null
+    season?: number
     poster_url?: string | null
     description?: string | null
     year?: number | null
@@ -20732,6 +19398,7 @@ export namespace Prisma {
     updated_at?: Date | string
     view_count?: number | null
     average_rating?: Decimal | DecimalJsLike | number | string | null
+    original_name?: string | null
     episodes?: episodesUncheckedCreateNestedManyWithoutFilmsInput
     favorites?: favoritesUncheckedCreateNestedManyWithoutFilmsInput
     feedbacks?: feedbacksUncheckedCreateNestedManyWithoutFilmsInput
@@ -20750,7 +19417,6 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     films?: filmsCreateNestedOneWithoutEpisodesInput
-    video_files?: video_filesCreateNestedManyWithoutEpisodesInput
   }
 
   export type episodesUncheckedCreateWithoutViewsInput = {
@@ -20761,7 +19427,6 @@ export namespace Prisma {
     sub_url?: string | null
     created_at?: Date | string
     updated_at?: Date | string
-    video_files?: video_filesUncheckedCreateNestedManyWithoutEpisodesInput
   }
 
   export type episodesCreateOrConnectWithoutViewsInput = {
@@ -20830,6 +19495,7 @@ export namespace Prisma {
 
   export type filmsUpdateWithoutViewsInput = {
     title?: NullableStringFieldUpdateOperationsInput | string | null
+    season?: IntFieldUpdateOperationsInput | number
     poster_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     year?: NullableIntFieldUpdateOperationsInput | number | null
@@ -20844,6 +19510,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     view_count?: NullableIntFieldUpdateOperationsInput | number | null
     average_rating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    original_name?: NullableStringFieldUpdateOperationsInput | string | null
     episodes?: episodesUpdateManyWithoutFilmsNestedInput
     favorites?: favoritesUpdateManyWithoutFilmsNestedInput
     feedbacks?: feedbacksUpdateManyWithoutFilmsNestedInput
@@ -20853,6 +19520,7 @@ export namespace Prisma {
   export type filmsUncheckedUpdateWithoutViewsInput = {
     id?: IntFieldUpdateOperationsInput | number
     title?: NullableStringFieldUpdateOperationsInput | string | null
+    season?: IntFieldUpdateOperationsInput | number
     poster_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     year?: NullableIntFieldUpdateOperationsInput | number | null
@@ -20867,6 +19535,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     view_count?: NullableIntFieldUpdateOperationsInput | number | null
     average_rating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    original_name?: NullableStringFieldUpdateOperationsInput | string | null
     episodes?: episodesUncheckedUpdateManyWithoutFilmsNestedInput
     favorites?: favoritesUncheckedUpdateManyWithoutFilmsNestedInput
     feedbacks?: feedbacksUncheckedUpdateManyWithoutFilmsNestedInput
@@ -20891,7 +19560,6 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     films?: filmsUpdateOneWithoutEpisodesNestedInput
-    video_files?: video_filesUpdateManyWithoutEpisodesNestedInput
   }
 
   export type episodesUncheckedUpdateWithoutViewsInput = {
@@ -20902,7 +19570,6 @@ export namespace Prisma {
     sub_url?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    video_files?: video_filesUncheckedUpdateManyWithoutEpisodesNestedInput
   }
 
   export type usersUpsertWithoutViewsInput = {
@@ -20959,35 +19626,12 @@ export namespace Prisma {
     invoices?: invoicesUncheckedUpdateManyWithoutUsersNestedInput
   }
 
-  export type video_filesCreateManyEpisodesInput = {
-    id?: number
-    quality?: string | null
-    file_url?: string | null
-  }
-
   export type viewsCreateManyEpisodesInput = {
     id?: number
     film_id?: number | null
     user_id?: number | null
     viewed_at?: Date | string
     progress?: number | null
-  }
-
-  export type video_filesUpdateWithoutEpisodesInput = {
-    quality?: NullableStringFieldUpdateOperationsInput | string | null
-    file_url?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type video_filesUncheckedUpdateWithoutEpisodesInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    quality?: NullableStringFieldUpdateOperationsInput | string | null
-    file_url?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type video_filesUncheckedUpdateManyWithoutEpisodesInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    quality?: NullableStringFieldUpdateOperationsInput | string | null
-    file_url?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type viewsUpdateWithoutEpisodesInput = {
@@ -21056,7 +19700,6 @@ export namespace Prisma {
     sub_url?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    video_files?: video_filesUpdateManyWithoutEpisodesNestedInput
     views?: viewsUpdateManyWithoutEpisodesNestedInput
   }
 
@@ -21067,7 +19710,6 @@ export namespace Prisma {
     sub_url?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    video_files?: video_filesUncheckedUpdateManyWithoutEpisodesNestedInput
     views?: viewsUncheckedUpdateManyWithoutEpisodesNestedInput
   }
 

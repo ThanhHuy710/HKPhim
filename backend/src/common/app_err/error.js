@@ -14,6 +14,9 @@ export const error = (err, req, res, next) => {
     err.code = statusCodes.FORBIDDEN; //403 =>Mã để FE refresh token
   }
 
-  const response = responseError(err.message, err.code, err.stack);
+  // Đảm bảo code luôn là số hợp lệ
+  const statusCode = typeof err.code === 'number' ? err.code : statusCodes.INTERNAL_SERVER_ERROR;
+  
+  const response = responseError(err.message, statusCode, err.stack);
   res.status(response.statusCode).json(response);
 };

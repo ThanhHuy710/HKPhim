@@ -25,7 +25,7 @@ export function initStrategyGoogleOauth20() {
         //nếu userExist k có dữ liệu=> create người dùng mới
 
         if (!userExist) {
-          const newUser = await prisma.users.create({
+          userExist = await prisma.users.create({
             data: {
               email: email,
               fullname: fullname,
