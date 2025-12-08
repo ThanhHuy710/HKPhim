@@ -49,10 +49,13 @@ export default function AdminPage() {
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-700">
           <Link to="/" className="flex items-center gap-2">
-            <span className="text-2xl font-bold">
-              <span className="text-white">FLIX</span>
-              <span className="text-pink-500">GO</span>
-            </span>
+            {sidebarOpen && (
+              <img 
+                src="/images/Logo.png" 
+                alt="HKPhim Logo" 
+                className="h-10 w-28 object-contain"
+              />
+            )}
           </Link>
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
