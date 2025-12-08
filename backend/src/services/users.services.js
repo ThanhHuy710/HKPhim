@@ -46,9 +46,49 @@ export const usersService = {
 
   update: async function (req) {
     const id = Number(req.params.id);
+    
+    // Chỉ cho phép update các trường cụ thể (theo schema)
+    const allowedFields = ['username', 'email', 'fullname', 'avatar', 'role', 'phonenumber', 'city', 'gender', 'interest', 'plan_id', 'birthday'];
+    const updateData = {};
+    
+    allowedFields.forEach(field => {
+      if (req.body[field] !== undefined) {
+        updateData[field] = req.body[field];
+      }
+    });
+    
     return await prisma.users.update({
       where: { id },
-      data: req.body,
+      data: updateData,
+    });
+  },
+
+  updatePassword: async function (req) {
+    const id = Number(req.params.id);
+    const { oldPassword, newPassword } = req.body;
+    
+    // Lấy thông tin user hiện tại
+    const user = await prisma.users.findUnique({
+      where: { id }
+    });
+
+    if (!user) {
+      throw new Error("Không tìm thấy người dùng");
+    }
+
+    // Kiểm tra mật khẩu cũ (so sánh trực tiếp - trong thực tế nên dùng bcrypt)
+    if (user.password !== oldPassword) {
+      throw new Error("Mật khẩu cũ không chính xác");
+    }
+
+    // Kiểm tra mật khẩu mới không được trống
+    if (!newPassword || newPassword.trim() === "") {
+      throw new Error("Mật khẩu mới không được để trống");
+    }
+    
+    return await prisma.users.update({
+      where: { id },
+      data: { password: newPassword },
     });
   },
 

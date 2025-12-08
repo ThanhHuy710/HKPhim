@@ -21,9 +21,33 @@ export const usersController = {
   },
 
   update: async (req, res, next) => {
-    const result = await usersService.update(req);
-    const response = responseSuccess(result, `Update user #${req.params.id} successfully`);
-    res.status(response.statusCode).json(response);
+    try {
+      const result = await usersService.update(req);
+      const response = responseSuccess(result, `Update user #${req.params.id} successfully`);
+      res.status(response.statusCode).json(response);
+    } catch (error) {
+      console.error("Update user error:", error);
+      res.status(500).json({ 
+        success: false, 
+        message: error.message || "Lỗi khi cập nhật người dùng",
+        error: error.toString()
+      });
+    }
+  },
+
+  updatePassword: async (req, res, next) => {
+    try {
+      const result = await usersService.updatePassword(req);
+      const response = responseSuccess(result, `Update password successfully`);
+      res.status(response.statusCode).json(response);
+    } catch (error) {
+      console.error("Update password error:", error);
+      res.status(500).json({ 
+        success: false, 
+        message: error.message || "Lỗi khi đổi mật khẩu",
+        error: error.toString()
+      });
+    }
   },
 
   remove: async (req, res, next) => {

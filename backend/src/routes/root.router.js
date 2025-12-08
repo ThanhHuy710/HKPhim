@@ -12,6 +12,7 @@ import favoritesRouter from "./favorites.router.js";
 import feedbacksRouter from "./feedbacks.router.js";
 import genresRouter from "./genres.router.js";
 import authRouter from "./auth.router.js";
+import filmGenresRouter from "./film-genres.router.js";
 
 const rootRouter = express.Router();
 
@@ -26,5 +27,6 @@ rootRouter.use("/views", viewsRouter);
 rootRouter.use("/favorites", favoritesRouter);
 rootRouter.use("/feedbacks", feedbacksRouter);
 rootRouter.use("/genres", genresRouter);
+rootRouter.use("/film-genres", filmGenresRouter);
 
 export default rootRouter;

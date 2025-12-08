@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { Play, Info, ChevronLeft, ChevronRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import api from "../lib/axios";
 
 export default function Banner() {
+  const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [films, setFilms] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -111,13 +113,19 @@ export default function Banner() {
 
             {/* Action Buttons - Modern Design */}
             <div className="flex gap-4 pt-4 animate-fadeIn" style={{ animationDelay: '0.3s' }}>
-              <button className="group flex items-center gap-3 px-8 py-3.5 bg-white text-black text-sm font-bold rounded-lg hover:bg-gray-100 transition-all duration-300 active:scale-95 shadow-2xl hover:shadow-white/30">
+              <button 
+                onClick={() => navigate(`/watch/${currentMovie.id}`)}
+                className="group flex items-center gap-3 px-8 py-3.5 bg-white text-black text-sm font-bold rounded-lg hover:bg-gray-100 transition-all duration-300 active:scale-95 shadow-2xl hover:shadow-white/30"
+              >
                 <Play className="w-5 h-5 fill-black group-hover:scale-110 transition-transform duration-300" />
-                <span className="tracking-wide">PLAY NOW</span>
+                <span className="tracking-wide">XEM NGAY</span>
               </button>
-              <button className="group flex items-center gap-3 px-8 py-3.5 bg-white/10 backdrop-blur-md text-white text-sm font-semibold rounded-lg border border-white/30 hover:bg-white/20 hover:border-white/50 transition-all duration-300 active:scale-95 shadow-xl">
+              <button 
+                onClick={() => navigate(`/movie/${currentMovie.id}`)}
+                className="group flex items-center gap-3 px-8 py-3.5 bg-white/10 backdrop-blur-md text-white text-sm font-semibold rounded-lg border border-white/30 hover:bg-white/20 hover:border-white/50 transition-all duration-300 active:scale-95 shadow-xl"
+              >
                 <Info className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
-                <span className="tracking-wide">MORE INFO</span>
+                <span className="tracking-wide">CHI TIẾT</span>
               </button>
             </div>
           </div>
@@ -168,11 +176,11 @@ export default function Banner() {
                     {/* Active State Overlay */}
                     {isActive && (
                       <>
-                        <div className="absolute inset-0 ring-[4px] ring-white shadow-[0_0_40px_rgba(255,255,255,0.6)] rounded-xl pointer-events-none"></div>
+                        <div className="absolute inset-0 ring-4 ring-white shadow-[0_0_40px_rgba(255,255,255,0.6)] rounded-xl pointer-events-none"></div>
                         <div className="absolute inset-0 bg-linear-to-t from-white/30 via-transparent to-transparent"></div>
                         
                         {/* Shine Effect */}
-                        <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/30 to-transparent translate-x-full group-hover:translate-x-[-100%] transition-transform duration-1000"></div>
+                        <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/30 to-transparent translate-x-full group-hover:-translate-x-full transition-transform duration-1000"></div>
                       </>
                     )}
                     

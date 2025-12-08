@@ -9,6 +9,12 @@ import GoogleCallback from "./pages/GoogleCallback.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import WatchMovie from "./pages/WatchMovie.jsx";
 import ListPage from "./pages/ListPage.jsx";
+import AdminPage from "./pages/AdminPage.jsx";
+import DashboardPage from "./pages/admin/DashboardPage.jsx";
+import FilmsManagement from "./pages/admin/FilmsManagement.jsx";
+import UsersManagement from "./pages/admin/UsersManagement.jsx";
+import UserDetailPage from "./pages/admin/UserDetailPage.jsx";
+import PlansManagement from "./pages/admin/PlansManagement.jsx";
 
 function App() {
   return (
@@ -23,6 +29,16 @@ function App() {
           <Route path="/search/genre/:genre" element={<ListPage />} />
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/google/callback" element={<GoogleCallback />} />
+          
+          {/* Admin Routes */}
+          <Route path="/admin" element={<AdminPage />}>
+            <Route index element={<DashboardPage />} />
+            <Route path="films" element={<FilmsManagement />} />
+            <Route path="users" element={<UsersManagement />} />
+            <Route path="users/:id" element={<UserDetailPage />} />
+            <Route path="plans" element={<PlansManagement />} />
+          </Route>
+          
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

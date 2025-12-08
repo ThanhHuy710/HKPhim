@@ -42,6 +42,8 @@ export default function ListPage() {
             ? " Phim bộ"
             : type == "genre" && name
             ? ` Thể loại "${name}"`
+            : type == "country" && name
+            ? ` Quốc gia "${name}"`
             : ""}
         </h2>
         {film && (
