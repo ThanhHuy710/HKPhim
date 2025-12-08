@@ -11,8 +11,7 @@ export default function PlansManagement() {
   const [formData, setFormData] = useState({
     name: "",
     price: "",
-    duration_days: "",
-    description: ""
+    duration_days: ""
   });
 
   useEffect(() => {
@@ -49,8 +48,7 @@ export default function PlansManagement() {
     setFormData({
       name: "",
       price: "",
-      duration_days: "",
-      description: ""
+      duration_days: ""
     });
     setIsModalOpen(true);
   };
@@ -60,8 +58,7 @@ export default function PlansManagement() {
     setFormData({
       name: plan.name || "",
       price: plan.price || "",
-      duration_days: plan.duration_days || "",
-      description: plan.description || ""
+      duration_days: plan.duration_days || ""
     });
     setIsModalOpen(true);
   };
@@ -96,34 +93,23 @@ export default function PlansManagement() {
   };
 
   const getPlanColor = (name) => {
-    if (name?.toLowerCase().includes('basic') || name?.toLowerCase().includes('free')) return 'yellow';
-    if (name?.toLowerCase().includes('premium')) return 'red';
-    if (name?.toLowerCase().includes('cinematic')) return 'pink';
+    const lowerName = name?.toLowerCase() || '';
+    if (lowerName.includes('free')) return 'gray';
+    if (lowerName.includes('tiết kiệm') || lowerName.includes('basic')) return 'blue';
+    if (lowerName.includes('vip') || lowerName.includes('standard')) return 'purple';
+    if (lowerName.includes('premium') || lowerName.includes('cinematic')) return 'red';
     return 'blue';
   };
 
   const getPlanFeatures = (plan) => {
     const features = [];
+    const days = plan.duration_days;
     
-    if (plan.duration_days === 7) {
-      features.push({ text: "7 days", active: true });
-      features.push({ text: "720p Resolution", active: true });
-      features.push({ text: "Limited Availability", active: false });
-      features.push({ text: "Desktop Only", active: false });
-      features.push({ text: "Limited Support", active: false });
-    } else if (plan.duration_days === 30) {
-      features.push({ text: "1 Month", active: true });
-      features.push({ text: "Full HD", active: true });
-      features.push({ text: "Limited Availability", active: true });
-      features.push({ text: "TV & Desktop", active: false });
-      features.push({ text: "24/7 Support", active: false });
-    } else if (plan.duration_days === 60) {
-      features.push({ text: "2 Months", active: true });
-      features.push({ text: "Ultra HD", active: true });
-      features.push({ text: "Limited Availability", active: true });
-      features.push({ text: "Any Device", active: true });
-      features.push({ text: "24/7 Support", active: true });
-    }
+    features.push({ text: "Không giới hạn thời lượng", active: true });
+    features.push({ text: `Thời hạn ${days} ngày`, active: true });
+    features.push({ text: "Full HD 1080p", active: true });
+    features.push({ text: "Xem trên 2 thiết bị", active: true });
+    features.push({ text: "Không quảng cáo", active: true });
     
     return features;
   };
@@ -164,11 +150,16 @@ export default function PlansManagement() {
                 {/* Header */}
                 <div className="mb-6">
                   <h3 className="text-2xl font-bold text-white mb-2">{plan.name}</h3>
-                  <div className="flex items-baseline gap-1">
-                    <span className={`text-4xl font-bold ${textColor}`}>
-                      {plan.price > 0 ? `$${plan.price}` : 'Free'}
+                  <div className="flex items-baseline gap-2">
+                    <span className={`text-5xl font-bold ${textColor}`}>
+                      {plan.price > 0 ? `${(plan.price * 1000).toLocaleString('vi-VN')}` : 'Miễn phí'}
                     </span>
-                    {plan.price > 0 && <span className="text-gray-400">/ month</span>}
+                    {plan.price > 0 && (
+                      <>
+                        <span className={`text-2xl font-semibold ${textColor}`}>đ</span>
+                        <span className="text-gray-400 text-sm">/ {plan.duration_days} ngày</span>
+                      </>
+                    )}
                   </div>
                 </div>
 
@@ -188,30 +179,22 @@ export default function PlansManagement() {
                   ))}
                 </div>
 
-                {/* Buttons */}
-                <div className="space-y-3">
+                {/* Admin Actions */}
+                <div className="flex gap-3">
                   <button 
-                    className={`w-full py-3 rounded border-2 ${borderColor} ${textColor} font-semibold hover:bg-opacity-10 hover:bg-white transition-colors`}
+                    onClick={() => openEditModal(plan)}
+                    className="flex-1 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center justify-center gap-2 font-semibold"
                   >
-                    {plan.price > 0 ? 'CHOOSE PLAN' : 'CURRENT PLAN'}
+                    <Edit size={18} />
+                    <span>Sửa</span>
                   </button>
-                  
-                  <div className="flex gap-2">
-                    <button 
-                      onClick={() => openEditModal(plan)}
-                      className="flex-1 p-2 bg-blue-500/20 text-blue-500 rounded hover:bg-blue-500/30 transition-colors flex items-center justify-center gap-1"
-                    >
-                      <Edit size={16} />
-                      <span className="text-sm">Sửa</span>
-                    </button>
-                    <button
-                      onClick={() => handleDelete(plan.id)}
-                      className="flex-1 p-2 bg-red-500/20 text-red-500 rounded hover:bg-red-500/30 transition-colors flex items-center justify-center gap-1"
-                    >
-                      <Trash2 size={16} />
-                      <span className="text-sm">Xóa</span>
-                    </button>
-                  </div>
+                  <button
+                    onClick={() => handleDelete(plan.id)}
+                    className="flex-1 py-3 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors flex items-center justify-center gap-2 font-semibold"
+                  >
+                    <Trash2 size={18} />
+                    <span>Xóa</span>
+                  </button>
                 </div>
               </div>
             </div>
@@ -252,10 +235,10 @@ export default function PlansManagement() {
               </div>
 
               <div>
-                <label className="block text-gray-400 mb-2">Giá ($) *</label>
+                <label className="block text-gray-400 mb-2">Giá (VNĐ) *</label>
                 <input
                   type="number"
-                  step="0.01"
+                  step="1"
                   value={formData.price}
                   onChange={(e) => setFormData({...formData, price: e.target.value})}
                   className="w-full bg-gray-700 text-white rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500"
@@ -273,17 +256,6 @@ export default function PlansManagement() {
                   className="w-full bg-gray-700 text-white rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500"
                   placeholder="7, 30, 60..."
                   required
-                />
-              </div>
-
-              <div>
-                <label className="block text-gray-400 mb-2">Mô tả</label>
-                <textarea
-                  value={formData.description}
-                  onChange={(e) => setFormData({...formData, description: e.target.value})}
-                  className="w-full bg-gray-700 text-white rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500"
-                  rows="3"
-                  placeholder="Mô tả gói cước..."
                 />
               </div>
 

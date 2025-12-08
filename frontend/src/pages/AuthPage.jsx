@@ -147,10 +147,13 @@ export default function AuthPage() {
     setLoading(true);
     try {
       // Bước 1: Login
+      console.log("Đang đăng nhập với:", { email: loginData.email, password: loginData.password });
       const res = await api.post("/auth/login", {
         email: loginData.email,
         password: loginData.password,
       });
+
+      console.log("Login response:", res.data);
 
       const { accessToken, refreshToken } = res.data.data;
 
@@ -170,6 +173,8 @@ export default function AuthPage() {
       toast.success("Đăng nhập thành công!");
       navigate("/");
     } catch (error) {
+      console.error("Login error:", error);
+      console.error("Error response:", error.response?.data);
       toast.error(error.response?.data?.message || "Đăng nhập thất bại");
     } finally {
       setLoading(false);

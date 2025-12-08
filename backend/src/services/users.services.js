@@ -1,4 +1,5 @@
 import { PrismaClient } from "../common/prisma/generated/prisma/index.js";
+import bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
 
@@ -76,8 +77,10 @@ export const usersService = {
       throw new Error("Không tìm thấy người dùng");
     }
 
-    // Kiểm tra mật khẩu cũ (so sánh trực tiếp - trong thực tế nên dùng bcrypt)
-    if (user.password !== oldPassword) {
+    // Kiểm tra mật khẩu cũ bằng bcrypt
+    const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
+    
+    if (!isPasswordValid) {
       throw new Error("Mật khẩu cũ không chính xác");
     }
 
@@ -86,9 +89,12 @@ export const usersService = {
       throw new Error("Mật khẩu mới không được để trống");
     }
     
+    // Hash mật khẩu mới
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    
     return await prisma.users.update({
       where: { id },
-      data: { password: newPassword },
+      data: { password: hashedPassword },
     });
   },
 

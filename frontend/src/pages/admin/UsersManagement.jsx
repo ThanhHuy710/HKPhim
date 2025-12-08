@@ -154,7 +154,7 @@ export default function UsersManagement() {
                 <th className="p-4">Nhận dạng</th>
                 <th className="p-4">Thông tin cơ bản</th>
                 <th className="p-4">Tên người dùng</th>
-                <th className="p-4">Kế hoạch giá</th>
+                <th className="p-4">Gói cước</th>
                 <th className="p-4">Bình luận</th>
                 <th className="p-4">Đánh giá</th>
                 <th className="p-4">Ngày tạo</th>

@@ -15,6 +15,10 @@ import FilmsManagement from "./pages/admin/FilmsManagement.jsx";
 import UsersManagement from "./pages/admin/UsersManagement.jsx";
 import UserDetailPage from "./pages/admin/UserDetailPage.jsx";
 import PlansManagement from "./pages/admin/PlansManagement.jsx";
+import SubscriptionPage from "./pages/SubscriptionPage.jsx";
+import ProfilePage from "./pages/ProfilePage.jsx";
+import CartPage from "./pages/CartPage.jsx";
+import PurchaseHistoryPage from "./pages/PurchaseHistoryPage.jsx";
 
 function App() {
   return (
@@ -27,6 +31,10 @@ function App() {
           <Route path="/watch/:id" element={<WatchMovie />} />
           <Route path="/search/:type" element={<ListPage />} />
           <Route path="/search/genre/:genre" element={<ListPage />} />
+          <Route path="/subscription" element={<SubscriptionPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/purchase-history" element={<PurchaseHistoryPage />} />
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/google/callback" element={<GoogleCallback />} />
           
