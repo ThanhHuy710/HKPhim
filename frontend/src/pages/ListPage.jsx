@@ -4,7 +4,7 @@ import api from "../lib/axios";
 import Layout from "../components/layout/Layout";
 import MovieCard from "../components/MovieCard";
 import { useParams, useSearchParams } from "react-router";
-
+import ResultNameForListPage from "../components/ResultNameForListPage";
 export default function ListPage() {
   const { type } = useParams();              // lấy param từ path
   const [searchParams] = useSearchParams();  // lấy query string
@@ -34,16 +34,7 @@ export default function ListPage() {
   return (
     <Layout>
       <div className="py-4 mx-auto lg:max-w-6xl md:max-w-4xl">
-        <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6 sm:mb-8">
-          Kết quả cho:
-          {type == "single-movies"
-            ? " Phim lẻ"
-            : type == "series"
-            ? " Phim bộ"
-            : type == "genre" && name
-            ? ` Thể loại "${name}"`
-            : ""}
-        </h2>
+        <ResultNameForListPage type={type} name={name}/>
         {film && (
           <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6">
             {loading ? (

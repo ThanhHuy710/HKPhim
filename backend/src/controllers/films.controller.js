@@ -141,6 +141,22 @@ export const filmsController = {
       res.status(response.statusCode).json(response);
     }
   },
+  //theo quốc gia
+    async findByCountry(req, res, next) {
+  try {
+    const country = req.params.country; 
+    const limit = parseInt(req.query.limit) || 50;
+    const offset = parseInt(req.query.offset) || 0;
+
+    const result = await filmsService.findByCountry(country, limit, offset);
+
+    const response = responseSuccess(result, "Get movies by country successfully");
+    res.status(response.statusCode).json(response);
+  } catch (err) {
+    const response = responseError(err.message, 500, err.stack);
+    res.status(response.statusCode).json(response);
+  }
+},
   // CRUD
   create: async function (req, res, next) {
     const result = await filmsService.create(req);

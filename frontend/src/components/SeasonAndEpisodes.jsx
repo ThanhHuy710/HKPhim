@@ -18,7 +18,8 @@ export default function SeasonAndEpisodes({ film }) {
       const data = res?.data?.data ?? [];
       setSeasons(data);
       // chọn mặc định: nếu có phần trùng film.id thì giữ, nếu không lấy phần đầu
-      const defaultId = data.find(d => d.id === filmObj.id)?.id ?? data[0]?.id ?? filmObj.id;
+      const defaultId =
+        data.find((d) => d.id === filmObj.id)?.id ?? data[0]?.id ?? filmObj.id;
       setSelectedFilmId(defaultId);
     } catch (error) {
       console.error("Lỗi fetchSeasons:", error);
@@ -29,13 +30,11 @@ export default function SeasonAndEpisodes({ film }) {
     }
   };
 
-
   useEffect(() => {
     if (!film) return;
     fetchSeasons(film);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [film?.id]);
-
 
   // handler chọn option (không dùng Link trong option)
   const handleChange = (e) => {
@@ -59,21 +58,24 @@ export default function SeasonAndEpisodes({ film }) {
           >
             {seasons.map((s) => (
               <option key={s.id} value={s.id}>
-                {s.season!==0 ? `Phần ${s.season}` : "Phim lẻ"}
+                {s.season !== 0 ? `Phần ${s.season}` : "Phim lẻ"}
               </option>
             ))}
           </select>
         ) : (
           <div>Không có phần khác</div>
         )}
-          <div className="flex flex-wrap gap-5 mt-5">
-              {film.episodes.map((ep) => (
-                <Link to={`/watch/${film.id}?episode=${ep.id}`}
-                  key={ep.id}>
-                  {ep.episode_name}
-                </Link>
-              ))}
-            </div>
+        <div className="flex flex-wrap gap-5 mt-5">
+          {film.episodes.map((ep) => (
+            <Link
+              to={`/watch/${film.id}?episode=${ep.id}`}
+              key={ep.id}
+              className="px-3 py-1 bg-gray-700 rounded-full text-sm"
+            >
+              {ep.episode_name}
+            </Link>
+          ))}
+        </div>
       </div>
     </div>
   );

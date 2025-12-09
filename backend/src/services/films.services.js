@@ -35,7 +35,7 @@ export const filmsService = {
     });
   },
   //lọc theo tiêu chí
-  findByFilter: async function ({ filter = {}, limit = 50, offset = 0 }) {
+  async findByFilter({ filter = {}, limit = 50, offset = 0 }) {
     return await prisma.films.findMany({
       where: filter,
       orderBy: { id: "asc" },
@@ -69,7 +69,7 @@ export const filmsService = {
   //lọc theo tên
   async findByTitle(title, limit = 50, offset = 0) {
     return this.findByFilter({
-      filter: { title: { contains: title, mode: "insensitive" } },
+      filter: { title: { contains: title} },
       limit,
       offset,
     });
@@ -77,6 +77,14 @@ export const filmsService = {
   //theo năm phát hành
   async findByYear(year, limit = 50, offset = 0) {
     return this.findByFilter({ filter: { year: Number(year) }, limit, offset });
+  },
+  //theo quốc gia
+  async findByCountry(country, limit = 50, offset = 0) {
+    return this.findByFilter({ 
+      filter: { country: { contains: country } },
+       limit,
+      offset 
+      });
   },
   //lọc theo nhiều tiêu chí
   async findByCriteria({

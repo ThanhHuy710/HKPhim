@@ -54,15 +54,19 @@ export default function MovieDetail() {
     <Layout>
       <div className="grid grid-cols-6 grid-rows-10 gap-4 text-white">
         <div className="col-span-4 row-span-4 min-h-[600px]">
-          {/**/}
-          <iframe
+          {/*check films null or undefined*/}
+          {films.poster_video_url ? (<iframe
             width="100%"
             height="100%"
             src={getEmbedUrl(film.poster_video_url)}
             title="YouTube video"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
-          ></iframe>
+          ></iframe> )
+          : (
+            <img src="../../public/images/imgNotAvailable.png" alt="" className="w-full h-full"/>
+          )}
+          
         </div>
         <div className="col-span-2 row-span-7 col-start-5 ">
           <h1 className="text-xs md:text-2xl">Phim dành cho bạn</h1>

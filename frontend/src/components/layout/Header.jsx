@@ -4,6 +4,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import api from "../../lib/axios";
+import { countries } from "../../lib/Array";
 
 export default function Header() {
   const { user, logout } = useAuth();
@@ -11,18 +12,7 @@ export default function Header() {
   const [openGenre, setOpenGenre] = useState(false);
   const [openCountry, setOpenCountry] = useState(false);
   const [genres, setGenres] = useState([]);
-  useEffect(() => {
-    const fetchGenres = async () => {
-    try {
-      const res = await api.get("/genres");
-      setGenres(res.data.data || []);
-    } catch (error) {
-      console.error("Lỗi:", error);
-      toast.error("Không thể tải phim");
-    } 
-  };
-    fetchGenres();
-  }, [openGenre]);
+  const [title, setTitle] = useState("");
   useEffect(() => {
     const fetchGenres = async () => {
     try {
@@ -40,7 +30,7 @@ export default function Header() {
       <div className="max-w-[1440px] px-4 py-3 flex items-center">
         {/* Logo */}
         <Link to="/" className="">
-          <img src="/images/Logo.png" alt="HKphim Logo" className="h-16 w-40" />
+          <img src="/images/Logo.png" alt="HKphim Logo" className="h-12" />
         </Link>
 
         {/* Navigation */}
@@ -58,7 +48,10 @@ export default function Header() {
           {/* Dropdown Thể loại*/}
           <div className="relative">
             <button
-              onClick={() => setOpenGenre(!openGenre)}
+              onClick={() => {
+                setOpenGenre(!openGenre);
+                setOpenCountry(false);
+              }}
               className="flex items-center hover:text-yellow-400"
             >
               Thể loại <ChevronDown size={14} className="ml-1" />
@@ -66,7 +59,6 @@ export default function Header() {
             {openGenre && (
               <div className="absolute left-0 mt-2 w-40 bg-gray-800 text-white rounded shadow-lg">
                 {genres.map((genre) => (
-
                   <Link
                   to={`/search/genre/?name=${genre.name}`}
                   className="block px-4 py-2 hover:bg-gray-700"
@@ -82,19 +74,24 @@ export default function Header() {
           {/* Dropdown Quốc gia*/}
           <div className="relative">
             <button
-              onClick={() => setOpenCountry(!openCountry)}
+              onClick={() => {
+                setOpenCountry(!openCountry);
+                setOpenGenre(false);
+              }}
               className="flex items-center hover:text-yellow-400"
             >
               Quốc gia <ChevronDown size={14} className="ml-1" />
             </button>
             {openCountry && (
               <div className="absolute left-0 mt-2 w-40 bg-gray-800 text-white rounded shadow-lg">
-                <Link
-                  to="/search/vietnam"
-                  className="block px-4 py-2 hover:bg-gray-700"
-                >
-                  Việt Nam
-                </Link>
+                {countries.map((country) => (
+                  <Link
+                    to={`/search/country/?name=${country}`}
+                    className="block px-4 py-2 hover:bg-gray-700"
+                  >
+                    {country}
+                  </Link>
+                ))}
               </div>
             )}
           </div>
@@ -102,14 +99,17 @@ export default function Header() {
 
         {/* Search */}
         <form
-          action="/search"
+          action={`/search/title/?name=${title}`}
           className="flex items-center bg-gray-600 rounded px-2 py-1 mr-10 w-1/4 h-10 ml-auto"
         >
           <button type="submit" className="mr-4 hover:text-white">
             <Search size={18} />
           </button>
           <input
+            name="name"
             type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
             placeholder="Tìm kiếm phim..."
             className="bg-transparent text-sm text-white placeholder-gray-400 focus:outline-none"
           />

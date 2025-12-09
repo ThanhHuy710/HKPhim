@@ -10,6 +10,7 @@ filmsRouter.get("/series", filmsController.findSeries);
 filmsRouter.get("/genre/:genre", filmsController.findByGenre);
 filmsRouter.get("/title/:title", filmsController.findByTitle);
 filmsRouter.get("/year/:year", filmsController.findByYear);
+filmsRouter.get("/country/:country", filmsController.findByCountry);
 
 // Tạo route CRUD
 filmsRouter.post("/", filmsController.create);
