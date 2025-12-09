@@ -7,6 +7,8 @@ const usersRouter = express.Router();
 usersRouter.post("/", usersController.create);
 usersRouter.get("/", usersController.findAll);
 usersRouter.get("/:id", usersController.findOne);
+usersRouter.put("/:id", usersController.update);
+usersRouter.put("/:id/password", usersController.updatePassword);
 usersRouter.patch("/:id", usersController.update);
 usersRouter.delete("/:id", usersController.remove);
 

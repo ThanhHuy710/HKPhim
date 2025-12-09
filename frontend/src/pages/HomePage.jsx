@@ -3,9 +3,12 @@ import api from "../lib/axios";
 import { toast } from "sonner";
 import Layout from "../components/layout/Layout";
 import Banner from "../components/Banner";
+import BannerAfterLogin from "../components/BannerAfterLogin";
 import MovieRow from "../components/MovieRow";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function HomePage() {
+  const { user } = useAuth();
   const [films, setFilms] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -35,7 +38,7 @@ export default function HomePage() {
 
   return (
     <Layout>
-      <Banner />
+      {user ? <BannerAfterLogin /> : <Banner />}
       
       <div className="movie-sections">
         {/* //viewcount */}

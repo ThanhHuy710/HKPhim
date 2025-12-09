@@ -49,18 +49,26 @@ export default function WatchMovie() {
     );
   }
 
+  if (!film) {
+    return (
+      <Layout>
+        <div className="loading-page">Không tìm thấy phim</div>
+      </Layout>
+    );
+  }
+
   return (
     <Layout>
       <div className="grid grid-cols-6 grid-rows-10 gap-4 text-white">
         <div className="col-span-4 row-span-4 h-full flex items-center justify-center">
           <div className="border-3 border-gray-600 rounded-lg opacity-75">
             <VideoPlayer
-            videoUrl={
-              film.episodes.find((ep) => ep.id === Number(episodeId))?.video_url
-            }
-          ></VideoPlayer>
+              videoUrl={
+                film.episodes?.find((ep) => ep.id === Number(episodeId))?.video_url ||
+                film.episodes?.[0]?.video_url
+              }
+            />
           </div>
-          
         </div>
         <div className="col-span-2 row-span-7 col-start-5 ">
           <h1 className="text-xs md:text-2xl">Phim dành cho bạn</h1>
@@ -79,12 +87,12 @@ export default function WatchMovie() {
 
             {/*  */}
             <div className="flex flex-wrap gap-2">
-              {film.film_genres.map((fg) => (
+              {film.film_genres?.map((fg) => (
                 <span
-                  key={fg.genres.id}
+                  key={fg.genres?.id}
                   className="px-3 py-1 bg-gray-700 rounded-full text-sm"
                 >
-                  {fg.genres.name}
+                  {fg.genres?.name}
                 </span>
               ))}
             </div>

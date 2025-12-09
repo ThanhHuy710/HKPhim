@@ -4,8 +4,8 @@ export default function MovieCard({film }) {
 
   return (
     <Link to={`/film/${film.id}`} 
-      className="flex-shrink-0 w-1/4 sm:w-1/4 md:w-1/6 lg:w-1/8">
-      <div className="aspect-[2/3]">
+      className="shrink-0 w-1/4 sm:w-1/4 md:w-1/6 lg:w-1/8">
+      <div className="aspect-2/3">
         <img
           src={film.poster_url}
           alt={film.title}

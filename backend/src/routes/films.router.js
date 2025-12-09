@@ -8,6 +8,7 @@ filmsRouter.get("/criteria", filmsController.getByCriteria);
 filmsRouter.get("/single-movies",filmsController.findSingleMovies);
 filmsRouter.get("/series", filmsController.findSeries);
 filmsRouter.get("/genre/:genre", filmsController.findByGenre);
+filmsRouter.get("/country/:country", filmsController.findByCountry);
 filmsRouter.get("/title/:title", filmsController.findByTitle);
 filmsRouter.get("/year/:year", filmsController.findByYear);
 filmsRouter.get("/country/:country", filmsController.findByCountry);

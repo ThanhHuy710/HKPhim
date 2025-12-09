@@ -11,8 +11,8 @@ export default function Banner() {
 
   return (
     <div class="bg-[linear-gradient(172.23deg,#000000_4.94%,rgba(0,0,0,0.35)_45.74%,rgba(0,0,0,0.9)_92.94%),url(../../public/images/Banner.png)] w-full md:min-h-[600px] bg-no-repeat bg-cover bg-center py-20">
-      <div class="max-w-screen-xl mx-auto">
-        <div class="max-w-screen-md">
+      <div class="max-w-7xl mx-auto">
+        <div class="max-w-3xl">
           <p class="text-white text-lg leading-relaxed">
             Chào mừng bạn đến với HKPhim{" "}
           </p>
@@ -20,7 +20,7 @@ export default function Banner() {
 
         <div class="grid lg:grid-cols-2 gap-16 lg:gap-12 mt-6">
           <div>
-            <h1 class="text-white xl:text-5xl md:text-5xl text-4xl font-bold !leading-tight">
+            <h1 class="text-white xl:text-5xl md:text-5xl text-4xl font-bold leading-tight!">
               Xem phim đa dạng,nhiều thể loại hấp dẫn
             </h1>
             <div class="mt-8 text-lg flex gap-6 items-center   flex-wrap text-white">
