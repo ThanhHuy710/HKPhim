@@ -55,7 +55,7 @@ export default function MovieDetail() {
       <div className="grid grid-cols-6 grid-rows-10 gap-4 text-white">
         <div className="col-span-4 row-span-4 min-h-[600px]">
           {/*check films null or undefined*/}
-          {films.poster_video_url ? (<iframe
+          {films.poster_video_url!== null ? (<iframe
             width="100%"
             height="100%"
             src={getEmbedUrl(film.poster_video_url)}
