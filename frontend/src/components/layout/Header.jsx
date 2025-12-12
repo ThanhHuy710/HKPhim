@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { Search, ChevronDown, User, LogOut, Lock, Heart, Settings, CreditCard, ShoppingCart, Receipt } from "lucide-react";
+import { Search, ChevronDown, User, LogOut, Lock, Heart, Settings, CreditCard, Receipt } from "lucide-react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useEffect, useState, useRef } from "react";
 import { toast } from "sonner";
@@ -17,7 +17,7 @@ export default function Header() {
   const genreRef = useRef(null);
   const countryRef = useRef(null);
 
-  // Fetch genres once on mount
+  // Lấy danh sách thể loại khi component mount
   useEffect(() => {
     const fetchGenres = async () => {
       try {
@@ -31,13 +31,13 @@ export default function Header() {
     fetchGenres();
   }, []);
 
-  // Fetch countries from database
+  // Lấy danh sách quốc gia từ database
   useEffect(() => {
     const fetchCountries = async () => {
       try {
         const res = await api.get("/films");
         const films = res.data.data || [];
-        // Get unique countries from films
+        // Lấy danh sách quốc gia duy nhất từ phim
         const uniqueCountries = [...new Set(films.map(film => film.country).filter(Boolean))];
         setCountries(uniqueCountries.sort());
       } catch (error) {
@@ -47,7 +47,7 @@ export default function Header() {
     fetchCountries();
   }, []);
 
-  // Close dropdowns when clicking outside
+  // Đóng dropdown khi click bên ngoài
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
@@ -177,17 +177,6 @@ export default function Header() {
             >
               <Lock size={18} />
               <span>Admin</span>
-            </Link>
-          )}
-
-          {/* Cart Button - Show if user is logged in */}
-          {user && (
-            <Link
-              to="/cart"
-              className="relative flex items-center justify-center w-11 h-11 bg-gray-800 hover:bg-yellow-400/20 rounded-full transition-all duration-200 border border-gray-700 hover:border-yellow-400 group"
-              title="Giỏ hàng"
-            >
-              <ShoppingCart size={20} className="text-gray-300 group-hover:text-yellow-400 transition-colors" />
             </Link>
           )}
 

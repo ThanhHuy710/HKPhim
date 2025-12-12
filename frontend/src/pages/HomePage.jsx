@@ -5,16 +5,32 @@ import Layout from "../components/layout/Layout";
 import Banner from "../components/Banner";
 import BannerAfterLogin from "../components/BannerAfterLogin";
 import MovieRow from "../components/MovieRow";
+import RequireBirthdayModal from "../components/RequireBirthdayModal";
 import { useAuth } from "../contexts/AuthContext";
 
 export default function HomePage() {
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
   const [films, setFilms] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showBirthdayModal, setShowBirthdayModal] = useState(false);
 
   useEffect(() => {
     fetchFilms();
   }, []);
+
+  useEffect(() => {
+    // Kiểm tra nếu user đã đăng nhập và chưa có ngày sinh
+    if (user && !user.birthday) {
+      setShowBirthdayModal(true);
+    } else {
+      setShowBirthdayModal(false);
+    }
+  }, [user]);
+
+  const handleBirthdayUpdate = (updatedUser) => {
+    updateUser(updatedUser);
+    setShowBirthdayModal(false);
+  };
 
   const fetchFilms = async () => {
     try {
@@ -38,6 +54,10 @@ export default function HomePage() {
 
   return (
     <Layout>
+      {showBirthdayModal && (
+        <RequireBirthdayModal user={user} onUpdate={handleBirthdayUpdate} />
+      )}
+      
       {user ? <BannerAfterLogin /> : <Banner />}
       
       <div className="movie-sections">

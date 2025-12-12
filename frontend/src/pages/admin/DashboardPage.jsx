@@ -39,23 +39,23 @@ export default function DashboardPage() {
         reviews: feedbacks.length,
       });
 
-      // Top films by view count
+      // Phim hot nhất theo lượt xem
       const sorted = [...films].sort((a, b) => (b.view_count || 0) - (a.view_count || 0));
       setTopFilms(sorted.slice(0, 5));
       
-      // Latest films
+      // Phim mới nhất
       const latest = [...films].sort((a, b) => 
         new Date(b.created_at) - new Date(a.created_at)
       );
       setLatestFilms(latest.slice(0, 5));
 
-      // Latest users
+      // User mới nhất
       const latestUsersData = [...users].sort((a, b) => 
         new Date(b.created_at) - new Date(a.created_at)
       );
       setLatestUsers(latestUsersData.slice(0, 5));
 
-      // Latest reviews
+      // Đánh giá mới nhất
       const latestReviewsData = [...feedbacks].sort((a, b) => 
         new Date(b.created_at) - new Date(a.created_at)
       );

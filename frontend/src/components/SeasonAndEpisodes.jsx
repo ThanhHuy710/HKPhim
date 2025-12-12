@@ -45,7 +45,7 @@ export default function SeasonAndEpisodes({ film }) {
     navigate(`/film/${id}`);
   };
 
-  // render
+  // Hiển thị giao diện
   return (
     <div>
       <div className="mb-4">

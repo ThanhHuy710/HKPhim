@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
 import { Play, Info, ChevronLeft, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import api from "../lib/axios";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function Banner() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [films, setFilms] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -54,6 +57,53 @@ export default function Banner() {
   const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % films.length);
   const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + films.length) % films.length);
 
+  const handleWatchClick = async (filmId) => {
+    // Kiểm tra nếu user đã đăng nhập
+    if (!user) {
+      toast.error('Vui lòng đăng nhập để xem phim!');
+      setTimeout(() => {
+        navigate('/auth');
+      }, 1500);
+      return;
+    }
+
+    // Kiểm tra nếu user có gói cước
+    if (!user.plan_id) {
+      toast.error('Bạn cần đăng ký gói cước để xem phim!');
+      setTimeout(() => {
+        navigate('/subscription');
+      }, 1500);
+      return;
+    }
+
+    // Kiểm tra nếu gói cước còn hiệu lực
+    try {
+      const res = await api.get(`/invoices?user_id=${user.id}`);
+      const invoices = res.data.data || [];
+      
+      const activeInvoice = invoices.find(inv => 
+        inv.plan_id === user.plan_id && 
+        inv.status === 'completed' &&
+        inv.end_date && 
+        new Date(inv.end_date) > new Date()
+      );
+
+      if (!activeInvoice) {
+        toast.error('Gói cước của bạn đã hết hạn! Vui lòng gia hạn.');
+        setTimeout(() => {
+          navigate('/subscription');
+        }, 1500);
+        return;
+      }
+
+      // Tất cả kiểm tra đã pass, chuyển đến trang xem phim
+      navigate(`/watch/${filmId}`);
+    } catch (error) {
+      console.error('Error checking subscription:', error);
+      toast.error('Không thể kiểm tra gói cước. Vui lòng thử lại!');
+    }
+  };
+
   return (
     <div className="relative w-full bg-black overflow-hidden">
       {/* Main Banner Section */}
@@ -95,9 +145,9 @@ export default function Banner() {
             {/* Genre Tags - Elegant */}
             {currentMovie.film_genres && currentMovie.film_genres.length > 0 && (
               <div className="flex flex-wrap gap-2 animate-fadeIn" style={{ animationDelay: '0.1s' }}>
-                {currentMovie.film_genres.slice(0, 3).map((filmGenre, index) => (
+                {currentMovie.film_genres.slice(0, 3).map((filmGenre) => (
                   <span
-                    key={index}
+                    key={filmGenre?.genres?.id || filmGenre?.id}
                     className="px-4 py-1.5 bg-white/10 backdrop-blur-md text-orange-400 text-xs font-semibold rounded-full border border-orange-500/30 hover:bg-orange-500/20 hover:border-orange-500/60 transition-all duration-300 shadow-lg"
                   >
                     {filmGenre?.genres?.name || "Thể loại"}
@@ -114,14 +164,14 @@ export default function Banner() {
             {/* Action Buttons - Modern Design */}
             <div className="flex gap-4 pt-4 animate-fadeIn" style={{ animationDelay: '0.3s' }}>
               <button 
-                onClick={() => navigate(`/watch/${currentMovie.id}`)}
+                onClick={() => handleWatchClick(currentMovie.id)}
                 className="group flex items-center gap-3 px-8 py-3.5 bg-white text-black text-sm font-bold rounded-lg hover:bg-gray-100 transition-all duration-300 active:scale-95 shadow-2xl hover:shadow-white/30"
               >
                 <Play className="w-5 h-5 fill-black group-hover:scale-110 transition-transform duration-300" />
                 <span className="tracking-wide">XEM NGAY</span>
               </button>
               <button 
-                onClick={() => navigate(`/movie/${currentMovie.id}`)}
+                onClick={() => navigate(`/film/${currentMovie.id}`)}
                 className="group flex items-center gap-3 px-8 py-3.5 bg-white/10 backdrop-blur-md text-white text-sm font-semibold rounded-lg border border-white/30 hover:bg-white/20 hover:border-white/50 transition-all duration-300 active:scale-95 shadow-xl"
               >
                 <Info className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
@@ -208,7 +258,7 @@ export default function Banner() {
       </div>
 
       {/* Animations */}
-      <style jsx>{`
+      <style>{`
         @keyframes fadeIn {
           from {
             opacity: 0;

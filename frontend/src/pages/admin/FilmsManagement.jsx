@@ -49,7 +49,7 @@ export default function FilmsManagement() {
       const filmsData = res.data.data || [];
       setFilms(filmsData);
       
-      // Extract unique directors and actors
+      // Trích xuất danh sách đạo diễn và diễn viên duy nhất
       const uniqueDirectors = [...new Set(
         filmsData
           .map(f => f.directeur)
@@ -147,12 +147,12 @@ export default function FilmsManagement() {
       if (editingFilm) {
         await api.patch(`/films/${editingFilm.id}`, submitData);
         
-        // Update film_genres if needed
+        // Cập nhật film_genres nếu cần
         if (formData.selected_genres.length > 0) {
-          // Delete existing film_genres
+          // Xóa film_genres hiện tại
           await api.delete(`/film-genres/film/${editingFilm.id}`);
           
-          // Add new film_genres
+          // Thêm film_genres mới
           for (const genreId of formData.selected_genres) {
             await api.post(`/film-genres`, {
               film_id: editingFilm.id,
@@ -161,7 +161,7 @@ export default function FilmsManagement() {
           }
         }
 
-        // Update video_url in first episode if exists
+        // Cập nhật video_url trong tập đầu tiên nếu có
         if (formData.video_url && editingFilm.episodes?.[0]) {
           await api.patch(`/episodes/${editingFilm.episodes[0].id}`, {
             video_url: formData.video_url
@@ -173,7 +173,7 @@ export default function FilmsManagement() {
         const filmRes = await api.post("/films", submitData);
         const newFilmId = filmRes.data.data.id;
         
-        // Add film_genres
+        // Thêm film_genres
         if (formData.selected_genres.length > 0) {
           for (const genreId of formData.selected_genres) {
             await api.post(`/film-genres`, {
@@ -183,7 +183,7 @@ export default function FilmsManagement() {
           }
         }
 
-        // Create first episode with video_url if provided
+        // Tạo tập đầu tiên với video_url nếu có
         if (formData.video_url) {
           await api.post("/episodes", {
             film_id: newFilmId,
