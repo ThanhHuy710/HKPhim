@@ -62,11 +62,11 @@ export default function CartPage() {
       const endDate = new Date();
       endDate.setDate(endDate.getDate() + (lastItem.plans.duration_days || 30));
       
-      // Tạo invoice cho giao dịch
+      // Tạo hóa đơn cho giao dịch
       await api.post("/invoices", {
         user_id: user.id,
         plan_id: lastItem.plan_id,
-        total_price: parseFloat((lastItem.plans.price * 1000).toFixed(2)), // Convert to VND as Decimal
+        total_price: parseFloat((lastItem.plans.price * 1000).toFixed(2)), // Chuyển đổi sang VND dạng Decimal
         payment_method: "card",
         status: "completed",
         start_date: startDate.toISOString(),

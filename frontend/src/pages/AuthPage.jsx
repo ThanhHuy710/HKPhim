@@ -11,7 +11,7 @@ export default function AuthPage() {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  // State cho Register
+  // State cho form đăng ký
   const [registerData, setRegisterData] = useState({
     fullname: "",
     email: "",
@@ -19,19 +19,19 @@ export default function AuthPage() {
     confirmPassword: "",
   });
 
-  // State cho Login
+  // State cho form đăng nhập
   const [loginData, setLoginData] = useState({
     email: "",
     password: "",
   });
 
-  // State lỗi cho Login
+  // State lỗi cho form đăng nhập
   const [loginErrors, setLoginErrors] = useState({
     email: "",
     password: "",
   });
 
-  // State lỗi cho Register
+  // State lỗi cho form đăng ký
   const [registerErrors, setRegisterErrors] = useState({
     fullname: "",
     email: "",
@@ -39,7 +39,7 @@ export default function AuthPage() {
     confirmPassword: "",
   });
 
-  // Handle change cho Register
+  // Xử lý thay đổi input cho form đăng ký
   const handleRegisterChange = (e) => {
     setRegisterData({
       ...registerData,
@@ -47,7 +47,7 @@ export default function AuthPage() {
     });
   };
 
-  // Handle change cho Login
+  // Xử lý thay đổi input cho form đăng nhập
   const handleLoginChange = (e) => {
     setLoginData({
       ...loginData,
@@ -55,14 +55,14 @@ export default function AuthPage() {
     });
   };
 
-  // Submit Register
+  // Xử lý submit form đăng ký
   const handleRegister = async (e) => {
     e.preventDefault();
 
     // Reset lỗi
     setRegisterErrors({ fullname: "", email: "", password: "", confirmPassword: "" });
 
-    // Validation tiếng Việt
+    // Kiểm tra dữ liệu
     let hasError = false;
     const errors = {};
     
@@ -102,7 +102,7 @@ export default function AuthPage() {
         password: registerData.password,
       });
       toast.success("Đăng ký thành công!");
-      // Chuyển sang form login
+      // Chuyển sang form đăng nhập
       setIsLogin(true);
       setRegisterData({ fullname: "", email: "", password: "", confirmPassword: "" });
     } catch (error) {
@@ -112,14 +112,14 @@ export default function AuthPage() {
     }
   };
 
-  // Submit Login
+  // Xử lý submit form đăng nhập
   const handleLogin = async (e) => {
     e.preventDefault();
     
     // Reset lỗi
     setLoginErrors({ email: "", password: "" });
     
-    // Validation tiếng Việt
+    // Kiểm tra dữ liệu
     let hasError = false;
     const errors = {};
     
@@ -146,7 +146,7 @@ export default function AuthPage() {
     
     setLoading(true);
     try {
-      // Bước 1: Login
+      // Bước 1: Gửi yêu cầu đăng nhập
       console.log("Đang đăng nhập với:", { email: loginData.email, password: loginData.password });
       const res = await api.post("/auth/login", {
         email: loginData.email,
@@ -191,7 +191,7 @@ export default function AuthPage() {
           {/* ===== FORM LOGIN ===== */}
           <div
             className={`absolute top-0 left-0 w-1/2 h-full px-8 py-8 flex flex-col justify-center bg-gray-900/95 backdrop-blur-sm transition-all duration-700 ease-in-out overflow-y-auto ${
-              isLogin ? "translate-x-0 opacity-100 z-20" : "translate-x-full opacity-0 z-10"
+              isLogin ? "translate-x-0 opacity-100 z-40" : "translate-x-full opacity-0 z-10"
             }`}
           >
             <h2 className="text-3xl font-bold text-white mb-2">Chào mừng trở lại 👋</h2>
@@ -280,7 +280,7 @@ export default function AuthPage() {
           {/* ===== FORM REGISTER ===== */}
           <div
             className={`absolute top-0 right-0 w-1/2 h-full px-8 py-8 flex flex-col justify-center bg-gray-900/95 backdrop-blur-sm transition-all duration-700 ease-in-out overflow-y-auto ${
-              !isLogin ? "translate-x-0 opacity-100 z-20" : "-translate-x-full opacity-0 z-10"
+              !isLogin ? "translate-x-0 opacity-100 z-40" : "-translate-x-full opacity-0 z-10"
             }`}
           >
             <h2 className="text-3xl font-bold text-white mb-2">Tạo tài khoản 👋</h2>

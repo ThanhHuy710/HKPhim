@@ -34,7 +34,18 @@ export default function ListPage() {
   return (
     <Layout>
       <div className="py-4 mx-auto lg:max-w-6xl md:max-w-4xl">
-        <ResultNameForListPage type={type} name={name}/>
+        <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6 sm:mb-8">
+          Kết quả cho:
+          {type == "single-movies"
+            ? " Phim lẻ"
+            : type == "series"
+            ? " Phim bộ"
+            : type == "genre" && name
+            ? ` Thể loại "${name}"`
+            : type == "country" && name
+            ? ` Quốc gia "${name}"`
+            : ""}
+        </h2>
         {film && (
           <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6">
             {loading ? (

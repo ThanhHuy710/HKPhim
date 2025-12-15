@@ -5,7 +5,7 @@ export default function Banner() {
 
   const handleRegister = () => {
     if (!phone) return;
-    // TODO: Gọi API đăng ký
+    // TODO: Tích hợp API đăng ký
     console.log("Số điện thoại:", phone);
   };
 

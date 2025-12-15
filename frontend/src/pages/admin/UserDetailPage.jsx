@@ -78,8 +78,8 @@ export default function UserDetailPage() {
   const handleChangePassword = async (e) => {
     e.preventDefault();
     
-    // Validate form
-    if (!passwordData.oldPassword) {
+    // Kiểm tra form
+    if (!formData.username || !formData.email) {
       toast.error("Vui lòng nhập mật khẩu cũ!");
       return;
     }
@@ -166,7 +166,7 @@ export default function UserDetailPage() {
     if (file) {
       // Tạm thời chỉ hỗ trợ nhập URL, không upload file
       toast.info("Vui lòng nhập URL ảnh đại diện thay vì upload file");
-      e.target.value = ""; // Reset input
+      e.target.value = ""; // Reset input sau khi chọn file
       return;
       
       /* TODO: Implement file upload to server/cloudinary

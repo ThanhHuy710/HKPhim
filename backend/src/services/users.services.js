@@ -48,13 +48,32 @@ export const usersService = {
   update: async function (req) {
     const id = Number(req.params.id);
     
+    // Get current user to check if birthday already exists
+    const currentUser = await prisma.users.findUnique({
+      where: { id },
+      select: { birthday: true }
+    });
+    
     // Chỉ cho phép update các trường cụ thể (theo schema)
     const allowedFields = ['username', 'email', 'fullname', 'avatar', 'role', 'phonenumber', 'city', 'gender', 'interest', 'plan_id', 'birthday'];
     const updateData = {};
     
     allowedFields.forEach(field => {
       if (req.body[field] !== undefined) {
-        updateData[field] = req.body[field];
+        // Prevent birthday change if it's already set (for child protection)
+        if (field === 'birthday') {
+          if (currentUser.birthday) {
+            // Birthday already exists, don't allow change
+            console.log('Birthday change blocked - already set for user protection');
+            return;
+          }
+          // First time setting birthday - validate and convert
+          if (req.body[field]) {
+            updateData[field] = new Date(req.body[field]);
+          }
+        } else {
+          updateData[field] = req.body[field];
+        }
       }
     });
     

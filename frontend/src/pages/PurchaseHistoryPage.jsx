@@ -23,7 +23,7 @@ export default function PurchaseHistoryPage() {
   const fetchPurchases = async () => {
     try {
       const res = await api.get("/invoices");
-      // Lọc chỉ lấy invoices của user hiện tại
+      // Lọc chỉ lấy hóa đơn của user hiện tại
       const userInvoices = (res.data.data || []).filter(invoice => invoice.user_id === user.id);
       setPurchases(userInvoices);
     } catch (error) {

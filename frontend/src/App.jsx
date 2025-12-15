@@ -17,13 +17,20 @@ import UserDetailPage from "./pages/admin/UserDetailPage.jsx";
 import PlansManagement from "./pages/admin/PlansManagement.jsx";
 import SubscriptionPage from "./pages/SubscriptionPage.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
-import CartPage from "./pages/CartPage.jsx";
 import PurchaseHistoryPage from "./pages/PurchaseHistoryPage.jsx";
-import FavouritePage from "./pages/FavouritePage.jsx";
+
 function App() {
   return (
     <AuthProvider>
-      <Toaster richColors position="bottom-right" />
+      <Toaster 
+        richColors 
+        position="top-right" 
+        toastOptions={{
+          style: {
+            marginTop: '80px',
+          },
+        }}
+      />
       <BrowserRouter>
         <Routes>
            <Route path="/" element={<HomePage />} />
@@ -33,11 +40,9 @@ function App() {
           <Route path="/search/genre/:genre" element={<ListPage />} />
           <Route path="/subscription" element={<SubscriptionPage />} />
           <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/cart" element={<CartPage />} />
           <Route path="/purchase-history" element={<PurchaseHistoryPage />} />
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/google/callback" element={<GoogleCallback />} />
-          <Route path="/favorites" element={<FavouritePage/>} />
           
           {/* Admin Routes */}
           <Route path="/admin" element={<AdminPage />}>

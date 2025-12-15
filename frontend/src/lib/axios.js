@@ -18,7 +18,7 @@ api.interceptors.request.use(
 
 // Interceptor để tự động refresh token khi hết hạn
 api.interceptors.response.use(
-  (response) => response, // Request thành công
+  (response) => response, // Response thành công
   async (error) => {
     const originalRequest = error.config;
 

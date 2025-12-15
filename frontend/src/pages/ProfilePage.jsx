@@ -4,6 +4,7 @@ import api from "../lib/axios";
 import { toast } from "sonner";
 import { useAuth } from "../contexts/AuthContext";
 import Layout from "../components/layout/Layout";
+import { calculateAge } from "../utils/ageVerification";
 
 export default function ProfilePage() {
   const { user: authUser, updateUser } = useAuth();
@@ -19,7 +20,8 @@ export default function ProfilePage() {
     email: "",
     fullname: "",
     phonenumber: "",
-    avatar: ""
+    avatar: "",
+    birthday: ""
   });
 
   const [passwordData, setPasswordData] = useState({
@@ -35,7 +37,8 @@ export default function ProfilePage() {
         email: authUser.email || "",
         fullname: authUser.fullname || "",
         phonenumber: authUser.phonenumber || "",
-        avatar: authUser.avatar || ""
+        avatar: authUser.avatar || "",
+        birthday: authUser.birthday ? new Date(authUser.birthday).toISOString().split('T')[0] : ""
       });
     }
   }, [authUser]);
@@ -44,13 +47,13 @@ export default function ProfilePage() {
     const file = e.target.files[0];
     if (!file) return;
 
-    // Validate file type
+    // Kiểm tra loại file
     if (!file.type.startsWith('image/')) {
       toast.error("Vui lòng chọn file ảnh!");
       return;
     }
 
-    // Validate file size (5MB)
+    // Kiểm tra kích thước file (5MB)
     if (file.size > 5 * 1024 * 1024) {
       toast.error("Kích thước ảnh tối đa 5MB!");
       return;
@@ -78,11 +81,27 @@ export default function ProfilePage() {
 
   const handleSaveProfile = async (e) => {
     e.preventDefault();
+    
+    // Kiểm tra birthday nếu đang được nhập lần đầu
+    if (profileData.birthday && !authUser.birthday) {
+      const age = calculateAge(profileData.birthday);
+      if (age < 13) {
+        toast.error("Bạn phải từ 13 tuổi trở lên để sử dụng dịch vụ!");
+        return;
+      }
+    }
+    
+    // Chuẩn bị dữ liệu - loại bỏ birthday nếu đã tồn tại (đã khóa)
+    const dataToUpdate = { ...profileData };
+    if (authUser.birthday) {
+      delete dataToUpdate.birthday; // Không cho phép thay đổi birthday sau khi đã nhập
+    }
+    
     setLoading(true);
     try {
-      const res = await api.put(`/users/${authUser.id}`, profileData);
+      const res = await api.put(`/users/${authUser.id}`, dataToUpdate);
       toast.success("Cập nhật thông tin thành công!");
-      // Cập nhật context
+      // Cập nhật AuthContext
       updateUser(res.data.data);
     } catch (error) {
       console.error("Error details:", error.response?.data || error);
@@ -252,6 +271,31 @@ export default function ProfilePage() {
                       className="w-full bg-gray-900 text-white border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all"
                       placeholder="Nhập số điện thoại"
                     />
+                  </div>
+
+                  <div>
+                    <label className="flex items-center gap-2 text-gray-300 font-medium mb-2">
+                      Ngày sinh *
+                      {profileData.birthday && (
+                        <span className="text-xs text-yellow-400 bg-yellow-400/10 px-2 py-0.5 rounded">
+                          Đã khóa
+                        </span>
+                      )}
+                    </label>
+                    <input
+                      type="date"
+                      value={profileData.birthday}
+                      onChange={(e) => setProfileData({...profileData, birthday: e.target.value})}
+                      className="w-full bg-gray-900 text-white border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                      max={new Date().toISOString().split('T')[0]}
+                      required
+                      disabled={!!profileData.birthday}
+                    />
+                    <p className="text-gray-500 text-xs mt-2">
+                      {profileData.birthday 
+                        ? '🔒 Ngày sinh đã được khóa để bảo vệ nội dung theo độ tuổi. Liên hệ quản trị viên nếu cần thay đổi.'
+                        : 'Phải từ 13 tuổi trở lên. Sau khi nhập, thông tin này sẽ được khóa để bảo vệ trẻ em.'}
+                    </p>
                   </div>
 
                   <div className="md:col-span-2">
