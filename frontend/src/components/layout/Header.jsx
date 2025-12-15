@@ -69,10 +69,10 @@ export default function Header() {
             <span className="relative z-10">Phim lẻ</span>
             <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-yellow-400 group-hover:w-full transition-all duration-300"></span>
           </Link>
-          <Link to="/subscription" className="text-white font-medium hover:text-yellow-400 transition-all duration-200 relative group">
+          {/* <Link to="/subscription" className="text-white font-medium hover:text-yellow-400 transition-all duration-200 relative group">
             <span className="relative z-10">Gói cước</span>
             <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-yellow-400 group-hover:w-full transition-all duration-300"></span>
-          </Link>
+          </Link> */}
 
           {/* Dropdown Thể loại*/}
           <div className="relative group" ref={genreRef}>
@@ -132,7 +132,7 @@ export default function Header() {
         {/* Search */}
         <form
           action={`/search/title/?name=${title}`}
-          className="flex items-center bg-gray-600 rounded px-2 py-1 mr-10 w-1/4 h-10 ml-auto"
+          className="flex items-center bg-gray-600 rounded px-2 py-1 mr-10 w-1/6 h-10 ml-auto"
         >
           <button type="submit" className="mr-4 hover:text-white">
             <Search size={18} />
@@ -146,8 +146,8 @@ export default function Header() {
             className="bg-transparent text-sm text-white placeholder-gray-400 focus:outline-none"
           />
         </form>
-
-          {/* Admin Button - Show if user is admin */}
+            <div className="flex justify-content-center items-center gap-3 ">
+                        {/* Admin Button - Show if user is admin */}
           {user && user.role === "admin" && (
             <Link
               to="/admin"
@@ -165,7 +165,7 @@ export default function Header() {
               className="relative flex items-center justify-center w-11 h-11 bg-gray-800 hover:bg-yellow-400/20 rounded-full transition-all duration-200 border border-gray-700 hover:border-yellow-400 group"
               title="Giỏ hàng"
             >
-              <ShoppingCart size={20} className="text-gray-300 group-hover:text-yellow-400 transition-colors" />
+              <ShoppingCart size={20} className="text-gray-300 group-hover:text-yellow-400 transition-colors " />
             </Link>
           )}
 
@@ -226,7 +226,7 @@ export default function Header() {
                       <span>Lịch sử mua hàng</span>
                     </Link>
                     <Link
-                      to="/favorites"
+                      to={`/favorites?userId=${user.id}`}
                       className="flex items-center gap-4 px-5 py-3 text-sm font-medium text-white hover:bg-yellow-400/10 hover:text-yellow-400 transition-all duration-200 border-b border-gray-800"
                       onClick={() => setOpenUserMenu(false)}
                     >
@@ -254,11 +254,12 @@ export default function Header() {
           ) : (
             <Link
               to="/auth"
-              className="px-8 py-3 bg-linear-to-r from-yellow-400 to-orange-500 text-black font-bold rounded-full hover:from-yellow-500 hover:to-orange-600 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
+              className="bg-red-600 hover:bg-red-700 text-white font-semibold px-6 py-2 rounded"
             >
-              ĐĂNG NHẬP
+              Đăng nhập
             </Link>
           )}
+            </div>
         </div>
     </header>
   );

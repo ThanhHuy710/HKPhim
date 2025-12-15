@@ -6,6 +6,8 @@ import Layout from "../components/layout/Layout";
 import MovieCard from "../components/MovieCard";
 import VideoPlayer from "../components/VideoPlayer";
 import SeasonAndEpisodes from "../components/SeasonAndEpisodes";
+import FavoriteButton from "../components/FavoriteButton";
+import { useAuth } from "../contexts/AuthContext";
 export default function WatchMovie() {
   const { id } = useParams();
   const { search } = useLocation();
@@ -14,6 +16,7 @@ export default function WatchMovie() {
   const [film, setFilm] = useState(null);
   const [loading, setLoading] = useState(true);
   const [films, setFilms] = useState([]);
+  const { user } = useAuth();
   useEffect(() => {
     fetchFilm();
     fetchFilms();
@@ -64,8 +67,8 @@ export default function WatchMovie() {
           <div className="border-3 border-gray-600 rounded-lg opacity-75">
             <VideoPlayer
               videoUrl={
-                film.episodes?.find((ep) => ep.id === Number(episodeId))?.video_url ||
-                film.episodes?.[0]?.video_url
+                film.episodes?.find((ep) => ep.id === Number(episodeId))
+                  ?.video_url || film.episodes?.[0]?.video_url
               }
             />
           </div>
@@ -126,14 +129,22 @@ export default function WatchMovie() {
               />
               <p className="text-sm">Bình luận</p>
             </Link>
-            <Link className="flex flex-col items-center cursor-pointer hover:text-blue-400">
-              <img
-                src="../public/images/AddToList.png"
-                alt="Comment "
-                className="w-6 h-6"
-              />
-              <p className="text-sm">Yêu thích</p>
-            </Link>
+            {user ? (
+              <FavoriteButton filmId={film.id} userId={user.id} />
+            ) : (
+              <Link
+                to="/auth"
+                className="flex flex-col items-center cursor-pointer hover:text-blue-400"
+              >
+                <img
+                  src="../../public/images/AddToList.png"
+                  alt="Favorite"
+                  className="w-6 h-6"
+                />
+                <p className="text-sm">"Yêu thích"</p>
+              </Link>
+            )}
+
             <Link className="flex flex-col items-center cursor-pointer hover:text-blue-400">
               <img
                 src="../public/images/Share.png"

@@ -5,16 +5,19 @@ import { toast } from "sonner";
 import Layout from "../components/layout/Layout";
 import MovieCard from "../components/MovieCard";
 import SeasonAndEpisodes from "../components/SeasonAndEpisodes";
+import FavoriteButton from "../components/FavoriteButton";
+import { useAuth } from "../contexts/AuthContext";
 export default function MovieDetail() {
   const { id } = useParams();
   const [film, setFilm] = useState(null);
   const [loading, setLoading] = useState(true);
   const [films, setFilms] = useState([]);
+  const { user } = useAuth();
   useEffect(() => {
     fetchFilm();
     fetchFilms();
+    window.scrollTo(0, 0);
   }, [id]);
-
   const fetchFilm = async () => {
     try {
       const res = await api.get(`/films/${id}`);
@@ -38,10 +41,10 @@ export default function MovieDetail() {
     }
   };
   const getEmbedUrl = (url) => {
-  // lấy VIDEO_ID từ link gốc
-  const match = url.match(/v=([^&]+)/);
-  return match ? `https://www.youtube.com/embed/${match[1]}` : url;
-};
+    // lấy VIDEO_ID từ link gốc
+    const match = url.match(/v=([^&]+)/);
+    return match ? `https://www.youtube.com/embed/${match[1]}` : url;
+  };
   if (loading) {
     return (
       <Layout>
@@ -55,18 +58,23 @@ export default function MovieDetail() {
       <div className="grid grid-cols-6 grid-rows-10 gap-4 text-white">
         <div className="col-span-4 row-span-4 min-h-[600px]">
           {/*check films null or undefined*/}
-          {films.poster_video_url!== null ? (<iframe
-            width="100%"
-            height="100%"
-            src={getEmbedUrl(film.poster_video_url)}
-            title="YouTube video"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          ></iframe> )
-          : (
-            <img src="../../public/images/imgNotAvailable.png" alt="" className="w-full h-full"/>
+          {films.poster_video_url !== null ? (
+            <iframe
+              width="100%"
+              height="100%"
+              src={getEmbedUrl(film.poster_video_url)}
+              title="YouTube video"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              onFocus={true}
+            ></iframe>
+          ) : (
+            <img
+              src="../../public/images/imgNotAvailable.png"
+              alt=""
+              className="w-full h-full"
+            />
           )}
-          
         </div>
         <div className="col-span-2 row-span-7 col-start-5 ">
           <h1 className="text-xs md:text-2xl">Phim dành cho bạn</h1>
@@ -123,14 +131,22 @@ export default function MovieDetail() {
               />
               <p className="text-sm">Bình luận</p>
             </Link>
-            <Link className="flex flex-col items-center cursor-pointer hover:text-blue-400">
-              <img
-                src="../public/images/AddToList.png"
-                alt="Comment "
-                className="w-6 h-6"
-              />
-              <p className="text-sm">Yêu thích</p>
-            </Link>
+            {/* nút button  */}
+            {user ? (
+              <FavoriteButton filmId={film.id} userId={user.id} />
+            ) : (
+              <Link
+              to="/auth"
+              className="flex flex-col items-center cursor-pointer hover:text-blue-400">
+                <img
+                  src="../../public/images/AddToList.png"
+                  alt="Favorite"
+                  className="w-6 h-6"
+                />
+                <p className="text-sm">"Yêu thích"</p>
+              </Link>
+            )}
+
             <Link className="flex flex-col items-center cursor-pointer hover:text-blue-400">
               <img
                 src="../public/images/Share.png"
