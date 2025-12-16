@@ -74,6 +74,14 @@ export const filmsService = {
       offset,
     });
   },
+  //lọc theo diễn viên
+  async findByActor(actor, limit = 50, offset = 0) {
+    return this.findByFilter({
+      filter: { actor: { contains: actor} },
+      limit,
+      offset,
+    });
+  },
   //theo năm phát hành
   async findByYear(year, limit = 50, offset = 0) {
     return this.findByFilter({ filter: { year: Number(year) }, limit, offset });
@@ -88,28 +96,89 @@ export const filmsService = {
   },
   //lọc theo nhiều tiêu chí
   async findByCriteria({
-    country,
-    type,
-    rating,
-    genre,
-    version,
-    year,
-    limit = 50,
-    offset = 0,
-  }) {
-    const filter = {};
+  country,
+  type,
+  rating,
+  genre,
+  version,
+  year,
+  age_rating,
+  limit = 50,
+  offset = 0,
+}) {
+  const filter = {};
 
-    if (country) filter.country = country;
-    if (type) filter.type = type;
-    if (rating) filter.rating = rating;
-    if (version) filter.version = version;
-    if (year) filter.year = Number(year);
-    if (genre) {
-      filter.film_genres = { some: { genres: { name: genre } } };
-    }
+  // Quốc gia: có thể nhiều giá trị, cách nhau bằng dấu phẩy
+  if (country) {
+    const countries = country.split(",").map((c) => c.trim());
+    filter.country = { in: countries };
+  }
 
-    return this.findByFilter({ filter, limit, offset });
+  if (type) filter.type = type;
+  if (rating) filter.rating = rating;
+  if (version) filter.version = version;
+  if (year) filter.year = Number(year);
+
+  // Thêm age_rating
+  if (age_rating) filter.age_rating = age_rating;
+
+  if (genre) {
+    filter.film_genres = { some: { genres: { name: genre } } };
+  }
+
+  return this.findByFilter({ filter, limit, offset });
+},
+ async updateAverageRating(filmId) {
+    // Lấy tất cả rating của phim
+    const feedbacks = await prisma.feedbacks.findMany({
+      where: { film_id: filmId },
+      select: { rating: true },
+    });
+
+    if (feedbacks.length === 0) return null;
+
+    // Tính trung bình
+    const total = feedbacks.reduce((sum, fb) => sum + Number(fb.rating), 0);
+    const average = (total / feedbacks.length).toFixed(1); // làm tròn 1 số thập phân
+
+    // Cập nhật vào bảng films
+    return await prisma.films.update({
+      where: { id: filmId },
+      data: { average_rating: average },
+    });
   },
+  async listByFavorites() {
+  return await prisma.films.findMany({
+    include: {
+      _count: {
+        select: { favorites: true }, // đếm số favorites liên quan
+      },
+    },
+    orderBy: {
+      favorites: { _count: "desc" }, // sắp xếp từ nhiều đến ít
+    },
+  });
+},
+async listByViews() {
+  return await prisma.films.findMany({
+    orderBy: { view_count: "desc" },
+    take: 20, // giới hạn số phim nếu muốn
+  });
+},
+async listByRating() {
+  return await prisma.films.findMany({
+    orderBy: { average_rating: "desc" },
+    take: 20,
+  });
+},
+async listRecommended(userId) {
+  //lấy random
+  return await prisma.films.findMany({
+    orderBy: { id: "desc" },
+    take: 20,
+  });
+},
+
   // CRUD
   create: async function (req) {
     return await prisma.films.create({

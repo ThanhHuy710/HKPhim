@@ -19,7 +19,7 @@ export default function MovieRow({ title, films, viewAllLink }) {
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold text-white">{title}</h2>
         <Link
-          to={viewAllLink}
+          to={`search/${viewAllLink}`}
           className="text-sm text-brand-green hover:underline"
         >
           Xem tất cả

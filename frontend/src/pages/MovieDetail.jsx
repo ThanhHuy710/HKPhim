@@ -249,9 +249,6 @@ export default function MovieDetail() {
           <div className="flex flex-col space-y-4 text-white">
             {/* Tên phim */}
             <h1 className="text-3xl font-bold">{film.title}</h1>
-
-            {/* Nếu là phim bộ thì hiển thị phần */}
-
             <div>
               <h2 className="text-xl font-semibold mb-2">Mô tả</h2>
               <p className="text-gray-300">{film.description}</p>
@@ -268,6 +265,10 @@ export default function MovieDetail() {
             <div>
               <h2 className="text-xl font-semibold mb-2">Diễn viên</h2>
               <p className="text-gray-300">{film.actor}</p>
+            </div>
+            <div>
+              <h2 className="text-xl font-semibold mb-2">Đạo diễn</h2>
+              <p className="text-gray-300">{film.directeur}</p>
             </div>
           </div>
         </div>

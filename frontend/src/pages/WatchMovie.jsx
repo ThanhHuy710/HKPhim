@@ -226,6 +226,8 @@ export default function WatchMovie() {
                   film.episodes?.find((ep) => ep.id === Number(episodeId))?.video_url ||
                   film.episodes?.[0]?.video_url
                 }
+                filmId={film.id}
+                currentViewCount={film.view_count}
               />
             ) : (
               <div className="w-full h-full min-h-[400px] flex items-center justify-center bg-gray-900 rounded-lg p-8">
@@ -340,6 +342,10 @@ export default function WatchMovie() {
             <div>
               <h2 className="text-xl font-semibold mb-2">Diễn viên</h2>
               <p className="text-gray-300">{film.actor}</p>
+            </div>
+            <div>
+              <h2 className="text-xl font-semibold mb-2">Đạo diễn</h2>
+              <p className="text-gray-300">{film.directeur}</p>
             </div>
           </div>
         </div>

@@ -37,7 +37,6 @@ function App() {
           <Route path="/film/:id" element={<MovieDetail />} />
           <Route path="/watch/:id" element={<WatchMovie />} />
           <Route path="/search/:type" element={<ListPage />} />
-          <Route path="/search/genre/:genre" element={<ListPage />} />
           <Route path="/subscription" element={<SubscriptionPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/purchase-history" element={<PurchaseHistoryPage />} />

@@ -13,7 +13,7 @@ export default function Header() {
   const [openCountry, setOpenCountry] = useState(false);
   const [openUserMenu, setOpenUserMenu] = useState(false);
   const [genres, setGenres] = useState([]);
-  const [title, setTitle] = useState("");
+  const [titleOrActor, setTitleOrActor] = useState("");
   const userMenuRef = useRef(null);
   const genreRef = useRef(null);
   const countryRef = useRef(null);
@@ -57,10 +57,10 @@ export default function Header() {
 
         {/* Navigation - Left aligned after logo */}
         <nav className="hidden lg:flex items-center space-x-10 ml-16">
-          <Link to="/phim-moi" className="text-white font-medium hover:text-yellow-400 transition-all duration-200 relative group">
+          {/* <Link to="/phim-moi" className="text-white font-medium hover:text-yellow-400 transition-all duration-200 relative group">
             <span className="relative z-10">Phim mới</span>
             <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-yellow-400 group-hover:w-full transition-all duration-300"></span>
-          </Link>
+          </Link> */}
           <Link to="/search/series" className="text-white font-medium hover:text-yellow-400 transition-all duration-200 relative group">
             <span className="relative z-10">Phim bộ</span>
             <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-yellow-400 group-hover:w-full transition-all duration-300"></span>
@@ -131,7 +131,7 @@ export default function Header() {
         </nav>
         {/* Search */}
         <form
-          action={`/search/title/?name=${title}`}
+          action={`/search/titleoractor/?name=${titleOrActor}`}
           className="flex items-center bg-gray-600 rounded px-2 py-1 mr-10 w-1/6 h-10 ml-auto"
         >
           <button type="submit" className="mr-4 hover:text-white">
@@ -140,9 +140,9 @@ export default function Header() {
           <input
             name="name"
             type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="Tìm kiếm phim..."
+            value={titleOrActor}
+            onChange={(e) => setTitleOrActor(e.target.value)}
+            placeholder="Tìm kiếm phim,diễn viên"
             className="bg-transparent text-sm text-white placeholder-gray-400 focus:outline-none"
           />
         </form>

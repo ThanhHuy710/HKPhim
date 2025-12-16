@@ -10,12 +10,15 @@ import { useAuth } from "../contexts/AuthContext";
 
 export default function HomePage() {
   const { user, updateUser } = useAuth();
-  const [films, setFilms] = useState([]);
+  const [hotFilms, setHotFilms] = useState([]);
+  const [ratingFilms, setRatingFilms] = useState([]);
+  const [recommendedFilms, setRecommendedFilms] = useState([]);
+  const [favoriteFilms, setFavoriteFilms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showBirthdayModal, setShowBirthdayModal] = useState(false);
 
   useEffect(() => {
-    fetchFilms();
+    fetchAllFilms();
   }, []);
 
   useEffect(() => {
@@ -32,10 +35,19 @@ export default function HomePage() {
     setShowBirthdayModal(false);
   };
 
-  const fetchFilms = async () => {
+  const fetchAllFilms = async () => {
     try {
-      const res = await api.get("/films");
-      setFilms(res.data.data || []);
+      const [hotRes, ratingRes, recommendedRes, favoriteRes] = await Promise.all([
+        api.get("/films/views"),
+        api.get("/films/rating"),
+        api.get("/films/recommended"),
+        api.get("/films/favorites"),
+      ]);
+
+      setHotFilms(hotRes.data.data || []);
+      setRatingFilms(ratingRes.data.data || []);
+      setRecommendedFilms(recommendedRes.data.data || []);
+      setFavoriteFilms(favoriteRes.data.data || []);
     } catch (error) {
       console.error("Lỗi:", error);
       toast.error("Không thể tải phim");
@@ -57,36 +69,34 @@ export default function HomePage() {
       {showBirthdayModal && (
         <RequireBirthdayModal user={user} onUpdate={handleBirthdayUpdate} />
       )}
-      
+
       {user ? <BannerAfterLogin /> : <Banner />}
-      
+
       <div className="movie-sections">
-        {/* //viewcount */}
         <MovieRow 
           title="Phim Hot" 
-          films={films}
-          viewAllLink="/phim-hot"
+          films={hotFilms}
+          viewAllLink="views"
         />
-        {/* //average rating */}
+
         <MovieRow 
           title="Đánh giá cao" 
-          films={films}
-          viewAllLink="/danh-gia-cao"
+          films={ratingFilms}
+          viewAllLink="rating"
         />
-        {/* //recommended */}
+
         <MovieRow 
           title="Dành cho bạn" 
-          films={films}
-          viewAllLink="/danh-cho-ban"
+          films={recommendedFilms}
+          viewAllLink="recommended"
         />
-        {/* //favourite */}
+
         <MovieRow 
           title="Top yêu thích" 
-          films={films}
-          viewAllLink="/top-yeu-thich"
+          films={favoriteFilms}
+          viewAllLink="favorites"
         />
       </div>
     </Layout>
   );
 }
-
