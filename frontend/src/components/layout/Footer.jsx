@@ -8,7 +8,7 @@ export default function Footer() {
     
     {/* Logo + mô tả */}
     <div className="flex flex-col items-start md:w-1/3">
-      <img src="/images/Logo.png" alt="HKphim Logo" className="h-12 w-12 mb-4" />
+      <img src="/images/Logo.png" alt="HKphim Logo" className="h-12 mb-4" />
       <p className="hidden md:block text-sm leading-relaxed">
         HK phim – Phim hay cả rổ - Trang xem phim online chất lượng cao miễn phí Vietsub,
          thuyết minh, lồng tiếng full HD. Kho phim mới khổng lồ, phim chiếu rạp, phim bộ,

@@ -45,10 +45,19 @@ export const filmsController = {
     }
   },
   //lọc theo nhiều tiêu chí
-  async getByCriteria(req, res, next) {
+   async getByCriteria(req, res, next) {
     try {
-      const { country, type, rating, genre, version, year, limit, offset } =
-        req.query;
+      const {
+        country,
+        type,
+        rating,
+        genre,
+        version,
+        year,
+        age_rating,
+        limit,
+        offset,
+      } = req.query;
 
       const result = await filmsService.findByCriteria({
         country,
@@ -57,6 +66,7 @@ export const filmsController = {
         genre,
         version,
         year,
+        age_rating,
         limit: parseInt(limit) || 50,
         offset: parseInt(offset) || 0,
       });
@@ -145,6 +155,46 @@ export const filmsController = {
       res.status(response.statusCode).json(response);
     }
   },
+  //theo diễn viên
+  async findByActor(req, res, next) {
+     try {
+      const actor = req.params.actor;
+      const limit = parseInt(req.query.limit) || 50;
+      const offset = parseInt(req.query.offset) || 0;
+      const result = await filmsService.findByActor(actor, limit, offset);
+      const response = responseSuccess(result, "Get Actor by title successfully");
+      res.status(response.statusCode).json(response);
+    } catch (err) {
+      const response = responseError(err.message, 500, err.stack);
+      res.status(response.statusCode).json(response);
+    }
+  },
+  //lấy danh sách diễn viên khi tìm kiếm
+  async findActors(req, res, next) {
+    try {
+      const keyword = req.params.actor; // lấy từ URL /films/actors/:actor
+      const limit = parseInt(req.query.limit) || 50;
+      const offset = parseInt(req.query.offset) || 0;
+
+      // lấy danh sách phim có chứa keyword trong actor
+      const films = await filmsService.findByActor(keyword, limit, offset);
+
+      // tách chuỗi actor thành mảng, lọc theo keyword
+      const actors = films
+        .flatMap(f => f.actor.split(","))   // tách thành mảng
+        .map(a => a.trim())                 // bỏ khoảng trắng
+        .filter(a => a.toLowerCase().includes(keyword.toLowerCase()));
+
+      // loại bỏ trùng lặp
+      const uniqueActors = [...new Set(actors)];
+
+      const response = responseSuccess(uniqueActors, "Get actors successfully");
+      res.status(response.statusCode).json(response);
+    } catch (err) {
+      const response = responseError(err.message, 500, err.stack);
+      res.status(response.statusCode).json(response);
+    }
+  },
   //theo năm phát hành
   async findByYear(req, res, next) {
     try {
@@ -159,6 +209,43 @@ export const filmsController = {
       res.status(response.statusCode).json(response);
     }
   },
+  //theo quốc gia
+    async findByCountry(req, res, next) {
+  try {
+    const country = req.params.country; 
+    const limit = parseInt(req.query.limit) || 50;
+    const offset = parseInt(req.query.offset) || 0;
+
+    const result = await filmsService.findByCountry(country, limit, offset);
+
+    const response = responseSuccess(result, "Get movies by country successfully");
+    res.status(response.statusCode).json(response);
+  } catch (err) {
+    const response = responseError(err.message, 500, err.stack);
+    res.status(response.statusCode).json(response);
+  }
+},
+  listByViews: async (req, res) => {
+  const result = await filmsService.listByViews();
+  res.json(responseSuccess(result, "List films by views"));
+},
+
+listByRating: async (req, res) => {
+  const result = await filmsService.listByRating();
+  res.json(responseSuccess(result, "List films by rating"));
+},
+
+listRecommended: async (req, res) => {
+  const result = await filmsService.listRecommended(req.user?.id);
+  res.json(responseSuccess(result, "List recommended films"));
+},
+
+listByFavorites: async (req, res) => {
+  const result = await filmsService.listByFavorites();
+  res.json(responseSuccess(result, "List films by favorites"));
+},
+
+  
   // CRUD
   create: async function (req, res, next) {
     const result = await filmsService.create(req);

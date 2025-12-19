@@ -68,7 +68,7 @@ export default function DashboardPage() {
     }
   };
 
-  const StatCard = ({ icon: Icon, label, value, color }) => (
+  const StatCard = ({ icon:label, value, color }) => (
     <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
       <div className="flex items-center justify-between">
         <div>

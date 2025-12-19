@@ -9,6 +9,7 @@ import SeasonAndEpisodes from "../components/SeasonAndEpisodes";
 import { useAuth } from "../contexts/AuthContext";
 import { canWatchFilm, parseAgeRating } from "../utils/ageVerification";
 import { AlertCircle, Lock } from "lucide-react";
+import FavoriteButton from "../components/FavoriteButton";
 
 export default function WatchMovie() {
   const { id } = useParams();
@@ -225,6 +226,8 @@ export default function WatchMovie() {
                   film.episodes?.find((ep) => ep.id === Number(episodeId))?.video_url ||
                   film.episodes?.[0]?.video_url
                 }
+                filmId={film.id}
+                currentViewCount={film.view_count}
               />
             ) : (
               <div className="w-full h-full min-h-[400px] flex items-center justify-center bg-gray-900 rounded-lg p-8">
@@ -340,6 +343,10 @@ export default function WatchMovie() {
               <h2 className="text-xl font-semibold mb-2">Diễn viên</h2>
               <p className="text-gray-300">{film.actor}</p>
             </div>
+            <div>
+              <h2 className="text-xl font-semibold mb-2">Đạo diễn</h2>
+              <p className="text-gray-300">{film.directeur}</p>
+            </div>
           </div>
         </div>
         <div className="col-span-2 row-span-6 col-start-3 row-start-5">
@@ -353,14 +360,7 @@ export default function WatchMovie() {
               />
               <p className="text-sm">Bình luận</p>
             </Link>
-            <Link className="flex flex-col items-center cursor-pointer hover:text-blue-400">
-              <img
-                src="../public/images/AddToList.png"
-                alt="Comment "
-                className="w-6 h-6"
-              />
-              <p className="text-sm">Yêu thích</p>
-            </Link>
+             <FavoriteButton filmId={film.id} userId={user.id} />
             <Link className="flex flex-col items-center cursor-pointer hover:text-blue-400">
               <img
                 src="../public/images/Share.png"
