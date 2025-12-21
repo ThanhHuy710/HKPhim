@@ -85,7 +85,7 @@ export type views = $Result.DefaultSelection<Prisma.$viewsPayload>
  */
 export class PrismaClient<
   ClientOptions extends Prisma.PrismaClientOptions = Prisma.PrismaClientOptions,
-  const U = 'log' extends keyof ClientOptions ? ClientOptions['log'] extends Array<Prisma.LogLevel | Prisma.LogDefinition> ? Prisma.GetEvents<ClientOptions['log']> : never : never,
+  U = 'log' extends keyof ClientOptions ? ClientOptions['log'] extends Array<Prisma.LogLevel | Prisma.LogDefinition> ? Prisma.GetEvents<ClientOptions['log']> : never : never,
   ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs
 > {
   [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['other'] }
@@ -117,6 +117,13 @@ export class PrismaClient<
    * Disconnect from the database
    */
   $disconnect(): $Utils.JsPromise<void>;
+
+  /**
+   * Add a middleware
+   * @deprecated since 4.16.0. For new code, prefer client extensions instead.
+   * @see https://pris.ly/d/extensions
+   */
+  $use(cb: Prisma.Middleware): void
 
 /**
    * Executes a prepared raw query and returns the number of affected rows.
@@ -354,8 +361,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.19.0
-   * Query Engine version: 2ba551f319ab1df4bc874a89965d8b3641056773
+   * Prisma Client JS version: 6.7.0
+   * Query Engine version: 3cff47a7f5d65c3ea74883f1d736e41d68ce91ed
    */
   export type PrismaVersion = {
     client: string
@@ -368,7 +375,6 @@ export namespace Prisma {
    */
 
 
-  export import Bytes = runtime.Bytes
   export import JsonObject = runtime.JsonObject
   export import JsonArray = runtime.JsonArray
   export import JsonValue = runtime.JsonValue
@@ -1539,24 +1545,16 @@ export namespace Prisma {
     /**
      * @example
      * ```
-     * // Shorthand for `emit: 'stdout'`
+     * // Defaults to stdout
      * log: ['query', 'info', 'warn', 'error']
      * 
-     * // Emit as events only
+     * // Emit as events
      * log: [
-     *   { emit: 'event', level: 'query' },
-     *   { emit: 'event', level: 'info' },
-     *   { emit: 'event', level: 'warn' }
-     *   { emit: 'event', level: 'error' }
+     *   { emit: 'stdout', level: 'query' },
+     *   { emit: 'stdout', level: 'info' },
+     *   { emit: 'stdout', level: 'warn' }
+     *   { emit: 'stdout', level: 'error' }
      * ]
-     * 
-     * / Emit as events and log to stdout
-     * og: [
-     *  { emit: 'stdout', level: 'query' },
-     *  { emit: 'stdout', level: 'info' },
-     *  { emit: 'stdout', level: 'warn' }
-     *  { emit: 'stdout', level: 'error' }
-     * 
      * ```
      * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/logging#the-log-option).
      */
@@ -1571,10 +1569,6 @@ export namespace Prisma {
       timeout?: number
       isolationLevel?: Prisma.TransactionIsolationLevel
     }
-    /**
-     * Instance of a Driver Adapter, e.g., like one provided by `@prisma/adapter-planetscale`
-     */
-    adapter?: runtime.SqlDriverAdapterFactory | null
     /**
      * Global configuration for omitting model fields by default.
      * 
@@ -1612,15 +1606,10 @@ export namespace Prisma {
     emit: 'stdout' | 'event'
   }
 
-  export type CheckIsLogLevel<T> = T extends LogLevel ? T : never;
-
-  export type GetLogType<T> = CheckIsLogLevel<
-    T extends LogDefinition ? T['level'] : T
-  >;
-
-  export type GetEvents<T extends any[]> = T extends Array<LogLevel | LogDefinition>
-    ? GetLogType<T[number]>
-    : never;
+  export type GetLogType<T extends LogLevel | LogDefinition> = T extends LogDefinition ? T['emit'] extends 'event' ? T['level'] : never : never
+  export type GetEvents<T extends any> = T extends Array<LogLevel | LogDefinition> ?
+    GetLogType<T[0]> | GetLogType<T[1]> | GetLogType<T[2]> | GetLogType<T[3]>
+    : never
 
   export type QueryEvent = {
     timestamp: Date
@@ -1660,6 +1649,25 @@ export namespace Prisma {
     | 'runCommandRaw'
     | 'findRaw'
     | 'groupBy'
+
+  /**
+   * These options are being passed into the middleware as "params"
+   */
+  export type MiddlewareParams = {
+    model?: ModelName
+    action: PrismaAction
+    args: any
+    dataPath: string[]
+    runInTransaction: boolean
+  }
+
+  /**
+   * The `T` type makes sure, that the `return proceed` is not forgotten in the middleware implementation
+   */
+  export type Middleware<T = any> = (
+    params: MiddlewareParams,
+    next: (params: MiddlewareParams) => $Utils.JsPromise<T>,
+  ) => $Utils.JsPromise<T>
 
   // tested in getLogLevel.test.ts
   export function getLogLevel(log: Array<LogLevel | LogDefinition>): LogLevel | undefined;
@@ -11393,13 +11401,13 @@ export namespace Prisma {
     fullname: string | null
     phonenumber: string | null
     email: string | null
-    avatar: string | null
     city: string | null
     gender: string | null
     interest: string | null
     birthday: Date | null
     created_at: Date | null
     updated_at: Date | null
+    avatar: string | null
   }
 
   export type UsersMaxAggregateOutputType = {
@@ -11411,13 +11419,13 @@ export namespace Prisma {
     fullname: string | null
     phonenumber: string | null
     email: string | null
-    avatar: string | null
     city: string | null
     gender: string | null
     interest: string | null
     birthday: Date | null
     created_at: Date | null
     updated_at: Date | null
+    avatar: string | null
   }
 
   export type UsersCountAggregateOutputType = {
@@ -11429,13 +11437,13 @@ export namespace Prisma {
     fullname: number
     phonenumber: number
     email: number
-    avatar: number
     city: number
     gender: number
     interest: number
     birthday: number
     created_at: number
     updated_at: number
+    avatar: number
     _all: number
   }
 
@@ -11459,13 +11467,13 @@ export namespace Prisma {
     fullname?: true
     phonenumber?: true
     email?: true
-    avatar?: true
     city?: true
     gender?: true
     interest?: true
     birthday?: true
     created_at?: true
     updated_at?: true
+    avatar?: true
   }
 
   export type UsersMaxAggregateInputType = {
@@ -11477,13 +11485,13 @@ export namespace Prisma {
     fullname?: true
     phonenumber?: true
     email?: true
-    avatar?: true
     city?: true
     gender?: true
     interest?: true
     birthday?: true
     created_at?: true
     updated_at?: true
+    avatar?: true
   }
 
   export type UsersCountAggregateInputType = {
@@ -11495,13 +11503,13 @@ export namespace Prisma {
     fullname?: true
     phonenumber?: true
     email?: true
-    avatar?: true
     city?: true
     gender?: true
     interest?: true
     birthday?: true
     created_at?: true
     updated_at?: true
+    avatar?: true
     _all?: true
   }
 
@@ -11600,13 +11608,13 @@ export namespace Prisma {
     fullname: string | null
     phonenumber: string | null
     email: string | null
-    avatar: string | null
     city: string | null
     gender: string | null
     interest: string | null
     birthday: Date | null
     created_at: Date
     updated_at: Date
+    avatar: string | null
     _count: UsersCountAggregateOutputType | null
     _avg: UsersAvgAggregateOutputType | null
     _sum: UsersSumAggregateOutputType | null
@@ -11637,13 +11645,13 @@ export namespace Prisma {
     fullname?: boolean
     phonenumber?: boolean
     email?: boolean
-    avatar?: boolean
     city?: boolean
     gender?: boolean
     interest?: boolean
     birthday?: boolean
     created_at?: boolean
     updated_at?: boolean
+    avatar?: boolean
     cart?: boolean | users$cartArgs<ExtArgs>
     favorites?: boolean | users$favoritesArgs<ExtArgs>
     feedbacks?: boolean | users$feedbacksArgs<ExtArgs>
@@ -11664,16 +11672,16 @@ export namespace Prisma {
     fullname?: boolean
     phonenumber?: boolean
     email?: boolean
-    avatar?: boolean
     city?: boolean
     gender?: boolean
     interest?: boolean
     birthday?: boolean
     created_at?: boolean
     updated_at?: boolean
+    avatar?: boolean
   }
 
-  export type usersOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "plan_id" | "username" | "password" | "role" | "fullname" | "phonenumber" | "email" | "avatar" | "city" | "gender" | "interest" | "birthday" | "created_at" | "updated_at", ExtArgs["result"]["users"]>
+  export type usersOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "plan_id" | "username" | "password" | "role" | "fullname" | "phonenumber" | "email" | "city" | "gender" | "interest" | "birthday" | "created_at" | "updated_at" | "avatar", ExtArgs["result"]["users"]>
   export type usersInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     cart?: boolean | users$cartArgs<ExtArgs>
     favorites?: boolean | users$favoritesArgs<ExtArgs>
@@ -11703,13 +11711,13 @@ export namespace Prisma {
       fullname: string | null
       phonenumber: string | null
       email: string | null
-      avatar: string | null
       city: string | null
       gender: string | null
       interest: string | null
       birthday: Date | null
       created_at: Date
       updated_at: Date
+      avatar: string | null
     }, ExtArgs["result"]["users"]>
     composites: {}
   }
@@ -12093,13 +12101,13 @@ export namespace Prisma {
     readonly fullname: FieldRef<"users", 'String'>
     readonly phonenumber: FieldRef<"users", 'String'>
     readonly email: FieldRef<"users", 'String'>
-    readonly avatar: FieldRef<"users", 'String'>
     readonly city: FieldRef<"users", 'String'>
     readonly gender: FieldRef<"users", 'String'>
     readonly interest: FieldRef<"users", 'String'>
     readonly birthday: FieldRef<"users", 'DateTime'>
     readonly created_at: FieldRef<"users", 'DateTime'>
     readonly updated_at: FieldRef<"users", 'DateTime'>
+    readonly avatar: FieldRef<"users", 'String'>
   }
     
 
@@ -13794,13 +13802,13 @@ export namespace Prisma {
     fullname: 'fullname',
     phonenumber: 'phonenumber',
     email: 'email',
-    avatar: 'avatar',
     city: 'city',
     gender: 'gender',
     interest: 'interest',
     birthday: 'birthday',
     created_at: 'created_at',
-    updated_at: 'updated_at'
+    updated_at: 'updated_at',
+    avatar: 'avatar'
   };
 
   export type UsersScalarFieldEnum = (typeof UsersScalarFieldEnum)[keyof typeof UsersScalarFieldEnum]
@@ -13895,10 +13903,10 @@ export namespace Prisma {
     fullname: 'fullname',
     phonenumber: 'phonenumber',
     email: 'email',
-    avatar: 'avatar',
     city: 'city',
     gender: 'gender',
-    interest: 'interest'
+    interest: 'interest',
+    avatar: 'avatar'
   };
 
   export type usersOrderByRelevanceFieldEnum = (typeof usersOrderByRelevanceFieldEnum)[keyof typeof usersOrderByRelevanceFieldEnum]
@@ -14607,13 +14615,13 @@ export namespace Prisma {
     fullname?: StringNullableFilter<"users"> | string | null
     phonenumber?: StringNullableFilter<"users"> | string | null
     email?: StringNullableFilter<"users"> | string | null
-    avatar?: StringNullableFilter<"users"> | string | null
     city?: StringNullableFilter<"users"> | string | null
     gender?: StringNullableFilter<"users"> | string | null
     interest?: StringNullableFilter<"users"> | string | null
     birthday?: DateTimeNullableFilter<"users"> | Date | string | null
     created_at?: DateTimeFilter<"users"> | Date | string
     updated_at?: DateTimeFilter<"users"> | Date | string
+    avatar?: StringNullableFilter<"users"> | string | null
     cart?: CartListRelationFilter
     favorites?: FavoritesListRelationFilter
     feedbacks?: FeedbacksListRelationFilter
@@ -14631,13 +14639,13 @@ export namespace Prisma {
     fullname?: SortOrderInput | SortOrder
     phonenumber?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
-    avatar?: SortOrderInput | SortOrder
     city?: SortOrderInput | SortOrder
     gender?: SortOrderInput | SortOrder
     interest?: SortOrderInput | SortOrder
     birthday?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    avatar?: SortOrderInput | SortOrder
     cart?: cartOrderByRelationAggregateInput
     favorites?: favoritesOrderByRelationAggregateInput
     feedbacks?: feedbacksOrderByRelationAggregateInput
@@ -14659,13 +14667,13 @@ export namespace Prisma {
     role?: StringNullableFilter<"users"> | string | null
     fullname?: StringNullableFilter<"users"> | string | null
     phonenumber?: StringNullableFilter<"users"> | string | null
-    avatar?: StringNullableFilter<"users"> | string | null
     city?: StringNullableFilter<"users"> | string | null
     gender?: StringNullableFilter<"users"> | string | null
     interest?: StringNullableFilter<"users"> | string | null
     birthday?: DateTimeNullableFilter<"users"> | Date | string | null
     created_at?: DateTimeFilter<"users"> | Date | string
     updated_at?: DateTimeFilter<"users"> | Date | string
+    avatar?: StringNullableFilter<"users"> | string | null
     cart?: CartListRelationFilter
     favorites?: FavoritesListRelationFilter
     feedbacks?: FeedbacksListRelationFilter
@@ -14683,13 +14691,13 @@ export namespace Prisma {
     fullname?: SortOrderInput | SortOrder
     phonenumber?: SortOrderInput | SortOrder
     email?: SortOrderInput | SortOrder
-    avatar?: SortOrderInput | SortOrder
     city?: SortOrderInput | SortOrder
     gender?: SortOrderInput | SortOrder
     interest?: SortOrderInput | SortOrder
     birthday?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    avatar?: SortOrderInput | SortOrder
     _count?: usersCountOrderByAggregateInput
     _avg?: usersAvgOrderByAggregateInput
     _max?: usersMaxOrderByAggregateInput
@@ -14709,13 +14717,13 @@ export namespace Prisma {
     fullname?: StringNullableWithAggregatesFilter<"users"> | string | null
     phonenumber?: StringNullableWithAggregatesFilter<"users"> | string | null
     email?: StringNullableWithAggregatesFilter<"users"> | string | null
-    avatar?: StringNullableWithAggregatesFilter<"users"> | string | null
     city?: StringNullableWithAggregatesFilter<"users"> | string | null
     gender?: StringNullableWithAggregatesFilter<"users"> | string | null
     interest?: StringNullableWithAggregatesFilter<"users"> | string | null
     birthday?: DateTimeNullableWithAggregatesFilter<"users"> | Date | string | null
     created_at?: DateTimeWithAggregatesFilter<"users"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"users"> | Date | string
+    avatar?: StringNullableWithAggregatesFilter<"users"> | string | null
   }
 
   export type viewsWhereInput = {
@@ -15419,13 +15427,13 @@ export namespace Prisma {
     fullname?: string | null
     phonenumber?: string | null
     email?: string | null
-    avatar?: string | null
     city?: string | null
     gender?: string | null
     interest?: string | null
     birthday?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    avatar?: string | null
     cart?: cartCreateNestedManyWithoutUsersInput
     favorites?: favoritesCreateNestedManyWithoutUsersInput
     feedbacks?: feedbacksCreateNestedManyWithoutUsersInput
@@ -15443,13 +15451,13 @@ export namespace Prisma {
     fullname?: string | null
     phonenumber?: string | null
     email?: string | null
-    avatar?: string | null
     city?: string | null
     gender?: string | null
     interest?: string | null
     birthday?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    avatar?: string | null
     cart?: cartUncheckedCreateNestedManyWithoutUsersInput
     favorites?: favoritesUncheckedCreateNestedManyWithoutUsersInput
     feedbacks?: feedbacksUncheckedCreateNestedManyWithoutUsersInput
@@ -15464,13 +15472,13 @@ export namespace Prisma {
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
     phonenumber?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     interest?: NullableStringFieldUpdateOperationsInput | string | null
     birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     cart?: cartUpdateManyWithoutUsersNestedInput
     favorites?: favoritesUpdateManyWithoutUsersNestedInput
     feedbacks?: feedbacksUpdateManyWithoutUsersNestedInput
@@ -15488,13 +15496,13 @@ export namespace Prisma {
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
     phonenumber?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     interest?: NullableStringFieldUpdateOperationsInput | string | null
     birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     cart?: cartUncheckedUpdateManyWithoutUsersNestedInput
     favorites?: favoritesUncheckedUpdateManyWithoutUsersNestedInput
     feedbacks?: feedbacksUncheckedUpdateManyWithoutUsersNestedInput
@@ -15511,13 +15519,13 @@ export namespace Prisma {
     fullname?: string | null
     phonenumber?: string | null
     email?: string | null
-    avatar?: string | null
     city?: string | null
     gender?: string | null
     interest?: string | null
     birthday?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    avatar?: string | null
   }
 
   export type usersUpdateManyMutationInput = {
@@ -15527,13 +15535,13 @@ export namespace Prisma {
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
     phonenumber?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     interest?: NullableStringFieldUpdateOperationsInput | string | null
     birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type usersUncheckedUpdateManyInput = {
@@ -15545,13 +15553,13 @@ export namespace Prisma {
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
     phonenumber?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     interest?: NullableStringFieldUpdateOperationsInput | string | null
     birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type viewsCreateInput = {
@@ -16326,13 +16334,13 @@ export namespace Prisma {
     fullname?: SortOrder
     phonenumber?: SortOrder
     email?: SortOrder
-    avatar?: SortOrder
     city?: SortOrder
     gender?: SortOrder
     interest?: SortOrder
     birthday?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    avatar?: SortOrder
   }
 
   export type usersAvgOrderByAggregateInput = {
@@ -16349,13 +16357,13 @@ export namespace Prisma {
     fullname?: SortOrder
     phonenumber?: SortOrder
     email?: SortOrder
-    avatar?: SortOrder
     city?: SortOrder
     gender?: SortOrder
     interest?: SortOrder
     birthday?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    avatar?: SortOrder
   }
 
   export type usersMinOrderByAggregateInput = {
@@ -16367,13 +16375,13 @@ export namespace Prisma {
     fullname?: SortOrder
     phonenumber?: SortOrder
     email?: SortOrder
-    avatar?: SortOrder
     city?: SortOrder
     gender?: SortOrder
     interest?: SortOrder
     birthday?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    avatar?: SortOrder
   }
 
   export type usersSumOrderByAggregateInput = {
@@ -17545,13 +17553,13 @@ export namespace Prisma {
     fullname?: string | null
     phonenumber?: string | null
     email?: string | null
-    avatar?: string | null
     city?: string | null
     gender?: string | null
     interest?: string | null
     birthday?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    avatar?: string | null
     favorites?: favoritesCreateNestedManyWithoutUsersInput
     feedbacks?: feedbacksCreateNestedManyWithoutUsersInput
     invoices?: invoicesCreateNestedManyWithoutUsersInput
@@ -17568,13 +17576,13 @@ export namespace Prisma {
     fullname?: string | null
     phonenumber?: string | null
     email?: string | null
-    avatar?: string | null
     city?: string | null
     gender?: string | null
     interest?: string | null
     birthday?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    avatar?: string | null
     favorites?: favoritesUncheckedCreateNestedManyWithoutUsersInput
     feedbacks?: feedbacksUncheckedCreateNestedManyWithoutUsersInput
     invoices?: invoicesUncheckedCreateNestedManyWithoutUsersInput
@@ -17630,13 +17638,13 @@ export namespace Prisma {
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
     phonenumber?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     interest?: NullableStringFieldUpdateOperationsInput | string | null
     birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     favorites?: favoritesUpdateManyWithoutUsersNestedInput
     feedbacks?: feedbacksUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUpdateManyWithoutUsersNestedInput
@@ -17653,13 +17661,13 @@ export namespace Prisma {
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
     phonenumber?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     interest?: NullableStringFieldUpdateOperationsInput | string | null
     birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     favorites?: favoritesUncheckedUpdateManyWithoutUsersNestedInput
     feedbacks?: feedbacksUncheckedUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUncheckedUpdateManyWithoutUsersNestedInput
@@ -17926,13 +17934,13 @@ export namespace Prisma {
     fullname?: string | null
     phonenumber?: string | null
     email?: string | null
-    avatar?: string | null
     city?: string | null
     gender?: string | null
     interest?: string | null
     birthday?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    avatar?: string | null
     cart?: cartCreateNestedManyWithoutUsersInput
     feedbacks?: feedbacksCreateNestedManyWithoutUsersInput
     invoices?: invoicesCreateNestedManyWithoutUsersInput
@@ -17949,13 +17957,13 @@ export namespace Prisma {
     fullname?: string | null
     phonenumber?: string | null
     email?: string | null
-    avatar?: string | null
     city?: string | null
     gender?: string | null
     interest?: string | null
     birthday?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    avatar?: string | null
     cart?: cartUncheckedCreateNestedManyWithoutUsersInput
     feedbacks?: feedbacksUncheckedCreateNestedManyWithoutUsersInput
     invoices?: invoicesUncheckedCreateNestedManyWithoutUsersInput
@@ -18045,13 +18053,13 @@ export namespace Prisma {
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
     phonenumber?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     interest?: NullableStringFieldUpdateOperationsInput | string | null
     birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     cart?: cartUpdateManyWithoutUsersNestedInput
     feedbacks?: feedbacksUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUpdateManyWithoutUsersNestedInput
@@ -18068,13 +18076,13 @@ export namespace Prisma {
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
     phonenumber?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     interest?: NullableStringFieldUpdateOperationsInput | string | null
     birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     cart?: cartUncheckedUpdateManyWithoutUsersNestedInput
     feedbacks?: feedbacksUncheckedUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUncheckedUpdateManyWithoutUsersNestedInput
@@ -18142,13 +18150,13 @@ export namespace Prisma {
     fullname?: string | null
     phonenumber?: string | null
     email?: string | null
-    avatar?: string | null
     city?: string | null
     gender?: string | null
     interest?: string | null
     birthday?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    avatar?: string | null
     cart?: cartCreateNestedManyWithoutUsersInput
     favorites?: favoritesCreateNestedManyWithoutUsersInput
     invoices?: invoicesCreateNestedManyWithoutUsersInput
@@ -18165,13 +18173,13 @@ export namespace Prisma {
     fullname?: string | null
     phonenumber?: string | null
     email?: string | null
-    avatar?: string | null
     city?: string | null
     gender?: string | null
     interest?: string | null
     birthday?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    avatar?: string | null
     cart?: cartUncheckedCreateNestedManyWithoutUsersInput
     favorites?: favoritesUncheckedCreateNestedManyWithoutUsersInput
     invoices?: invoicesUncheckedCreateNestedManyWithoutUsersInput
@@ -18261,13 +18269,13 @@ export namespace Prisma {
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
     phonenumber?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     interest?: NullableStringFieldUpdateOperationsInput | string | null
     birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     cart?: cartUpdateManyWithoutUsersNestedInput
     favorites?: favoritesUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUpdateManyWithoutUsersNestedInput
@@ -18284,13 +18292,13 @@ export namespace Prisma {
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
     phonenumber?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     interest?: NullableStringFieldUpdateOperationsInput | string | null
     birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     cart?: cartUncheckedUpdateManyWithoutUsersNestedInput
     favorites?: favoritesUncheckedUpdateManyWithoutUsersNestedInput
     invoices?: invoicesUncheckedUpdateManyWithoutUsersNestedInput
@@ -18741,13 +18749,13 @@ export namespace Prisma {
     fullname?: string | null
     phonenumber?: string | null
     email?: string | null
-    avatar?: string | null
     city?: string | null
     gender?: string | null
     interest?: string | null
     birthday?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    avatar?: string | null
     cart?: cartCreateNestedManyWithoutUsersInput
     favorites?: favoritesCreateNestedManyWithoutUsersInput
     feedbacks?: feedbacksCreateNestedManyWithoutUsersInput
@@ -18764,13 +18772,13 @@ export namespace Prisma {
     fullname?: string | null
     phonenumber?: string | null
     email?: string | null
-    avatar?: string | null
     city?: string | null
     gender?: string | null
     interest?: string | null
     birthday?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    avatar?: string | null
     cart?: cartUncheckedCreateNestedManyWithoutUsersInput
     favorites?: favoritesUncheckedCreateNestedManyWithoutUsersInput
     feedbacks?: feedbacksUncheckedCreateNestedManyWithoutUsersInput
@@ -18826,13 +18834,13 @@ export namespace Prisma {
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
     phonenumber?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     interest?: NullableStringFieldUpdateOperationsInput | string | null
     birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     cart?: cartUpdateManyWithoutUsersNestedInput
     favorites?: favoritesUpdateManyWithoutUsersNestedInput
     feedbacks?: feedbacksUpdateManyWithoutUsersNestedInput
@@ -18849,13 +18857,13 @@ export namespace Prisma {
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
     phonenumber?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     interest?: NullableStringFieldUpdateOperationsInput | string | null
     birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     cart?: cartUncheckedUpdateManyWithoutUsersNestedInput
     favorites?: favoritesUncheckedUpdateManyWithoutUsersNestedInput
     feedbacks?: feedbacksUncheckedUpdateManyWithoutUsersNestedInput
@@ -18953,13 +18961,13 @@ export namespace Prisma {
     fullname?: string | null
     phonenumber?: string | null
     email?: string | null
-    avatar?: string | null
     city?: string | null
     gender?: string | null
     interest?: string | null
     birthday?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    avatar?: string | null
     cart?: cartCreateNestedManyWithoutUsersInput
     favorites?: favoritesCreateNestedManyWithoutUsersInput
     feedbacks?: feedbacksCreateNestedManyWithoutUsersInput
@@ -18975,13 +18983,13 @@ export namespace Prisma {
     fullname?: string | null
     phonenumber?: string | null
     email?: string | null
-    avatar?: string | null
     city?: string | null
     gender?: string | null
     interest?: string | null
     birthday?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    avatar?: string | null
     cart?: cartUncheckedCreateNestedManyWithoutUsersInput
     favorites?: favoritesUncheckedCreateNestedManyWithoutUsersInput
     feedbacks?: feedbacksUncheckedCreateNestedManyWithoutUsersInput
@@ -19084,13 +19092,13 @@ export namespace Prisma {
     fullname?: StringNullableFilter<"users"> | string | null
     phonenumber?: StringNullableFilter<"users"> | string | null
     email?: StringNullableFilter<"users"> | string | null
-    avatar?: StringNullableFilter<"users"> | string | null
     city?: StringNullableFilter<"users"> | string | null
     gender?: StringNullableFilter<"users"> | string | null
     interest?: StringNullableFilter<"users"> | string | null
     birthday?: DateTimeNullableFilter<"users"> | Date | string | null
     created_at?: DateTimeFilter<"users"> | Date | string
     updated_at?: DateTimeFilter<"users"> | Date | string
+    avatar?: StringNullableFilter<"users"> | string | null
   }
 
   export type cartCreateWithoutUsersInput = {
@@ -19441,13 +19449,13 @@ export namespace Prisma {
     fullname?: string | null
     phonenumber?: string | null
     email?: string | null
-    avatar?: string | null
     city?: string | null
     gender?: string | null
     interest?: string | null
     birthday?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    avatar?: string | null
     cart?: cartCreateNestedManyWithoutUsersInput
     favorites?: favoritesCreateNestedManyWithoutUsersInput
     feedbacks?: feedbacksCreateNestedManyWithoutUsersInput
@@ -19464,13 +19472,13 @@ export namespace Prisma {
     fullname?: string | null
     phonenumber?: string | null
     email?: string | null
-    avatar?: string | null
     city?: string | null
     gender?: string | null
     interest?: string | null
     birthday?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    avatar?: string | null
     cart?: cartUncheckedCreateNestedManyWithoutUsersInput
     favorites?: favoritesUncheckedCreateNestedManyWithoutUsersInput
     feedbacks?: feedbacksUncheckedCreateNestedManyWithoutUsersInput
@@ -19590,13 +19598,13 @@ export namespace Prisma {
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
     phonenumber?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     interest?: NullableStringFieldUpdateOperationsInput | string | null
     birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     cart?: cartUpdateManyWithoutUsersNestedInput
     favorites?: favoritesUpdateManyWithoutUsersNestedInput
     feedbacks?: feedbacksUpdateManyWithoutUsersNestedInput
@@ -19613,13 +19621,13 @@ export namespace Prisma {
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
     phonenumber?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     interest?: NullableStringFieldUpdateOperationsInput | string | null
     birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     cart?: cartUncheckedUpdateManyWithoutUsersNestedInput
     favorites?: favoritesUncheckedUpdateManyWithoutUsersNestedInput
     feedbacks?: feedbacksUncheckedUpdateManyWithoutUsersNestedInput
@@ -19846,13 +19854,13 @@ export namespace Prisma {
     fullname?: string | null
     phonenumber?: string | null
     email?: string | null
-    avatar?: string | null
     city?: string | null
     gender?: string | null
     interest?: string | null
     birthday?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    avatar?: string | null
   }
 
   export type cartUpdateWithoutPlansInput = {
@@ -19911,13 +19919,13 @@ export namespace Prisma {
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
     phonenumber?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     interest?: NullableStringFieldUpdateOperationsInput | string | null
     birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     cart?: cartUpdateManyWithoutUsersNestedInput
     favorites?: favoritesUpdateManyWithoutUsersNestedInput
     feedbacks?: feedbacksUpdateManyWithoutUsersNestedInput
@@ -19933,13 +19941,13 @@ export namespace Prisma {
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
     phonenumber?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     interest?: NullableStringFieldUpdateOperationsInput | string | null
     birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     cart?: cartUncheckedUpdateManyWithoutUsersNestedInput
     favorites?: favoritesUncheckedUpdateManyWithoutUsersNestedInput
     feedbacks?: feedbacksUncheckedUpdateManyWithoutUsersNestedInput
@@ -19955,13 +19963,13 @@ export namespace Prisma {
     fullname?: NullableStringFieldUpdateOperationsInput | string | null
     phonenumber?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
-    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     city?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
     interest?: NullableStringFieldUpdateOperationsInput | string | null
     birthday?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type cartCreateManyUsersInput = {

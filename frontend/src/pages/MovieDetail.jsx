@@ -37,7 +37,7 @@ export default function MovieDetail() {
   useEffect(() => {
     const checkAccess = async () => {
       setCheckingAccess(true);
-      
+      window.scrollTo(0,0);
       // Đợi user context load xong
       if (user === undefined) {
         return;
@@ -45,24 +45,24 @@ export default function MovieDetail() {
 
       // Bước 1: Kiểm tra đăng nhập
       if (!user) {
-        setAccessError('Vui lòng đăng nhập để xem thông tin phim.');
+        setAccessError("Vui lòng đăng nhập để xem thông tin phim.");
         setHasAccess(false);
         setCheckingAccess(false);
-        toast.error('Vui lòng đăng nhập để xem phim!');
+        toast.error("Vui lòng đăng nhập để xem phim!");
         setTimeout(() => {
-          navigate('/auth');
+          navigate("/auth");
         }, 2000);
         return;
       }
 
       // Bước 2: Kiểm tra có gói cước
       if (!user.plan_id) {
-        setAccessError('Bạn cần đăng ký gói cước để xem phim.');
+        setAccessError("Bạn cần đăng ký gói cước để xem phim.");
         setHasAccess(false);
         setCheckingAccess(false);
-        toast.error('Bạn cần đăng ký gói cước để xem phim!');
+        toast.error("Bạn cần đăng ký gói cước để xem phim!");
         setTimeout(() => {
-          navigate('/subscription');
+          navigate("/subscription");
         }, 2000);
         return;
       }
@@ -71,21 +71,22 @@ export default function MovieDetail() {
       try {
         const res = await api.get(`/invoices?user_id=${user.id}`);
         const invoices = res.data.data || [];
-        
-        const activeInvoice = invoices.find(inv => 
-          inv.plan_id === user.plan_id && 
-          inv.status === 'completed' &&
-          inv.end_date && 
-          new Date(inv.end_date) > new Date()
+
+        const activeInvoice = invoices.find(
+          (inv) =>
+            inv.plan_id === user.plan_id &&
+            inv.status === "completed" &&
+            inv.end_date &&
+            new Date(inv.end_date) > new Date()
         );
 
         if (!activeInvoice) {
-          setAccessError('Gói cước của bạn đã hết hạn. Vui lòng gia hạn.');
+          setAccessError("Gói cước của bạn đã hết hạn. Vui lòng gia hạn.");
           setHasAccess(false);
           setCheckingAccess(false);
-          toast.error('Gói cước của bạn đã hết hạn! Vui lòng gia hạn.');
+          toast.error("Gói cước của bạn đã hết hạn! Vui lòng gia hạn.");
           setTimeout(() => {
-            navigate('/subscription');
+            navigate("/subscription");
           }, 2000);
           return;
         }
@@ -94,21 +95,21 @@ export default function MovieDetail() {
         setHasAccess(true);
         setAccessError(null);
         setCheckingAccess(false);
-        
+
         // Chỉ tải phim khi đã có quyền truy cập
         fetchFilm();
         fetchFilms();
-        
+
         // Kiểm tra birthday
         if (!user.birthday) {
           setShowBirthdayModal(true);
         }
       } catch (error) {
-        console.error('Lỗi kiểm tra gói cước:', error);
-        setAccessError('Không thể kiểm tra gói cước.');
+        console.error("Lỗi kiểm tra gói cước:", error);
+        setAccessError("Không thể kiểm tra gói cước.");
         setHasAccess(false);
         setCheckingAccess(false);
-        toast.error('Không thể kiểm tra gói cước. Vui lòng thử lại!');
+        toast.error("Không thể kiểm tra gói cước. Vui lòng thử lại!");
       }
     };
 
@@ -144,7 +145,7 @@ export default function MovieDetail() {
 
   const handleWatchClick = async (e) => {
     e.preventDefault();
-    
+
     // Đã được kiểm tra ở useEffect, nên chỉ cần navigate
     if (hasAccess && film && film.episodes && film.episodes.length > 0) {
       navigate(`/watch/${film.id}?episode=${film.episodes[0].id}`);
@@ -213,10 +214,10 @@ export default function MovieDetail() {
     fetchComments();
   }, [id]);
   const getEmbedUrl = (url) => {
-  // lấy VIDEO_ID từ link gốc
-  const match = url.match(/v=([^&]+)/);
-  return match ? `https://www.youtube.com/embed/${match[1]}` : url;
-};
+    // lấy VIDEO_ID từ link gốc
+    const match = url.match(/v=([^&]+)/);
+    return match ? `https://www.youtube.com/embed/${match[1]}` : url;
+  };
   // Hiển thị loading khi đang kiểm tra quyền truy cập
   if (checkingAccess || loading) {
     return (
@@ -239,35 +240,47 @@ export default function MovieDetail() {
           <div className="text-center max-w-md">
             <div className="mb-6">
               <div className="inline-block p-4 bg-red-500/20 rounded-full">
-                <svg className="w-16 h-16 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                <svg
+                  className="w-16 h-16 text-red-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                  />
                 </svg>
               </div>
             </div>
-            <h2 className="text-2xl font-bold text-white mb-3">Yêu cầu đăng nhập</h2>
+            <h2 className="text-2xl font-bold text-white mb-3">
+              Yêu cầu đăng nhập
+            </h2>
             <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 mb-6">
               <p className="text-red-400 text-sm">
-                {accessError || 'Bạn cần đăng nhập và có gói cước để xem phim.'}
+                {accessError || "Bạn cần đăng nhập và có gói cước để xem phim."}
               </p>
             </div>
             <div className="flex gap-3 justify-center">
               {!user ? (
                 <button
-                  onClick={() => navigate('/auth')}
+                  onClick={() => navigate("/auth")}
                   className="px-6 py-3 bg-yellow-400 hover:bg-yellow-500 text-black font-semibold rounded-lg transition-all duration-200"
                 >
                   Đăng nhập
                 </button>
               ) : (
                 <button
-                  onClick={() => navigate('/subscription')}
+                  onClick={() => navigate("/subscription")}
                   className="px-6 py-3 bg-yellow-400 hover:bg-yellow-500 text-black font-semibold rounded-lg transition-all duration-200"
                 >
                   Xem gói cước
                 </button>
               )}
               <button
-                onClick={() => navigate('/')}
+                onClick={() => navigate("/")}
                 className="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white font-semibold rounded-lg transition-all duration-200"
               >
                 Quay về
@@ -352,6 +365,11 @@ export default function MovieDetail() {
         </div>
         <div className="col-span-2 row-span-6 row-start-5">
           <div className="flex flex-col space-y-4 text-white">
+            <div className="flex gap-3">
+                <h2 className="text-xl font-semibold mb-2">Lượt xem: {film.view_count}</h2>
+                <h2 className="text-xl font-semibold mb-2">Đánh giá trung bình: {film.average_rating}/10</h2>
+            </div>
+
             {/* Tên phim */}
             <h1 className="text-3xl font-bold">{film.title}</h1>
             <div>

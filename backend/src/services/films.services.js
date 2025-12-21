@@ -57,19 +57,15 @@ export const filmsService = {
   },
   //Lọc theo thể loại
   async findByGenre(genreName, limit = 50, offset = 0) {
-    return prisma.films.findMany({
-      where: {
-        film_genres: { some: { genres: { name: genreName } } },
-      },
-      take: limit,
-      skip: offset,
-      include: { film_genres: { include: { genres: true } }, episodes: true },
-    });
+    const filter = {
+      film_genres: { some: { genres: { name: genreName } } },
+    };
+    return this.findByFilter({ filter, limit, offset });
   },
   //lọc theo tên
   async findByTitle(title, limit = 50, offset = 0) {
     return this.findByFilter({
-      filter: { title: { contains: title} },
+      filter: { title: { contains: title } },
       limit,
       offset,
     });
@@ -77,58 +73,61 @@ export const filmsService = {
   //lọc theo diễn viên
   async findByActor(actor, limit = 50, offset = 0) {
     return this.findByFilter({
-      filter: { actor: { contains: actor} },
+      filter: { actor: { contains: actor } },
       limit,
       offset,
     });
   },
   //theo năm phát hành
   async findByYear(year, limit = 50, offset = 0) {
-    return this.findByFilter({ filter: { year: Number(year) }, limit, offset });
+    return this.findByFilter({ filter: { year: { contains: Number(year) } }, limit, offset });
   },
   //theo quốc gia
   async findByCountry(country, limit = 50, offset = 0) {
-    return this.findByFilter({ 
+    return this.findByFilter({
       filter: { country: { contains: country } },
-       limit,
-      offset 
-      });
+      limit,
+      offset,
+    });
   },
   //lọc theo nhiều tiêu chí
   async findByCriteria({
-  country,
-  type,
-  rating,
-  genre,
-  version,
-  year,
-  age_rating,
-  limit = 50,
-  offset = 0,
-}) {
-  const filter = {};
+    country,
+    is_series,
+    age_rating,
+    genre,
+    version,
+    year,
+    limit = 50,
+    offset = 0,
+  }) {
+    console.log("is_series",is_series)
+    const filter = {};
 
-  // Quốc gia: có thể nhiều giá trị, cách nhau bằng dấu phẩy
-  if (country) {
-    const countries = country.split(",").map((c) => c.trim());
-    filter.country = { in: countries };
-  }
+    if (country) {
+      const countries = country.split(",").map((c) => c.trim());
+      filter.country = { in: countries };
+    }
 
-  if (type) filter.type = type;
-  if (rating) filter.rating = rating;
-  if (version) filter.version = version;
-  if (year) filter.year = Number(year);
+    if (is_series !== undefined) {
+      filter.is_series = is_series === "true" || is_series === "1" ? true : false;
+    }
 
-  // Thêm age_rating
-  if (age_rating) filter.age_rating = age_rating;
+    if (age_rating) filter.age_rating = age_rating;
 
-  if (genre) {
-    filter.film_genres = { some: { genres: { name: genre } } };
-  }
+    if (version) filter.version = version;
+    if (year) filter.year = Number(year);
 
-  return this.findByFilter({ filter, limit, offset });
-},
- async updateAverageRating(filmId) {
+    if (genre) {
+      const genres = genre.split(",").map((g) => g.trim());
+      filter.film_genres = {
+        some: { genres: { name: { in: genres } } },
+      };
+    }
+    console.log("Filter:", filter);
+    return this.findByFilter({ filter, limit, offset });
+  },
+  async updateAverageRating(filmId) {
     // Lấy tất cả rating của phim
     const feedbacks = await prisma.feedbacks.findMany({
       where: { film_id: filmId },
@@ -148,36 +147,36 @@ export const filmsService = {
     });
   },
   async listByFavorites() {
-  return await prisma.films.findMany({
-    include: {
-      _count: {
-        select: { favorites: true }, // đếm số favorites liên quan
+    return await prisma.films.findMany({
+      include: {
+        _count: {
+          select: { favorites: true }, // đếm số favorites liên quan
+        },
       },
-    },
-    orderBy: {
-      favorites: { _count: "desc" }, // sắp xếp từ nhiều đến ít
-    },
-  });
-},
-async listByViews() {
-  return await prisma.films.findMany({
-    orderBy: { view_count: "desc" },
-    take: 20, // giới hạn số phim nếu muốn
-  });
-},
-async listByRating() {
-  return await prisma.films.findMany({
-    orderBy: { average_rating: "desc" },
-    take: 20,
-  });
-},
-async listRecommended(userId) {
-  //lấy random
-  return await prisma.films.findMany({
-    orderBy: { id: "desc" },
-    take: 20,
-  });
-},
+      orderBy: {
+        favorites: { _count: "desc" }, // sắp xếp từ nhiều đến ít
+      },
+    });
+  },
+  async listByViews() {
+    return await prisma.films.findMany({
+      orderBy: { view_count: "desc" },
+      take: 20, // giới hạn số phim nếu muốn
+    });
+  },
+  async listByRating() {
+    return await prisma.films.findMany({
+      orderBy: { average_rating: "desc" },
+      take: 20,
+    });
+  },
+  async listRecommended(userId) {
+    //lấy random
+    return await prisma.films.findMany({
+      orderBy: { id: "desc" },
+      take: 20,
+    });
+  },
 
   // CRUD
   create: async function (req) {

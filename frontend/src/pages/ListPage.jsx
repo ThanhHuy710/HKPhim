@@ -18,30 +18,34 @@ export default function ListPage() {
   const [viewMode, setViewMode] = useState("films"); // "films" hoặc "actors"
   const [activeAvSearch,setActiveAvSearch] = useState(false);
   const fetchFilm = async () => {
-    try {
-      setLoading(true);
-      if (type === "titleoractor" && name) {
-        const [resTitle, resActor] = await Promise.all([
-          api.get(`/films/title/${name}`),
-          api.get(`/films/actors/${name}`),
-        ]);
-        setFilm(resTitle.data.data || []);
-        setActors(resActor.data.data || []);
-      } else if (name) {
-        const res = await api.get(`/films/${type}/${name}`);
-        setFilm(res.data.data || []);
-      } else {
-        const res = await api.get(`/films/${type}`);
-        setFilm(res.data.data || []);
-      }
-    } catch (error) {
-      console.error("Lỗi:", error);
-      toast.error("Không thể tải phim");
-    } finally {
-      setLoading(false);
+  try {
+    setLoading(true);
+    if (type === "titleoractor" && name) {
+      const [resTitle, resActor] = await Promise.all([
+        api.get(`/films/title/${name}`),
+        api.get(`/films/actors/${name}`),
+      ]);
+      setFilm(resTitle.data.data || []);
+      setActors(resActor.data.data || []);
+    } else if (type === "criteria") {
+      // lấy tất cả query params
+      const params = Object.fromEntries([...searchParams]);
+      const res = await api.get("/films/criteria", { params });
+      setFilm(res.data.data || []);
+    } else if (name) {
+      const res = await api.get(`/films/${type}/${name}`);
+      setFilm(res.data.data || []);
+    } else {
+      const res = await api.get(`/films/${type}`);
+      setFilm(res.data.data || []);
     }
-  };
-
+  } catch (error) {
+    console.error("Lỗi:", error);
+    toast.error("Không thể tải phim");
+  } finally {
+    setLoading(false);
+  }
+};
   // Lắng nghe thay đổi type + query string
   useEffect(() => {
     fetchFilm();
@@ -61,7 +65,7 @@ export default function ListPage() {
             className="w-6 h-6 object-contain"
           />
         </button>
-        {activeAvSearch && <AdvancedSearch ></AdvancedSearch> }
+        {activeAvSearch && <AdvancedSearch AvSearch={()=>setActiveAvSearch(false)} ></AdvancedSearch> }
 
         {/* Nút chọn chế độ hiển thị */}
         {type === "titleoractor" && (
