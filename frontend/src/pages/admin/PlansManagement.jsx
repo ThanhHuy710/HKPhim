@@ -118,19 +118,19 @@ export default function PlansManagement() {
     return (
       <div className="p-8">
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-pink-500"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-500"></div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="p-8">
+    <div className="p-8 bg-gray-50 min-h-screen">
       <div className="flex items-center justify-between mb-8">
-        <h1 className="text-3xl font-bold text-white">Quản lý gói cước</h1>
+        <h1 className="text-3xl font-bold text-gray-900">Quản lý gói cước</h1>
         <button 
           onClick={openAddModal}
-          className="flex items-center gap-2 px-6 py-3 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors font-semibold"
+          className="flex items-center gap-2 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-semibold shadow-md"
         >
           <Plus size={20} />
           Thêm gói cước
@@ -140,16 +140,16 @@ export default function PlansManagement() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {plans.map((plan) => {
           const color = getPlanColor(plan.name);
-          const borderColor = color === 'yellow' ? 'border-yellow-500' : color === 'red' ? 'border-red-500' : 'border-pink-500';
-          const textColor = color === 'yellow' ? 'text-yellow-500' : color === 'red' ? 'text-red-500' : 'text-pink-500';
+          const borderColor = color === 'yellow' ? 'border-yellow-500' : color === 'red' ? 'border-red-500' : 'border-blue-500';
+          const textColor = color === 'yellow' ? 'text-yellow-500' : color === 'red' ? 'text-red-500' : 'text-blue-500';
           const features = getPlanFeatures(plan);
           
           return (
-            <div key={plan.id} className={`bg-gray-800 rounded-lg border-t-4 ${borderColor} overflow-hidden`}>
+            <div key={plan.id} className={`bg-white rounded-xl border-t-4 ${borderColor} overflow-hidden shadow-lg hover:shadow-xl transition-shadow`}>
               <div className="p-6">
                 {/* Header */}
                 <div className="mb-6">
-                  <h3 className="text-2xl font-bold text-white mb-2">{plan.name}</h3>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
                   <div className="flex items-baseline gap-2">
                     <span className={`text-5xl font-bold ${textColor}`}>
                       {plan.price > 0 ? `${(plan.price * 1000).toLocaleString('vi-VN')}` : 'Miễn phí'}
@@ -157,7 +157,7 @@ export default function PlansManagement() {
                     {plan.price > 0 && (
                       <>
                         <span className={`text-2xl font-semibold ${textColor}`}>đ</span>
-                        <span className="text-gray-400 text-sm">/ {plan.duration_days} ngày</span>
+                        <span className="text-gray-500 text-sm">/ {plan.duration_days} ngày</span>
                       </>
                     )}
                   </div>
@@ -170,9 +170,9 @@ export default function PlansManagement() {
                       {feature.active ? (
                         <Check size={18} className="text-green-500 shrink-0" />
                       ) : (
-                        <XIcon size={18} className="text-gray-600 shrink-0" />
+                        <XIcon size={18} className="text-gray-400 shrink-0" />
                       )}
-                      <span className={feature.active ? "text-white" : "text-gray-600"}>
+                      <span className={feature.active ? "text-gray-900" : "text-gray-400"}>
                         {feature.text}
                       </span>
                     </div>
@@ -183,14 +183,14 @@ export default function PlansManagement() {
                 <div className="flex gap-3">
                   <button 
                     onClick={() => openEditModal(plan)}
-                    className="flex-1 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center justify-center gap-2 font-semibold"
+                    className="flex-1 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center justify-center gap-2 font-semibold shadow-md"
                   >
                     <Edit size={18} />
                     <span>Sửa</span>
                   </button>
                   <button
                     onClick={() => handleDelete(plan.id)}
-                    className="flex-1 py-3 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors flex items-center justify-center gap-2 font-semibold"
+                    className="flex-1 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors flex items-center justify-center gap-2 font-semibold shadow-md"
                   >
                     <Trash2 size={18} />
                     <span>Xóa</span>
@@ -203,57 +203,57 @@ export default function PlansManagement() {
       </div>
 
       {plans.length === 0 && (
-        <div className="bg-gray-800 rounded-lg border border-gray-700 p-12 text-center">
-          <p className="text-gray-400 text-lg">Chưa có gói cước nào</p>
+        <div className="bg-white rounded-xl border border-gray-200 p-12 text-center shadow-lg">
+          <p className="text-gray-500 text-lg">Chưa có gói cước nào</p>
         </div>
       )}
 
       {/* Modal thêm/sửa */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-gray-800 rounded-lg p-6 w-full max-w-md">
+          <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-2xl border border-gray-200">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-white">
+              <h2 className="text-xl font-bold text-gray-900">
                 {editingPlan ? "Chỉnh sửa gói cước" : "Thêm gói cước mới"}
               </h2>
-              <button onClick={closeModal} className="text-gray-400 hover:text-white">
+              <button onClick={closeModal} className="text-gray-400 hover:text-gray-600">
                 <XIcon size={24} />
               </button>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-gray-400 mb-2">Tên gói *</label>
+                <label className="block text-gray-700 mb-2 font-medium">Tên gói *</label>
                 <input
                   type="text"
                   value={formData.name}
                   onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  className="w-full bg-gray-700 text-white rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                  className="w-full bg-gray-50 text-gray-900 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 border border-gray-300"
                   placeholder="VD: Basic, Premium, Cinematic"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-gray-400 mb-2">Giá (VNĐ) *</label>
+                <label className="block text-gray-700 mb-2 font-medium">Giá (VNĐ) *</label>
                 <input
                   type="number"
                   step="1"
                   value={formData.price}
                   onChange={(e) => setFormData({...formData, price: e.target.value})}
-                  className="w-full bg-gray-700 text-white rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                  className="w-full bg-gray-50 text-gray-900 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 border border-gray-300"
                   placeholder="0 cho gói miễn phí"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-gray-400 mb-2">Thời hạn (ngày) *</label>
+                <label className="block text-gray-700 mb-2 font-medium">Thời hạn (ngày) *</label>
                 <input
                   type="number"
                   value={formData.duration_days}
                   onChange={(e) => setFormData({...formData, duration_days: e.target.value})}
-                  className="w-full bg-gray-700 text-white rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                  className="w-full bg-gray-50 text-gray-900 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 border border-gray-300"
                   placeholder="7, 30, 60..."
                   required
                 />
@@ -262,14 +262,14 @@ export default function PlansManagement() {
               <div className="flex gap-4 pt-4">
                 <button
                   type="submit"
-                  className="flex-1 bg-pink-500 text-white py-2 rounded hover:bg-pink-600 transition-colors"
+                  className="flex-1 bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition-colors font-semibold shadow-md"
                 >
                   {editingPlan ? "Cập nhật" : "Thêm mới"}
                 </button>
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="flex-1 bg-gray-700 text-white py-2 rounded hover:bg-gray-600 transition-colors"
+                  className="flex-1 bg-gray-200 text-gray-700 py-3 rounded-lg hover:bg-gray-300 transition-colors font-semibold"
                 >
                   Hủy
                 </button>

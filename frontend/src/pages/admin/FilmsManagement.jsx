@@ -228,23 +228,23 @@ export default function FilmsManagement() {
     return (
       <div className="p-8">
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-pink-500"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-500"></div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="p-8">
+    <div className="p-8 bg-gray-50 min-h-screen">
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-white">Quản lý phim</h1>
-          <p className="text-gray-400 text-sm mt-1">Tổng cộng {films.length}</p>
+          <h1 className="text-3xl font-bold text-gray-900">Quản lý phim</h1>
+          <p className="text-gray-600 text-sm mt-1">Tổng cộng {films.length} phim</p>
         </div>
         <button
           onClick={() => handleOpenModal()}
-          className="flex items-center gap-2 px-6 py-3 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors font-semibold"
+          className="flex items-center gap-2 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-semibold shadow-md"
         >
           <Plus size={20} />
           Thêm phim
@@ -260,65 +260,65 @@ export default function FilmsManagement() {
             placeholder="Tìm kiếm phim..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 bg-gray-800 text-white rounded-lg border border-gray-700 focus:border-pink-500 focus:outline-none"
+            className="w-full pl-12 pr-4 py-3 bg-white text-gray-900 rounded-lg border border-gray-300 focus:border-blue-500 focus:outline-none shadow-sm"
           />
         </div>
       </div>
 
       {/* Table */}
-      <div className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
+      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-lg">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="text-left text-gray-400 text-sm bg-gray-750 border-b border-gray-700">
-                <th className="p-4">ID</th>
-                <th className="p-4">Poster</th>
-                <th className="p-4">Tiêu đề</th>
-                <th className="p-4">Loại phim</th>
-                <th className="p-4">Ngày tạo</th>
-                <th className="p-4">Lượt xem</th>
-                <th className="p-4">Đánh giá</th>
-                <th className="p-4 text-center">Thao tác</th>
+              <tr className="text-left text-gray-600 text-sm bg-gray-50 border-b border-gray-200">
+                <th className="p-4 font-semibold">ID</th>
+                <th className="p-4 font-semibold">Poster</th>
+                <th className="p-4 font-semibold">Tiêu đề</th>
+                <th className="p-4 font-semibold">Loại phim</th>
+                <th className="p-4 font-semibold">Ngày tạo</th>
+                <th className="p-4 font-semibold">Lượt xem</th>
+                <th className="p-4 font-semibold">Đánh giá</th>
+                <th className="p-4 text-center font-semibold">Thao tác</th>
               </tr>
             </thead>
             <tbody>
               {filteredFilms.map((film) => (
-                <tr key={film.id} className="border-b border-gray-700 hover:bg-gray-750 transition-colors">
-                  <td className="p-4 text-white">{film.id}</td>
+                <tr key={film.id} className="border-b border-gray-100 hover:bg-blue-50 transition-colors">
+                  <td className="p-4 text-gray-900 font-medium">{film.id}</td>
                   <td className="p-4">
                     <img
                       src={film.poster_url}
                       alt={film.title}
-                      className="w-12 h-16 object-cover rounded"
+                      className="w-12 h-16 object-cover rounded shadow-sm"
                     />
                   </td>
-                  <td className="p-4 text-white font-medium">{film.title}</td>
-                  <td className="p-4 text-gray-400">
+                  <td className="p-4 text-gray-900 font-medium">{film.title}</td>
+                  <td className="p-4 text-gray-600">
                     {film.is_series ? "Phim bộ" : "Phim lẻ"}
                   </td>
-                  <td className="p-4 text-gray-400">
+                  <td className="p-4 text-gray-600">
                     {film.created_at ? film.created_at.replace('T', ' ').split('.')[0] : "N/A"}
                   </td>
                   <td className="p-4">
-                    <div className="flex items-center gap-1 text-gray-400">
+                    <div className="flex items-center gap-1 text-gray-600">
                       <Eye size={16} />
                       <span>{film.view_count || 0}</span>
                     </div>
                   </td>
-                  <td className="p-4 text-yellow-500">
+                  <td className="p-4 text-yellow-600 font-semibold">
                     ★ {film.average_rating || "0.0"}
                   </td>
                   <td className="p-4">
                     <div className="flex items-center justify-center gap-2">
                       <button
                         onClick={() => handleOpenModal(film)}
-                        className="p-2 bg-blue-500/20 text-blue-500 rounded hover:bg-blue-500/30 transition-colors"
+                        className="p-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition-colors"
                       >
                         <Edit size={16} />
                       </button>
                       <button
                         onClick={() => handleDelete(film.id)}
-                        className="p-2 bg-red-500/20 text-red-500 rounded hover:bg-red-500/30 transition-colors"
+                        className="p-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition-colors"
                       >
                         <Trash2 size={16} />
                       </button>
@@ -331,7 +331,7 @@ export default function FilmsManagement() {
         </div>
 
         {filteredFilms.length === 0 && (
-          <div className="p-8 text-center text-gray-400">
+          <div className="p-8 text-center text-gray-500">
             Không tìm thấy phim nào
           </div>
         )}
@@ -339,16 +339,16 @@ export default function FilmsManagement() {
 
       {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4 overflow-y-auto">
-          <div className="bg-gray-800 rounded-lg w-full max-w-4xl my-8">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
+          <div className="bg-white rounded-xl w-full max-w-4xl my-8 shadow-2xl border border-gray-200">
             {/* Modal Header */}
-            <div className="flex items-center justify-between p-6 border-b border-gray-700">
-              <h2 className="text-2xl font-bold text-white">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200 bg-linear-to-r from-blue-50 to-indigo-50">
+              <h2 className="text-2xl font-bold text-gray-900">
                 {editingFilm ? "Chỉnh sửa phim" : "Thêm phim mới"}
               </h2>
               <button
                 onClick={() => setShowModal(false)}
-                className="text-gray-400 hover:text-white transition-colors"
+                className="text-gray-400 hover:text-gray-600 transition-colors"
               >
                 <X size={24} />
               </button>
@@ -359,60 +359,60 @@ export default function FilmsManagement() {
               {/* Row 1: Title, Age */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-gray-300 mb-2 text-sm">Tiêu đề</label>
+                  <label className="block text-gray-700 mb-2 text-sm font-medium">Tiêu đề</label>
                   <input
                     type="text"
                     name="title"
                     value={formData.title}
                     onChange={handleInputChange}
                     placeholder="Title"
-                    className="w-full px-4 py-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-pink-500 focus:outline-none"
+                    className="w-full px-4 py-3 bg-gray-50 text-gray-900 rounded-lg border border-gray-300 focus:border-blue-500 focus:outline-none"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-gray-300 mb-2 text-sm">Độ tuổi</label>
+                  <label className="block text-gray-700 mb-2 text-sm font-medium">Độ tuổi</label>
                   <input
                     type="text"
                     name="age_rating"
                     value={formData.age_rating}
                     onChange={handleInputChange}
                     placeholder="13+, 16+, 18+"
-                    className="w-full px-4 py-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-pink-500 focus:outline-none"
+                    className="w-full px-4 py-3 bg-gray-50 text-gray-900 rounded-lg border border-gray-300 focus:border-blue-500 focus:outline-none"
                   />
                 </div>
               </div>
 
               {/* Row 2: Description */}
               <div>
-                <label className="block text-gray-300 mb-2 text-sm">Mô tả</label>
+                <label className="block text-gray-700 mb-2 text-sm font-medium">Mô tả</label>
                 <textarea
                   name="description"
                   value={formData.description}
                   onChange={handleInputChange}
                   placeholder="Description"
                   rows="4"
-                  className="w-full px-4 py-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-pink-500 focus:outline-none resize-none"
+                  className="w-full px-4 py-3 bg-gray-50 text-gray-900 rounded-lg border border-gray-300 focus:border-blue-500 focus:outline-none resize-none"
                 />
               </div>
 
               {/* Row 3: Genre, Running time, Premiere date */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-gray-300 mb-2 text-sm">Thể loại (chọn nhiều)</label>
+                  <label className="block text-gray-700 mb-2 text-sm font-medium">Thể loại (chọn nhiều)</label>
                   <div className="relative">
-                    <div className="w-full px-4 py-3 bg-gray-700 text-white rounded-lg border border-gray-600 max-h-32 overflow-y-auto">
+                    <div className="w-full px-4 py-3 bg-gray-50 text-gray-900 rounded-lg border border-gray-300 max-h-32 overflow-y-auto">
                       {genres.length === 0 ? (
-                        <p className="text-gray-400 text-sm">Đang tải...</p>
+                        <p className="text-gray-500 text-sm">Đang tải...</p>
                       ) : (
                         <div className="space-y-2">
                           {genres.map(genre => (
-                            <label key={genre.id} className="flex items-center gap-2 cursor-pointer hover:bg-gray-600 p-1 rounded">
+                            <label key={genre.id} className="flex items-center gap-2 cursor-pointer hover:bg-blue-50 p-1 rounded">
                               <input
                                 type="checkbox"
                                 checked={formData.selected_genres.includes(genre.id)}
                                 onChange={() => handleGenreToggle(genre.id)}
-                                className="w-4 h-4 text-pink-500 bg-gray-600 border-gray-500 rounded focus:ring-pink-500"
+                                className="w-4 h-4 text-blue-500 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
                               />
                               <span className="text-sm">{genre.name}</span>
                             </label>
@@ -423,24 +423,24 @@ export default function FilmsManagement() {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-gray-300 mb-2 text-sm">Thời lượng</label>
+                  <label className="block text-gray-700 mb-2 text-sm font-medium">Thời lượng</label>
                   <input
                     type="text"
                     name="duration"
                     value={formData.duration}
                     onChange={handleInputChange}
                     placeholder="VD: 120 phút"
-                    className="w-full px-4 py-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-pink-500 focus:outline-none"
+                    className="w-full px-4 py-3 bg-gray-50 text-gray-900 rounded-lg border border-gray-300 focus:border-blue-500 focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-gray-300 mb-2 text-sm">Ngày tạo</label>
+                  <label className="block text-gray-700 mb-2 text-sm font-medium">Ngày tạo</label>
                   <input
                     type="date"
                     name="premiere_date"
                     value={formData.premiere_date}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-pink-500 focus:outline-none"
+                    className="w-full px-4 py-3 bg-gray-50 text-gray-900 rounded-lg border border-gray-300 focus:border-blue-500 focus:outline-none"
                   />
                 </div>
               </div>
@@ -448,7 +448,7 @@ export default function FilmsManagement() {
               {/* Row 4: Cover & Background */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-gray-300 mb-2 text-sm">Upload cover (240x340)</label>
+                  <label className="block text-gray-700 mb-2 text-sm font-medium">Upload cover (240x340)</label>
                   <div className="relative">
                     <input
                       type="text"
@@ -456,7 +456,7 @@ export default function FilmsManagement() {
                       value={formData.poster_url}
                       onChange={handleInputChange}
                       placeholder="URL ảnh poster"
-                      className="w-full px-4 py-3 pr-12 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-pink-500 focus:outline-none"
+                      className="w-full px-4 py-3 pr-12 bg-gray-50 text-gray-900 rounded-lg border border-gray-300 focus:border-blue-500 focus:outline-none"
                     />
                     <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
                       <Upload size={20} />
@@ -464,14 +464,14 @@ export default function FilmsManagement() {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-gray-300 mb-2 text-sm">Link to the background (1920x1280)</label>
+                  <label className="block text-gray-700 mb-2 text-sm font-medium">Link to the background (1920x1280)</label>
                   <input
                     type="text"
                     name="poster_video_url"
                     value={formData.poster_video_url}
                     onChange={handleInputChange}
                     placeholder="URL ảnh nền"
-                    className="w-full px-4 py-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-pink-500 focus:outline-none"
+                    className="w-full px-4 py-3 bg-gray-50 text-gray-900 rounded-lg border border-gray-300 focus:border-blue-500 focus:outline-none"
                   />
                 </div>
               </div>
@@ -479,12 +479,12 @@ export default function FilmsManagement() {
               {/* Row 5: Country */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="md:col-span-3">
-                  <label className="block text-gray-300 mb-2 text-sm">Quốc gia</label>
+                  <label className="block text-gray-700 mb-2 text-sm font-medium">Quốc gia</label>
                   <select
                     name="country"
                     value={formData.country}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-pink-500 focus:outline-none"
+                    className="w-full px-4 py-3 bg-gray-50 text-gray-900 rounded-lg border border-gray-300 focus:border-blue-500 focus:outline-none"
                   >
                     <option value="">Chọn quốc gia</option>
                     <option value="Hoa Kỳ">Hoa Kỳ</option>
@@ -503,7 +503,7 @@ export default function FilmsManagement() {
               {/* Row 6: Director & Actors */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-gray-300 mb-2 text-sm">Đạo diễn</label>
+                  <label className="block text-gray-700 mb-2 text-sm font-medium">Đạo diễn</label>
                   <input
                     type="text"
                     name="directeur"
@@ -511,7 +511,7 @@ export default function FilmsManagement() {
                     onChange={handleInputChange}
                     list="directors-list"
                     placeholder="Nhập hoặc chọn đạo diễn"
-                    className="w-full px-4 py-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-pink-500 focus:outline-none"
+                    className="w-full px-4 py-3 bg-gray-50 text-gray-900 rounded-lg border border-gray-300 focus:border-blue-500 focus:outline-none"
                   />
                   <datalist id="directors-list">
                     {directors.map((director, index) => (
@@ -520,7 +520,7 @@ export default function FilmsManagement() {
                   </datalist>
                 </div>
                 <div>
-                  <label className="block text-gray-300 mb-2 text-sm">Diễn viên</label>
+                  <label className="block text-gray-700 mb-2 text-sm font-medium">Diễn viên</label>
                   <input
                     type="text"
                     name="actor"
@@ -528,7 +528,7 @@ export default function FilmsManagement() {
                     onChange={handleInputChange}
                     list="actors-list"
                     placeholder="Nhập hoặc chọn diễn viên (cách nhau bởi dấu phẩy)"
-                    className="w-full px-4 py-3 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-pink-500 focus:outline-none"
+                    className="w-full px-4 py-3 bg-gray-50 text-gray-900 rounded-lg border border-gray-300 focus:border-blue-500 focus:outline-none"
                   />
                   <datalist id="actors-list">
                     {actors.map((actor, index) => (
@@ -540,7 +540,7 @@ export default function FilmsManagement() {
 
               {/* Row 7: Item Type */}
               <div>
-                <label className="block text-gray-300 mb-3 text-sm">Loại phim:</label>
+                <label className="block text-gray-700 mb-3 text-sm font-medium">Loại phim:</label>
                 <div className="flex items-center gap-6">
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input
@@ -548,9 +548,9 @@ export default function FilmsManagement() {
                       name="is_series"
                       checked={!formData.is_series}
                       onChange={() => setFormData(prev => ({ ...prev, is_series: false }))}
-                      className="w-5 h-5 text-pink-500 bg-gray-700 border-gray-600 focus:ring-pink-500"
+                      className="w-5 h-5 text-blue-500 bg-gray-100 border-gray-300 focus:ring-blue-500"
                     />
-                    <span className="text-white">Phim lẻ</span>
+                    <span className="text-gray-900">Phim lẻ</span>
                   </label>
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input
@@ -558,16 +558,16 @@ export default function FilmsManagement() {
                       name="is_series"
                       checked={formData.is_series}
                       onChange={() => setFormData(prev => ({ ...prev, is_series: true }))}
-                      className="w-5 h-5 text-pink-500 bg-gray-700 border-gray-600 focus:ring-pink-500"
+                      className="w-5 h-5 text-blue-500 bg-gray-100 border-gray-300 focus:ring-blue-500"
                     />
-                    <span className="text-white">Phim bộ</span>
+                    <span className="text-gray-900">Phim bộ</span>
                   </label>
                 </div>
               </div>
 
               {/* Row 8: Upload Video */}
               <div>
-                <label className="block text-gray-300 mb-2 text-sm">Upload video</label>
+                <label className="block text-gray-700 mb-2 text-sm font-medium">Upload video</label>
                 <div className="relative">
                   <input
                     type="text"
@@ -575,7 +575,7 @@ export default function FilmsManagement() {
                     value={formData.video_url}
                     onChange={handleInputChange}
                     placeholder="URL video"
-                    className="w-full px-4 py-3 pr-12 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-pink-500 focus:outline-none"
+                    className="w-full px-4 py-3 pr-12 bg-gray-50 text-gray-900 rounded-lg border border-gray-300 focus:border-blue-500 focus:outline-none"
                   />
                   <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
                     <Film size={20} />
@@ -587,7 +587,7 @@ export default function FilmsManagement() {
               <div className="flex justify-end pt-4">
                 <button
                   type="submit"
-                  className="px-8 py-3 bg-yellow-500 text-black font-bold rounded-lg hover:bg-yellow-600 transition-colors uppercase"
+                  className="px-8 py-3 bg-blue-500 text-white font-bold rounded-lg hover:bg-blue-600 transition-colors shadow-md uppercase"
                 >
                   Publish
                 </button>

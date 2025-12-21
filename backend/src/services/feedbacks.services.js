@@ -7,10 +7,12 @@ export const feedbacksService = {
     const limit = parseInt(req.query.limit) || 50;
     const offset = parseInt(req.query.offset) || 0;
     const user_id = req.query.user_id ? Number(req.query.user_id) : undefined;
+    const film_id = req.query.film_id ? Number(req.query.film_id) : undefined;
     const type = req.query.type;
 
     const where = {};
     if (user_id) where.user_id = user_id;
+    if (film_id) where.film_id = film_id;
     
     // Type filter: comment có rating null, review có rating không null
     if (type === "comment") {
@@ -32,8 +34,14 @@ export const feedbacksService = {
   },
 
   create: async function (req) {
+    // allow storing is_anonymous and return relations
+    const data = { ...req.body };
     return await prisma.feedbacks.create({
-      data: req.body,
+      data,
+      include: {
+        users: true,
+        films: true,
+      },
     });
   },
 

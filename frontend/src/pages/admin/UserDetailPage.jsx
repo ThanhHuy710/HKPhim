@@ -189,7 +189,7 @@ export default function UserDetailPage() {
     return (
       <div className="p-8">
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-pink-500"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-500"></div>
         </div>
       </div>
     );
@@ -198,42 +198,42 @@ export default function UserDetailPage() {
   if (!user) {
     return (
       <div className="p-8">
-        <div className="text-center text-gray-400">Không tìm thấy người dùng</div>
+        <div className="text-center text-gray-500">Không tìm thấy người dùng</div>
       </div>
     );
   }
 
   return (
-    <div className="p-8">
+    <div className="p-8 bg-gray-50 min-h-screen">
       {/* Header */}
-      <div className="bg-gray-800 rounded-lg p-6 mb-6">
+      <div className="bg-white rounded-xl p-6 mb-6 shadow-lg border border-gray-200">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 bg-gray-700 rounded-full flex items-center justify-center overflow-hidden">
+            <div className="w-16 h-16 bg-linear-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center overflow-hidden shadow-md">
               {user.avatar ? (
                 <img src={user.avatar} alt={user.fullname} className="w-full h-full object-cover" />
               ) : (
-                <span className="text-2xl text-gray-400">👤</span>
+                <span className="text-2xl text-white font-bold">👤</span>
               )}
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-white">
+              <h1 className="text-2xl font-bold text-gray-900">
                 {user.fullname}
               </h1>
-              <p className="text-gray-400">ID HKPhim: {user.id} | {user.email}</p>
+              <p className="text-gray-600">ID HKPhim: {user.id} | {user.email}</p>
             </div>
           </div>
           <div className="flex gap-2">
             <button
               onClick={handleLockUser}
-              className="p-3 bg-green-500/20 text-green-500 rounded hover:bg-green-500/30 transition-colors"
+              className="p-3 bg-green-100 text-green-600 rounded-lg hover:bg-green-200 transition-colors shadow-sm"
               title="Khóa/Mở khóa người dùng"
             >
               <Lock size={20} />
             </button>
             <button
               onClick={handleDeleteUser}
-              className="p-3 bg-red-500/20 text-red-500 rounded hover:bg-red-500/30 transition-colors"
+              className="p-3 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition-colors shadow-sm"
               title="Xóa người dùng"
             >
               <Trash2 size={20} />
@@ -243,13 +243,13 @@ export default function UserDetailPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-8 mb-6 border-b border-gray-700">
+      <div className="flex gap-8 mb-6 border-b border-gray-200 bg-white rounded-t-lg p-4 shadow-sm">
         <button
           onClick={() => setActiveTab("profile")}
           className={`pb-4 px-2 font-medium transition-colors ${
             activeTab === "profile"
-              ? "text-yellow-500 border-b-2 border-yellow-500"
-              : "text-gray-400 hover:text-white"
+              ? "text-blue-600 border-b-2 border-blue-600"
+              : "text-gray-500 hover:text-gray-700"
           }`}
         >
           HỒ SƠ
@@ -258,8 +258,8 @@ export default function UserDetailPage() {
           onClick={() => setActiveTab("reviews")}
           className={`pb-4 px-2 font-medium transition-colors ${
             activeTab === "reviews"
-              ? "text-yellow-500 border-b-2 border-yellow-500"
-              : "text-gray-400 hover:text-white"
+              ? "text-blue-600 border-b-2 border-blue-600"
+              : "text-gray-500 hover:text-gray-700"
           }`}
         >
           ĐÁNH GIÁ
@@ -270,68 +270,68 @@ export default function UserDetailPage() {
       {activeTab === "profile" && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Profile Details */}
-          <div className="bg-gray-800 rounded-lg p-6">
-            <h2 className="text-xl font-bold text-white mb-6">Chi tiết hồ sơ</h2>
+          <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-200">
+            <h2 className="text-xl font-bold text-gray-900 mb-6">Chi tiết hồ sơ</h2>
             <form onSubmit={handleSaveProfile} className="space-y-4">
               <div>
-                <label className="block text-gray-400 mb-2">Tên người dùng</label>
+                <label className="block text-gray-700 mb-2 font-medium">Tên người dùng</label>
                 <input
                   type="text"
                   value={profileData.username}
                   onChange={(e) => setProfileData({ ...profileData, username: e.target.value })}
-                  className="w-full bg-gray-700 text-white rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                  className="w-full bg-gray-50 text-gray-900 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 border border-gray-300"
                 />
               </div>
 
               <div>
-                <label className="block text-gray-400 mb-2">Email</label>
+                <label className="block text-gray-700 mb-2 font-medium">Email</label>
                 <input
                   type="email"
                   value={profileData.email}
                   onChange={(e) => setProfileData({ ...profileData, email: e.target.value })}
-                  className="w-full bg-gray-700 text-white rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                  className="w-full bg-gray-50 text-gray-900 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 border border-gray-300"
                 />
               </div>
 
               <div>
-                <label className="block text-gray-400 mb-2">Họ và tên</label>
+                <label className="block text-gray-700 mb-2 font-medium">Họ và tên</label>
                 <input
                   type="text"
                   value={profileData.fullname}
                   onChange={(e) => setProfileData({ ...profileData, fullname: e.target.value })}
-                  className="w-full bg-gray-700 text-white rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                  className="w-full bg-gray-50 text-gray-900 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 border border-gray-300"
                 />
               </div>
 
               <div>
-                <label className="block text-gray-400 mb-2">Ảnh đại diện</label>
+                <label className="block text-gray-700 mb-2 font-medium">Ảnh đại diện</label>
                 <div className="flex gap-2">
                   <input
                     type="text"
                     value={profileData.avatar}
                     onChange={(e) => setProfileData({ ...profileData, avatar: e.target.value })}
-                    className="w-full bg-gray-700 text-white rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                    className="w-full bg-gray-50 text-gray-900 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 border border-gray-300"
                     placeholder="Nhập URL ảnh đại diện (ví dụ: https://example.com/avatar.jpg)"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-gray-400 mb-2">Gói cước</label>
+                <label className="block text-gray-700 mb-2 font-medium">Gói cước</label>
                 <input
                   type="text"
                   value={user.plans?.name || "Miễn phí"}
                   disabled
-                  className="w-full bg-gray-700 text-gray-400 rounded px-4 py-2"
+                  className="w-full bg-gray-100 text-gray-500 rounded-lg px-4 py-3 border border-gray-300"
                 />
               </div>
 
               <div>
-                <label className="block text-gray-400 mb-2">Quyền hạn</label>
+                <label className="block text-gray-700 mb-2 font-medium">Quyền hạn</label>
                 <select
                   value={profileData.role}
                   onChange={(e) => setProfileData({ ...profileData, role: e.target.value })}
-                  className="w-full bg-gray-700 text-white rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                  className="w-full bg-gray-50 text-gray-900 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 border border-gray-300"
                 >
                   <option value="user">Người dùng</option>
                   <option value="admin">Quản trị viên</option>
@@ -340,7 +340,7 @@ export default function UserDetailPage() {
 
               <button
                 type="submit"
-                className="w-full bg-yellow-500 text-black font-semibold py-3 rounded hover:bg-yellow-600 transition-colors"
+                className="w-full bg-blue-500 text-white font-semibold py-3 rounded-lg hover:bg-blue-600 transition-colors shadow-md"
               >
                 LƯU THAY ĐỔI
               </button>
@@ -348,42 +348,42 @@ export default function UserDetailPage() {
           </div>
 
           {/* Change Password */}
-          <div className="bg-gray-800 rounded-lg p-6">
-            <h2 className="text-xl font-bold text-white mb-6">Đổi mật khẩu</h2>
+          <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-200">
+            <h2 className="text-xl font-bold text-gray-900 mb-6">Đổi mật khẩu</h2>
             <form onSubmit={handleChangePassword} className="space-y-4">
               <div>
-                <label className="block text-gray-400 mb-2">Mật khẩu cũ</label>
+                <label className="block text-gray-700 mb-2 font-medium">Mật khẩu cũ</label>
                 <input
                   type="password"
                   value={passwordData.oldPassword}
                   onChange={(e) => setPasswordData({ ...passwordData, oldPassword: e.target.value })}
-                  className="w-full bg-gray-700 text-white rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                  className="w-full bg-gray-50 text-gray-900 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 border border-gray-300"
                 />
               </div>
 
               <div>
-                <label className="block text-gray-400 mb-2">Mật khẩu mới</label>
+                <label className="block text-gray-700 mb-2 font-medium">Mật khẩu mới</label>
                 <input
                   type="password"
                   value={passwordData.newPassword}
                   onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
-                  className="w-full bg-gray-700 text-white rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                  className="w-full bg-gray-50 text-gray-900 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 border border-gray-300"
                 />
               </div>
 
               <div>
-                <label className="block text-gray-400 mb-2">Xác nhận mật khẩu mới</label>
+                <label className="block text-gray-700 mb-2 font-medium">Xác nhận mật khẩu mới</label>
                 <input
                   type="password"
                   value={passwordData.confirmPassword}
                   onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
-                  className="w-full bg-gray-700 text-white rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                  className="w-full bg-gray-50 text-gray-900 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 border border-gray-300"
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-yellow-500 text-black font-semibold py-3 rounded hover:bg-yellow-600 transition-colors mt-16"
+                className="w-full bg-blue-500 text-white font-semibold py-3 rounded-lg hover:bg-blue-600 transition-colors shadow-md mt-16"
               >
                 ĐỔI MẬT KHẨU
               </button>
@@ -393,47 +393,47 @@ export default function UserDetailPage() {
       )}
 
       {activeTab === "reviews" && (
-        <div className="bg-gray-800 rounded-lg overflow-hidden">
+        <div className="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-200">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="text-left text-gray-400 text-sm uppercase tracking-wider bg-gray-750 border-b border-gray-700">
-                  <th className="p-4">ID</th>
-                  <th className="p-4">PHIM</th>
-                  <th className="p-4">TÁC GIẢ</th>
-                  <th className="p-4">NỘI DUNG</th>
-                  <th className="p-4">ĐÁNH GIÁ</th>
-                  <th className="p-4">NGÀY TẠO</th>
-                  <th className="p-4 text-center">HÀNH ĐỘNG</th>
+                <tr className="text-left text-gray-600 text-sm uppercase tracking-wider bg-gray-50 border-b border-gray-200">
+                  <th className="p-4 font-semibold">ID</th>
+                  <th className="p-4 font-semibold">PHIM</th>
+                  <th className="p-4 font-semibold">TÁC GIẢ</th>
+                  <th className="p-4 font-semibold">NỘI DUNG</th>
+                  <th className="p-4 font-semibold">ĐÁNH GIÁ</th>
+                  <th className="p-4 font-semibold">NGÀY TẠO</th>
+                  <th className="p-4 text-center font-semibold">HÀNH ĐỘNG</th>
                 </tr>
               </thead>
               <tbody>
                 {reviews.map((review) => (
-                  <tr key={review.id} className="border-b border-gray-700 hover:bg-gray-750/50 transition-colors">
-                    <td className="p-4 text-white">{review.id}</td>
-                    <td className="p-4 text-white">{review.films?.title || "N/A"}</td>
-                    <td className="p-4 text-gray-400">{review.users?.fullname || "Unknown"}</td>
-                    <td className="p-4 text-gray-400">{review.comment?.substring(0, 50) || "Không có nội dung"}...</td>
+                  <tr key={review.id} className="border-b border-gray-100 hover:bg-blue-50 transition-colors">
+                    <td className="p-4 text-gray-900 font-medium">{review.id}</td>
+                    <td className="p-4 text-gray-900">{review.films?.title || "N/A"}</td>
+                    <td className="p-4 text-gray-600">{review.users?.fullname || "Unknown"}</td>
+                    <td className="p-4 text-gray-600">{review.comment?.substring(0, 50) || "Không có nội dung"}...</td>
                     <td className="p-4">
-                      <span className="flex items-center gap-1 text-yellow-500">
+                      <span className="flex items-center gap-1 text-yellow-500 font-semibold">
                         ⭐ {review.rating || 0}
                       </span>
                     </td>
-                    <td className="p-4 text-gray-400">
+                    <td className="p-4 text-gray-600">
                       {review.created_at ? new Date(review.created_at).toLocaleDateString('en-GB').split('/').join('.') : "N/A"}
                     </td>
                     <td className="p-4">
                       <div className="flex items-center justify-center gap-2">
                         <button 
                           onClick={() => handleViewFeedback(review)}
-                          className="p-2 bg-yellow-500/20 text-yellow-500 rounded hover:bg-yellow-500/30 transition-colors"
+                          className="p-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition-colors"
                           title="Xem chi tiết"
                         >
                           <Eye size={16} />
                         </button>
                         <button
                           onClick={() => handleDeleteReview(review.id)}
-                          className="p-2 bg-red-500/20 text-red-500 rounded hover:bg-red-500/30 transition-colors"
+                          className="p-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition-colors"
                           title="Xóa"
                         >
                           <Trash2 size={16} />
@@ -446,7 +446,7 @@ export default function UserDetailPage() {
             </table>
           </div>
           {reviews.length === 0 && (
-            <div className="p-8 text-center text-gray-400">
+            <div className="p-8 text-center text-gray-500">
               Không có đánh giá nào
             </div>
           )}
@@ -456,46 +456,46 @@ export default function UserDetailPage() {
       {/* Modal xem chi tiết feedback */}
       {isViewModalOpen && viewingFeedback && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-gray-800 rounded-lg p-6 w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+          <div className="bg-white rounded-xl p-6 w-full max-w-3xl max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-200">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-white">
+              <h2 className="text-xl font-bold text-gray-900">
                 {viewingFeedback.rating ? 'Chi tiết đánh giá' : 'Chi tiết bình luận'}
               </h2>
-              <button onClick={closeViewModal} className="text-gray-400 hover:text-white">
+              <button onClick={closeViewModal} className="text-gray-400 hover:text-gray-600">
                 <X size={24} />
               </button>
             </div>
 
             <div className="space-y-4">
-              <div className="bg-gray-700 rounded-lg p-4">
+              <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-gray-400 text-sm mb-1">ID</label>
-                    <div className="text-white">{viewingFeedback.id}</div>
+                    <label className="block text-gray-600 text-sm mb-1 font-medium">ID</label>
+                    <div className="text-gray-900 font-semibold">{viewingFeedback.id}</div>
                   </div>
                   <div>
-                    <label className="block text-gray-400 text-sm mb-1">Phim</label>
-                    <div className="text-white">{viewingFeedback.films?.title || "N/A"}</div>
+                    <label className="block text-gray-600 text-sm mb-1 font-medium">Phim</label>
+                    <div className="text-gray-900 font-semibold">{viewingFeedback.films?.title || "N/A"}</div>
                   </div>
                   <div>
-                    <label className="block text-gray-400 text-sm mb-1">Tác giả</label>
-                    <div className="text-white">{viewingFeedback.users?.fullname || "Unknown"}</div>
+                    <label className="block text-gray-600 text-sm mb-1 font-medium">Tác giả</label>
+                    <div className="text-gray-900 font-semibold">{viewingFeedback.users?.fullname || "Unknown"}</div>
                   </div>
                   <div>
-                    <label className="block text-gray-400 text-sm mb-1">Email</label>
-                    <div className="text-white">{viewingFeedback.users?.email || "N/A"}</div>
+                    <label className="block text-gray-600 text-sm mb-1 font-medium">Email</label>
+                    <div className="text-gray-900 font-semibold">{viewingFeedback.users?.email || "N/A"}</div>
                   </div>
                   {viewingFeedback.rating && (
                     <div>
-                      <label className="block text-gray-400 text-sm mb-1">Đánh giá</label>
-                      <div className="text-yellow-500 flex items-center gap-1">
+                      <label className="block text-gray-600 text-sm mb-1 font-medium">Đánh giá</label>
+                      <div className="text-yellow-500 flex items-center gap-1 font-semibold">
                         ⭐ {viewingFeedback.rating}/10
                       </div>
                     </div>
                   )}
                   <div>
-                    <label className="block text-gray-400 text-sm mb-1">Ngày tạo</label>
-                    <div className="text-white">
+                    <label className="block text-gray-600 text-sm mb-1 font-medium">Ngày tạo</label>
+                    <div className="text-gray-900 font-semibold">
                       {viewingFeedback.created_at 
                         ? new Date(viewingFeedback.created_at).toLocaleString('vi-VN') 
                         : "N/A"}
@@ -504,11 +504,11 @@ export default function UserDetailPage() {
                 </div>
               </div>
 
-              <div className="bg-gray-700 rounded-lg p-4">
-                <label className="block text-gray-400 text-sm mb-2">
+              <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                <label className="block text-gray-600 text-sm mb-2 font-medium">
                   {viewingFeedback.rating ? 'Nội dung đánh giá' : 'Nội dung bình luận'}
                 </label>
-                <div className="text-white whitespace-pre-wrap">
+                <div className="text-gray-900 whitespace-pre-wrap">
                   {viewingFeedback.comment || "Không có nội dung"}
                 </div>
               </div>
@@ -516,7 +516,7 @@ export default function UserDetailPage() {
               <div className="flex gap-4">
                 <button
                   onClick={closeViewModal}
-                  className="flex-1 bg-gray-700 text-white py-2 rounded hover:bg-gray-600 transition-colors"
+                  className="flex-1 bg-gray-200 text-gray-700 py-2 rounded-lg hover:bg-gray-300 transition-colors font-medium"
                 >
                   Đóng
                 </button>
@@ -525,7 +525,7 @@ export default function UserDetailPage() {
                     closeViewModal();
                     handleDeleteReview(viewingFeedback.id);
                   }}
-                  className="flex-1 bg-red-500 text-white py-2 rounded hover:bg-red-600 transition-colors"
+                  className="flex-1 bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition-colors font-medium"
                 >
                   Xóa
                 </button>

@@ -1,25 +1,2 @@
 @import "tailwindcss";
 @config "../tailwind.config.js";
-
-/* Ensure the app root can expand to full viewport height */
-html, body, #root {
-	height: 100%;
-	margin: auto;
-}
-
-
-
-/* Optional: ensure body background and font inherit */
-body {
-	margin: 0;
-	font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-}
-
-/* scrollbar-hide utility (cross-browser) */
-.scrollbar-hide {
-	-ms-overflow-style: none; /* IE and Edge */
-	scrollbar-width: none; /* Firefox */
-}
-.scrollbar-hide::-webkit-scrollbar {
-	display: none; /* Chrome, Safari */
-}

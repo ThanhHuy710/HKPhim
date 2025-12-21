@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { Trash2, RefreshCw, MoreHorizontal, Lock, AlertCircle } from "lucide-react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import api from "../lib/axios";
 import { toast } from "sonner";
@@ -7,6 +8,7 @@ import MovieCard from "../components/MovieCard";
 import SeasonAndEpisodes from "../components/SeasonAndEpisodes";
 import RequireBirthdayModal from "../components/RequireBirthdayModal";
 import { useAuth } from "../contexts/AuthContext";
+import { canWatchFilm, parseAgeRating } from "../utils/ageVerification";
 import FavoriteButton from "../components/FavoriteButton";
 
 export default function MovieDetail() {
@@ -16,10 +18,20 @@ export default function MovieDetail() {
   const [film, setFilm] = useState(null);
   const [loading, setLoading] = useState(true);
   const [films, setFilms] = useState([]);
+  const [comments, setComments] = useState([]);
+  const [commentText, setCommentText] = useState("");
+  const commentsRef = useRef(null);
+  const commentInputRef = useRef(null);
+  const [rating, setRating] = useState(0);
+  const [hoverRating, setHoverRating] = useState(0);
+  const [deleteModalId, setDeleteModalId] = useState(null);
+  const [deleteInProgress, setDeleteInProgress] = useState(false);
   const [showBirthdayModal, setShowBirthdayModal] = useState(false);
   const [hasAccess, setHasAccess] = useState(false);
   const [checkingAccess, setCheckingAccess] = useState(true);
   const [accessError, setAccessError] = useState(null);
+  const [ageVerified, setAgeVerified] = useState(false);
+  const [ageError, setAgeError] = useState(null);
 
   // Kiểm tra quyền truy cập trước khi tải phim
   useEffect(() => {
@@ -108,6 +120,28 @@ export default function MovieDetail() {
     setShowBirthdayModal(false);
   };
 
+  // Xác thực độ tuổi khi phim được tải và user có birthday
+  useEffect(() => {
+    if (film && user && user.birthday && hasAccess) {
+      verifyAge();
+    }
+  }, [film, user?.birthday, hasAccess]);
+
+  const verifyAge = () => {
+    // Kiểm tra xem tuổi của user có đủ để xem phim này không
+    if (!canWatchFilm(user.birthday, film.age_rating)) {
+      const requiredAge = parseAgeRating(film.age_rating);
+      setAgeError(`Phim này yêu cầu độ tuổi ${requiredAge}+. Bạn không đủ tuổi để xem nội dung này.`);
+      setAgeVerified(false);
+      toast.error(`Bạn phải từ ${requiredAge} tuổi trở lên để xem phim này!`);
+      return;
+    }
+
+    // Tất cả kiểm tra đều pass - cho phép xem phim
+    setAgeVerified(true);
+    setAgeError(null);
+  };
+
   const handleWatchClick = async (e) => {
     e.preventDefault();
     
@@ -121,6 +155,10 @@ export default function MovieDetail() {
     try {
       const res = await api.get(`/films/${id}`);
       setFilm(res.data.data || null);
+      // Verify age after film is loaded
+      if (user && user.birthday && hasAccess) {
+        verifyAge();
+      }
     } catch (error) {
       console.error("Lỗi:", error);
       toast.error("Không thể tải phim");
@@ -139,6 +177,41 @@ export default function MovieDetail() {
       setLoading(false);
     }
   };
+  const fetchComments = async () => {
+    try {
+      // fetch all feedbacks (comments + reviews) for this film
+      const res = await api.get(`/feedbacks?film_id=${id}`);
+      setComments(res.data.data || []);
+    } catch (error) {
+      console.error("Lỗi khi tải bình luận:", error);
+    }
+  };
+
+  const handleDeleteFeedback = (feedbackId) => {
+    // open confirmation modal
+    setDeleteModalId(feedbackId);
+  };
+
+  const confirmDeleteFeedback = async () => {
+    if (!deleteModalId) return;
+    setDeleteInProgress(true);
+    try {
+      await api.delete(`/feedbacks/${deleteModalId}`);
+      setComments(prev => prev.filter(c => c.id !== deleteModalId));
+      toast.success('Xóa bình luận thành công');
+      setDeleteModalId(null);
+    } catch (error) {
+      console.error('Lỗi xóa bình luận:', error);
+      toast.error('Xóa bình luận thất bại');
+    } finally {
+      setDeleteInProgress(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!id) return;
+    fetchComments();
+  }, [id]);
   const getEmbedUrl = (url) => {
   // lấy VIDEO_ID từ link gốc
   const match = url.match(/v=([^&]+)/);
@@ -224,16 +297,48 @@ export default function MovieDetail() {
       )}
       
       <div className="grid grid-cols-6 grid-rows-10 gap-4 text-white">
-        <div className="col-span-4 row-span-4 min-h-[600px]">
-          {/**/}
-          <iframe
-            width="100%"
-            height="100%"
-            src={getEmbedUrl(film.poster_video_url)}
-            title="YouTube video"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          ></iframe>
+        <div className="col-span-4 row-span-4">
+          {ageVerified ? (
+            <iframe
+              src={getEmbedUrl(film.poster_video_url)}
+              title="YouTube video"
+              className="w-full h-[280px] md:h-[520px] lg:h-[640px] rounded-md bg-black"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          ) : (
+            <div className="w-full h-full min-h-[400px] flex items-center justify-center bg-gray-900 rounded-lg p-8">
+              <div className="text-center max-w-md">
+                <div className="mb-6 flex justify-center">
+                  <div className="p-4 bg-red-500/20 rounded-full">
+                    <Lock size={48} className="text-red-500" />
+                  </div>
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-3">
+                  Nội dung bị giới hạn độ tuổi
+                </h3>
+                <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 mb-4">
+                  <div className="flex items-start gap-3">
+                    <AlertCircle size={20} className="text-red-500 shrink-0 mt-0.5" />
+                    <p className="text-red-400 text-sm text-left">
+                      {ageError || 'Quyền truy cập bị từ chối'}
+                    </p>
+                  </div>
+                </div>
+                <p className="text-gray-400 text-sm mb-6">
+                  Đây là biện pháp bảo vệ nội dung theo độ tuổi.
+                </p>
+                <div className="flex gap-3 justify-center">
+                  <button
+                    onClick={() => navigate('/')}
+                    className="px-6 py-3 bg-yellow-400 hover:bg-yellow-500 text-black font-semibold rounded-lg transition-all duration-200"
+                  >
+                    Quay về Trang chủ
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
         <div className="col-span-2 row-span-7 col-start-5 ">
           <h1 className="text-xs md:text-2xl">Phim dành cho bạn</h1>
@@ -282,14 +387,25 @@ export default function MovieDetail() {
             >
               Xem Ngay
             </button>
-            <Link className="flex flex-col items-center cursor-pointer hover:text-blue-400">
+            <button
+              type="button"
+              onClick={() => {
+                  if (commentsRef.current) {
+                    // use scrollIntoView so CSS `scroll-margin-top` is respected
+                    commentsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }
+                  // focus shortly after scroll starts
+                  setTimeout(() => commentInputRef.current?.focus(), 400);
+                }}
+              className="flex flex-col items-center cursor-pointer hover:text-blue-400 transition-transform active:scale-95"
+            >
               <img
                 src="../public/images/Comment.png"
                 alt="Comment "
                 className="w-6 h-6"
               />
               <p className="text-sm">Bình luận</p>
-            </Link>
+            </button>
              <FavoriteButton filmId={film.id} userId={user.id} />
             <Link className="flex flex-col items-center cursor-pointer hover:text-blue-400">
               <img
@@ -319,6 +435,126 @@ export default function MovieDetail() {
           </div>
         </div>
       </div>
+      
+      {/* Comments Section - moved below entire layout to avoid overlap */}
+      <div id="comments" ref={commentsRef} className="mt-6 max-w-4xl mx-auto text-white scroll-offset-target">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-4">
+            <h2 className="text-2xl font-bold flex items-center gap-2">
+              <span className="w-7 h-7 bg-gray-800 rounded-full flex items-center justify-center">💬</span>
+              Bình luận <span className="text-gray-400 text-sm">({comments.length})</span>
+            </h2>
+          </div>
+        </div>
+
+        <div className="bg-gray-900 rounded-lg p-4 mb-6">
+          <div className="flex items-center gap-2 mb-3">
+            {[...Array(10)].map((_, i) => {
+              const val = i + 1;
+              const filled = hoverRating ? val <= hoverRating : val <= rating;
+              return (
+                <button key={val} onMouseEnter={() => setHoverRating(val)} onMouseLeave={() => setHoverRating(0)} onClick={() => setRating(val)} className="p-1">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill={filled ? '#F59E0B' : 'none'} stroke="#F59E0B" strokeWidth="1.5" className="inline-block">
+                    <path d="M12 .587l3.668 7.431L24 9.748l-6 5.857L19.335 24 12 20.201 4.665 24 6 15.605 0 9.748l8.332-1.73z" />
+                  </svg>
+                </button>
+              );
+            })}
+            <div className="text-sm text-gray-300 ml-3">{rating}/10</div>
+          </div>
+
+          <div className="relative">
+            <textarea
+              ref={commentInputRef}
+              value={commentText}
+              onChange={(e) => setCommentText(e.target.value)}
+              placeholder="Viết bình luận"
+              className="w-full p-4 rounded-lg bg-gray-800 text-white min-h-[120px] resize-none"
+              maxLength={1000}
+            />
+            <div className="absolute right-4 top-4 text-gray-400 text-xs">{commentText.length}/1000</div>
+          </div>
+
+          <div className="flex items-center justify-end mt-3">
+            <div className="flex items-center gap-3">
+              <button onClick={async () => {
+                if (!user) { navigate('/auth'); return; }
+                if (!commentText.trim() && rating === 0) return;
+                try {
+                  const payload = { film_id: Number(id) };
+                  if (commentText.trim()) payload.comment = commentText.trim();
+                  if (rating > 0) payload.rating = rating;
+                  payload.user_id = user.id;
+                  const res = await api.post('/feedbacks', payload);
+                  setComments(prev => [res.data.data, ...prev]);
+                  setCommentText('');
+                  setRating(0);
+                } catch (error) {
+                  console.error('Lỗi gửi bình luận/đánh giá:', error);
+                  toast.error('Gửi bình luận thất bại');
+                }
+              }} className="flex items-center gap-2 px-4 py-2 bg-yellow-400 text-black font-semibold rounded-md">
+                <span>Gửi</span>
+                
+              
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          {comments.length === 0 ? (
+            <p className="text-gray-400">Chưa có bình luận nào.</p>
+          ) : (
+            comments.map((c) => (
+              <div key={c.id} className="flex gap-4 p-4 bg-gray-900 rounded-lg">
+                <div className="w-12">
+                  <img src={c.users?.avatar || '/images/default-avatar.png'} alt="avatar" className="w-12 h-12 rounded-full object-cover" />
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center justify-between mb-1">
+                    <div className="flex items-center gap-3">
+                      <div className="font-semibold">{c.users?.fullname || c.users?.username || 'Người dùng'}</div>
+                      {c.rating ? (
+                        <div className="flex items-center gap-1 text-sm text-yellow-400">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="#F59E0B" stroke="#F59E0B" strokeWidth="1"><path d="M12 .587l3.668 7.431L24 9.748l-6 5.857L19.335 24 12 20.201 4.665 24 6 15.605 0 9.748l8.332-1.73z"/></svg>
+                          <span className="text-xs text-gray-200">{c.rating}/10</span>
+                        </div>
+                      ) : null}
+                      <div className="text-xs text-gray-400">{new Date(c.created_at).toLocaleString('vi-VN')}</div>
+                    </div>
+                    <div className="flex items-center gap-2 text-gray-400">
+                      <button title="Làm mới" className="rounded-full bg-gray-800 w-8 h-8 flex items-center justify-center"><RefreshCw size={14} /></button>
+                      <button title="Tùy chọn" className="rounded-full bg-gray-800 w-8 h-8 flex items-center justify-center"><MoreHorizontal size={14} /></button>
+                      { (c.users?.id === user?.id || c.user_id === user?.id) && (
+                        <button title="Xóa" onClick={() => handleDeleteFeedback(c.id)} className="rounded-full bg-red-700 hover:bg-red-600 w-8 h-8 flex items-center justify-center">
+                          <Trash2 size={14} />
+                        </button>
+                      ) }
+                    </div>
+                  </div>
+                  <div className="text-gray-200">{c.comment}</div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+      {deleteModalId !== null && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => { if(!deleteInProgress) setDeleteModalId(null); }} />
+          <div className="bg-gray-900 text-white rounded-lg p-6 z-10 w-full max-w-md mx-4">
+            <h3 className="text-lg font-semibold mb-2">Xác nhận xóa bình luận</h3>
+            <p className="text-sm text-gray-300 mb-4">Bạn có chắc muốn xóa bình luận này? Hành động này không thể hoàn tác.</p>
+            <div className="flex justify-end gap-3">
+              <button onClick={() => setDeleteModalId(null)} disabled={deleteInProgress} className="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded">Hủy</button>
+              <button onClick={confirmDeleteFeedback} disabled={deleteInProgress} className="px-4 py-2 bg-red-600 hover:bg-red-500 rounded text-white">
+                {deleteInProgress ? 'Đang xóa...' : 'Xóa'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </Layout>
   );
 }

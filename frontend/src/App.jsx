@@ -15,6 +15,9 @@ import FilmsManagement from "./pages/admin/FilmsManagement.jsx";
 import UsersManagement from "./pages/admin/UsersManagement.jsx";
 import UserDetailPage from "./pages/admin/UserDetailPage.jsx";
 import PlansManagement from "./pages/admin/PlansManagement.jsx";
+import CommentsManagement from "./pages/admin/CommentsManagement.jsx";
+import ReviewsManagement from "./pages/admin/ReviewsManagement.jsx";
+import ReportsManagement from "./pages/admin/ReportsManagement.jsx";
 import SubscriptionPage from "./pages/SubscriptionPage.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
 import PurchaseHistoryPage from "./pages/PurchaseHistoryPage.jsx";
@@ -50,6 +53,9 @@ function App() {
             <Route path="users" element={<UsersManagement />} />
             <Route path="users/:id" element={<UserDetailPage />} />
             <Route path="plans" element={<PlansManagement />} />
+            <Route path="comments" element={<CommentsManagement />} />
+            <Route path="reviews" element={<ReviewsManagement />} />
+            <Route path="reports" element={<ReportsManagement />} />
           </Route>
           
           <Route path="*" element={<NotFound />} />
