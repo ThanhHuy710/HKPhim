@@ -2,21 +2,52 @@ import { useEffect, useState } from "react";
 import api from "../lib/axios";
 import { toast } from "sonner";
 import Layout from "../components/layout/Layout";
-import HeroSection from "../components/HeroSection";
+import Banner from "../components/Banner";
+import BannerAfterLogin from "../components/BannerAfterLogin";
 import MovieRow from "../components/MovieRow";
+import RequireBirthdayModal from "../components/RequireBirthdayModal";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function HomePage() {
-  const [films, setFilms] = useState([]);
+  const { user, updateUser } = useAuth();
+  const [hotFilms, setHotFilms] = useState([]);
+  const [ratingFilms, setRatingFilms] = useState([]);
+  const [recommendedFilms, setRecommendedFilms] = useState([]);
+  const [favoriteFilms, setFavoriteFilms] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showBirthdayModal, setShowBirthdayModal] = useState(false);
 
   useEffect(() => {
-    fetchFilms();
+    fetchAllFilms();
   }, []);
 
-  const fetchFilms = async () => {
+  useEffect(() => {
+    // Kiểm tra nếu user đã đăng nhập và chưa có ngày sinh
+    if (user && !user.birthday) {
+      setShowBirthdayModal(true);
+    } else {
+      setShowBirthdayModal(false);
+    }
+  }, [user]);
+
+  const handleBirthdayUpdate = (updatedUser) => {
+    updateUser(updatedUser);
+    setShowBirthdayModal(false);
+  };
+
+  const fetchAllFilms = async () => {
     try {
-      const res = await api.get("/tasks");
-      setFilms(res.data.films || []);
+      const [hotRes, ratingRes, recommendedRes, favoriteRes] = await Promise.all([
+        api.get("/films/views"),
+        api.get("/films/rating"),
+        api.get("/films/recommended"),
+        api.get("/films/favorites"),
+      ]);
+
+      setHotFilms(hotRes.data.data || []);
+      setRatingFilms(ratingRes.data.data || []);
+      setRecommendedFilms(recommendedRes.data.data || []);
+      setFavoriteFilms(favoriteRes.data.data || []);
     } catch (error) {
       console.error("Lỗi:", error);
       toast.error("Không thể tải phim");
@@ -35,28 +66,37 @@ export default function HomePage() {
 
   return (
     <Layout>
-      <HeroSection />
-      
+      {showBirthdayModal && (
+        <RequireBirthdayModal user={user} onUpdate={handleBirthdayUpdate} />
+      )}
+
+      {user ? <BannerAfterLogin /> : <Banner />}
+
       <div className="movie-sections">
         <MovieRow 
           title="Phim Hot" 
-          films={films.slice(0, 10)}
-          viewAllLink="/phim-hot"
+          films={hotFilms}
+          viewAllLink="views"
         />
-        
+
         <MovieRow 
-          title="Phổ Biến" 
-          films={films.slice(10, 20)}
-          viewAllLink="/phim-pho-bien"
+          title="Đánh giá cao" 
+          films={ratingFilms}
+          viewAllLink="rating"
         />
-        
+
         <MovieRow 
-          title="Mới Cập Nhật" 
-          films={films.slice(20, 30)}
-          viewAllLink="/moi-cap-nhat"
+          title="Dành cho bạn" 
+          films={recommendedFilms}
+          viewAllLink="recommended"
+        />
+
+        <MovieRow 
+          title="Top yêu thích" 
+          films={favoriteFilms}
+          viewAllLink="favorites"
         />
       </div>
     </Layout>
   );
 }
-

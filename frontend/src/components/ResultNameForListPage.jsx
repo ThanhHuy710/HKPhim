@@ -1,0 +1,28 @@
+export default function ResultNameForListPage({ type, name }) {
+  const handlerTypeAndName = (type, name) => {
+    if (type == "single-movies") {
+      return " Phim lẻ";
+    } else if (type == "series") {
+      return " Phim bộ";
+    } else if (type == "genre" && name) {
+      return ` Thể loại "${name}"`;
+    } else if (type == "country" && name) {
+      return ` Quốc gia "${name}"`;
+    } else if (type == "titleoractor" && name) {
+      return ` Từ khóa "${name}"`;
+    } else if (type == "actor" && name) {
+      return ` Diễn viên "${name}"`;
+    } else if (type == "views") {
+      return " Phim Hot";
+    } else if (type == "rating") {
+      return " Đánh giá cao";
+    } else if (type == "recommended") {
+      return " Dành cho bạn";
+    } else if (type == "favorites") {
+      return " Top yêu thích";
+    } else if(type=="criteria") {
+      return "Lọc theo nhiều tiêu chí";
+    }
+  };
+  return handlerTypeAndName(type, name);
+}
