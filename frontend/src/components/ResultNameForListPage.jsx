@@ -24,9 +24,5 @@ export default function ResultNameForListPage({ type, name }) {
       return "Lọc theo nhiều tiêu chí";
     }
   };
-  return (
-    <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6 sm:mb-8">
-      {handlerTypeAndName(type, name)}
-    </h2>
-  );
+  return handlerTypeAndName(type, name);
 }

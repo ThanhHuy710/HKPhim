@@ -158,16 +158,7 @@ export default function Header() {
             </Link>
           )}
 
-          {/* Cart Button - Show if user is logged in */}
-          {user && (
-            <Link
-              to="/cart"
-              className="relative flex items-center justify-center w-11 h-11 bg-gray-800 hover:bg-yellow-400/20 rounded-full transition-all duration-200 border border-gray-700 hover:border-yellow-400 group"
-              title="Giỏ hàng"
-            >
-              <ShoppingCart size={20} className="text-gray-300 group-hover:text-yellow-400 transition-colors " />
-            </Link>
-          )}
+          
 
           {/* User Menu hoặc Login */}
           {user ? (

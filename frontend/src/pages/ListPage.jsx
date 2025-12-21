@@ -6,6 +6,7 @@ import MovieCard from "../components/MovieCard";
 import { useParams, useSearchParams } from "react-router";
 import ResultNameForListPage from "../components/ResultNameForListPage";
 import AvataCard from "../components/AvataCard";
+import DirectorCard from "../components/DirectorCard";
 import AdvancedSearch from "../components/AdvancedSearch";
 export default function ListPage() {
   const { type } = useParams(); // lấy param từ path
@@ -15,18 +16,30 @@ export default function ListPage() {
   const [film, setFilm] = useState([]);
   const [loading, setLoading] = useState(true);
   const [actors, setActors] = useState([]);
-  const [viewMode, setViewMode] = useState("films"); // "films" hoặc "actors"
+  const [directors, setDirectors] = useState([]);
+  const [viewMode, setViewMode] = useState("films"); // "films", "actors", "directors"
   const [activeAvSearch,setActiveAvSearch] = useState(false);
   const fetchFilm = async () => {
   try {
     setLoading(true);
     if (type === "titleoractor" && name) {
-      const [resTitle, resActor] = await Promise.all([
+      const [resTitle, resActor, resDirector] = await Promise.all([
         api.get(`/films/title/${name}`),
         api.get(`/films/actors/${name}`),
+        api.get(`/films/directors/${name}`),
       ]);
       setFilm(resTitle.data.data || []);
       setActors(resActor.data.data || []);
+      setDirectors(resDirector.data.data || []);
+      
+      // Tự động set viewMode dựa trên data có sẵn
+      if ((resTitle.data.data || []).length > 0) {
+        setViewMode("films");
+      } else if ((resActor.data.data || []).length > 0) {
+        setViewMode("actors");
+      } else if ((resDirector.data.data || []).length > 0) {
+        setViewMode("directors");
+      }
     } else if (type === "criteria") {
       // lấy tất cả query params
       const params = Object.fromEntries([...searchParams]);
@@ -90,6 +103,16 @@ export default function ListPage() {
             >
               Diễn viên
             </button>
+            <button
+              onClick={() => setViewMode("directors")}
+              className={`px-4 py-2 rounded ${
+                viewMode === "directors"
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-700 text-gray-200"
+              }`}
+            >
+              Đạo diễn
+            </button>
           </div>
         )}
 
@@ -116,8 +139,22 @@ export default function ListPage() {
         {viewMode === "actors" &&
           (actors.length > 0 ? (
             <div className="flex flex-wrap gap-3">
-              {actors.map((actor) => (
-                <AvataCard actor={actor}></AvataCard>
+              {actors.map((actor, index) => (
+                <AvataCard key={actor + index} actor={actor}></AvataCard>
+              ))}
+            </div>
+          ) : (
+            <p className="no-results text-white text-nowrap">
+              Không tìm thấy kết quả nào
+            </p>
+          ))}
+
+        {/* Hiển thị danh sách đạo diễn */}
+        {viewMode === "directors" &&
+          (directors.length > 0 ? (
+            <div className="flex flex-wrap gap-3">
+              {directors.map((director, index) => (
+                <DirectorCard key={director + index} director={director}></DirectorCard>
               ))}
             </div>
           ) : (

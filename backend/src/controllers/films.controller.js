@@ -169,6 +169,20 @@ export const filmsController = {
       res.status(response.statusCode).json(response);
     }
   },
+  //theo đạo diễn
+  async findByDirector(req, res, next) {
+     try {
+      const director = req.params.director;
+      const limit = parseInt(req.query.limit) || 50;
+      const offset = parseInt(req.query.offset) || 0;
+      const result = await filmsService.findByDirector(director, limit, offset);
+      const response = responseSuccess(result, "Get Director by title successfully");
+      res.status(response.statusCode).json(response);
+    } catch (err) {
+      const response = responseError(err.message, 500, err.stack);
+      res.status(response.statusCode).json(response);
+    }
+  },
   //lấy danh sách diễn viên khi tìm kiếm
   async findActors(req, res, next) {
     try {
@@ -189,6 +203,32 @@ export const filmsController = {
       const uniqueActors = [...new Set(actors)];
 
       const response = responseSuccess(uniqueActors, "Get actors successfully");
+      res.status(response.statusCode).json(response);
+    } catch (err) {
+      const response = responseError(err.message, 500, err.stack);
+      res.status(response.statusCode).json(response);
+    }
+  },
+  //lấy danh sách đạo diễn khi tìm kiếm
+  async findDirectors(req, res, next) {
+    try {
+      const keyword = req.params.director; // lấy từ URL /films/directors/:director
+      const limit = parseInt(req.query.limit) || 50;
+      const offset = parseInt(req.query.offset) || 0;
+
+      // lấy danh sách phim có chứa keyword trong director
+      const films = await filmsService.findByDirector(keyword, limit, offset);
+
+      // tách chuỗi director thành mảng, lọc theo keyword
+      const directors = films
+        .flatMap(f => f.directeur.split(","))   // tách thành mảng
+        .map(d => d.trim())                 // bỏ khoảng trắng
+        .filter(d => d.toLowerCase().includes(keyword.toLowerCase()));
+
+      // loại bỏ trùng lặp
+      const uniqueDirectors = [...new Set(directors)];
+
+      const response = responseSuccess(uniqueDirectors, "Get directors successfully");
       res.status(response.statusCode).json(response);
     } catch (err) {
       const response = responseError(err.message, 500, err.stack);

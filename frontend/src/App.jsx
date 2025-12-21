@@ -20,7 +20,7 @@ import ReviewsManagement from "./pages/admin/ReviewsManagement.jsx";
 import ReportsManagement from "./pages/admin/ReportsManagement.jsx";
 import SubscriptionPage from "./pages/SubscriptionPage.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
-import PurchaseHistoryPage from "./pages/PurchaseHistoryPage.jsx";
+import FavouritePage from "./pages/FavouritePage.jsx";
 
 function App() {
   return (
@@ -39,10 +39,10 @@ function App() {
            <Route path="/" element={<HomePage />} />
           <Route path="/film/:id" element={<MovieDetail />} />
           <Route path="/watch/:id" element={<WatchMovie />} />
-          <Route path="/search/:type" element={<ListPage />} />
+          <Route path="/search/:type" element={<ListPage key={window.location.pathname + window.location.search} />} />
           <Route path="/subscription" element={<SubscriptionPage />} />
           <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/purchase-history" element={<PurchaseHistoryPage />} />
+          <Route path="/favorites" element={<FavouritePage />} />
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/google/callback" element={<GoogleCallback />} />
           

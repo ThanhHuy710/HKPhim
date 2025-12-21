@@ -13,6 +13,10 @@ export default function UserDetailPage() {
   const [loading, setLoading] = useState(true);
   const [viewingFeedback, setViewingFeedback] = useState(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [showDeleteReviewConfirm, setShowDeleteReviewConfirm] = useState(false);
+  const [showDeleteUserConfirm, setShowDeleteUserConfirm] = useState(false);
+  const [deleteReviewId, setDeleteReviewId] = useState(null);
+  const [deleteUserId, setDeleteUserId] = useState(null);
   
   const [profileData, setProfileData] = useState({
     username: "",
@@ -112,15 +116,28 @@ export default function UserDetailPage() {
   };
 
   const handleDeleteReview = async (reviewId) => {
-    if (!confirm("Bạn có chắc muốn xóa đánh giá này?")) return;
+    setShowDeleteReviewConfirm(true);
+    setDeleteReviewId(reviewId);
+  };
+
+  const confirmDeleteReview = async () => {
+    if (!deleteReviewId) return;
     try {
-      await api.delete(`/feedbacks/${reviewId}`);
+      await api.delete(`/feedbacks/${deleteReviewId}`);
       toast.success("Xóa đánh giá thành công");
       fetchReviews();
     } catch (error) {
       console.error("Error:", error);
       toast.error("Xóa đánh giá thất bại");
+    } finally {
+      setShowDeleteReviewConfirm(false);
+      setDeleteReviewId(null);
     }
+  };
+
+  const cancelDeleteReview = () => {
+    setShowDeleteReviewConfirm(false);
+    setDeleteReviewId(null);
   };
 
   const handleViewFeedback = (feedback) => {
@@ -150,15 +167,28 @@ export default function UserDetailPage() {
   };
 
   const handleDeleteUser = async () => {
-    if (!confirm("Bạn có chắc muốn xóa người dùng này?")) return;
+    setShowDeleteUserConfirm(true);
+    setDeleteUserId(id);
+  };
+
+  const confirmDeleteUser = async () => {
+    if (!deleteUserId) return;
     try {
-      await api.delete(`/users/${id}`);
+      await api.delete(`/users/${deleteUserId}`);
       toast.success("Xóa người dùng thành công");
       navigate("/admin/users");
     } catch (error) {
       console.error("Error:", error);
       toast.error("Xóa người dùng thất bại");
+    } finally {
+      setShowDeleteUserConfirm(false);
+      setDeleteUserId(null);
     }
+  };
+
+  const cancelDeleteUser = () => {
+    setShowDeleteUserConfirm(false);
+    setDeleteUserId(null);
   };
 
   const handleAvatarUpload = (e) => {
@@ -530,6 +560,68 @@ export default function UserDetailPage() {
                   Xóa
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Review Confirmation Modal */}
+      {showDeleteReviewConfirm && (
+        <div className="fixed inset-0 backdrop-blur-md bg-black/20 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4 shadow-xl">
+            <div className="flex items-center mb-4">
+              <div className="p-3 bg-red-100 rounded-full mr-4">
+                <Trash2 className="w-6 h-6 text-red-600" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900">Xác nhận xóa đánh giá</h3>
+            </div>
+            <p className="text-gray-600 mb-6">
+              Bạn có chắc chắn muốn xóa đánh giá này không? Hành động này không thể hoàn tác.
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={cancelDeleteReview}
+                className="flex-1 bg-gray-200 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors font-medium"
+              >
+                Hủy
+              </button>
+              <button
+                onClick={confirmDeleteReview}
+                className="flex-1 bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-colors font-medium"
+              >
+                Xóa
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete User Confirmation Modal */}
+      {showDeleteUserConfirm && (
+        <div className="fixed inset-0 backdrop-blur-md bg-black/20 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4 shadow-xl">
+            <div className="flex items-center mb-4">
+              <div className="p-3 bg-red-100 rounded-full mr-4">
+                <Trash2 className="w-6 h-6 text-red-600" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900">Xác nhận xóa người dùng</h3>
+            </div>
+            <p className="text-gray-600 mb-6">
+              Bạn có chắc chắn muốn xóa người dùng này không? Hành động này không thể hoàn tác.
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={cancelDeleteUser}
+                className="flex-1 bg-gray-200 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors font-medium"
+              >
+                Xóa
+              </button>
+              <button
+                onClick={confirmDeleteUser}
+                className="flex-1 bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-colors font-medium"
+              >
+                Xóa
+              </button>
             </div>
           </div>
         </div>

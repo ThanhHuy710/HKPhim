@@ -8,6 +8,8 @@ export default function PlansManagement() {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingPlan, setEditingPlan] = useState(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
     price: "",
@@ -31,16 +33,29 @@ export default function PlansManagement() {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm("Bạn có chắc muốn xóa gói cước này?")) return;
+    setShowDeleteConfirm(true);
+    setDeleteId(id);
+  };
+
+  const confirmDelete = async () => {
+    if (!deleteId) return;
     
     try {
-      await api.delete(`/plans/${id}`);
+      await api.delete(`/plans/${deleteId}`);
       toast.success("Xóa gói cước thành công");
       fetchPlans();
     } catch (error) {
       console.error("Error:", error);
       toast.error("Không thể xóa gói cước");
+    } finally {
+      setShowDeleteConfirm(false);
+      setDeleteId(null);
     }
+  };
+
+  const cancelDelete = () => {
+    setShowDeleteConfirm(false);
+    setDeleteId(null);
   };
 
   const openAddModal = () => {
@@ -275,6 +290,37 @@ export default function PlansManagement() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 backdrop-blur-md bg-black/20 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4 shadow-xl">
+            <div className="flex items-center mb-4">
+              <div className="p-3 bg-red-100 rounded-full mr-4">
+                <Trash2 className="w-6 h-6 text-red-600" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900">Xác nhận xóa</h3>
+            </div>
+            <p className="text-gray-600 mb-6">
+              Bạn có chắc chắn muốn xóa gói cước này không? Hành động này không thể hoàn tác.
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={cancelDelete}
+                className="flex-1 bg-gray-200 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors font-medium"
+              >
+                Hủy
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="flex-1 bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-colors font-medium"
+              >
+                Xóa
+              </button>
+            </div>
           </div>
         </div>
       )}

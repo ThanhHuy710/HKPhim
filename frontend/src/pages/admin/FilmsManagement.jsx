@@ -12,6 +12,8 @@ export default function FilmsManagement() {
   const [searchTerm, setSearchTerm] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [editingFilm, setEditingFilm] = useState(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -74,16 +76,29 @@ export default function FilmsManagement() {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm("Bạn có chắc muốn xóa phim này?")) return;
+    setShowDeleteConfirm(true);
+    setDeleteId(id);
+  };
+
+  const confirmDelete = async () => {
+    if (!deleteId) return;
     
     try {
-      await api.delete(`/films/${id}`);
+      await api.delete(`/films/${deleteId}`);
       toast.success("Xóa phim thành công");
       fetchFilms();
     } catch (error) {
       console.error("Error:", error);
       toast.error("Không thể xóa phim");
+    } finally {
+      setShowDeleteConfirm(false);
+      setDeleteId(null);
     }
+  };
+
+  const cancelDelete = () => {
+    setShowDeleteConfirm(false);
+    setDeleteId(null);
   };
 
   const handleOpenModal = (film = null) => {
@@ -593,6 +608,37 @@ export default function FilmsManagement() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 backdrop-blur-md bg-black/20 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4 shadow-xl">
+            <div className="flex items-center mb-4">
+              <div className="p-3 bg-red-100 rounded-full mr-4">
+                <Trash2 className="w-6 h-6 text-red-600" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900">Xác nhận xóa</h3>
+            </div>
+            <p className="text-gray-600 mb-6">
+              Bạn có chắc chắn muốn xóa phim này không? Hành động này không thể hoàn tác.
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={cancelDelete}
+                className="flex-1 bg-gray-200 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors font-medium"
+              >
+                Hủy
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="flex-1 bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-colors font-medium"
+              >
+                Xóa
+              </button>
+            </div>
           </div>
         </div>
       )}

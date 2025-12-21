@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
 
-export default function AvataCard({ actor }) {
+export default function DirectorCard({ director }) {
   const handleClick = () => {
-    window.location.href = `/search/actor/?name=${actor}`;
+    window.location.href = `/search/director/?name=${director}`;
   };
 
   return (
@@ -12,13 +12,13 @@ export default function AvataCard({ actor }) {
     >
       <div className="aspect-2/3">
         <img
-          src="../../public/images/DefaultAvata.png" 
-          alt={actor}
+          src="../../public/images/DefaultAvata.png"
+          alt={director}
           className="w-full h-full object-cover rounded-lg"
         />
       </div>
       <p className="mt-2 text-xs sm:text-sm md:text-base lg:text-lg text-white font-semibold truncate">
-        {actor}
+        {director}
       </p>
     </button>
   );

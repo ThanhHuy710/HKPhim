@@ -78,6 +78,14 @@ export const filmsService = {
       offset,
     });
   },
+  //lọc theo đạo diễn
+  async findByDirector(director, limit = 50, offset = 0) {
+    return this.findByFilter({
+      filter: { directeur: { contains: director } },
+      limit,
+      offset,
+    });
+  },
   //theo năm phát hành
   async findByYear(year, limit = 50, offset = 0) {
     return this.findByFilter({ filter: { year: { contains: Number(year) } }, limit, offset });
