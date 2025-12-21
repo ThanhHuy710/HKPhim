@@ -46,41 +46,41 @@ export const filmsController = {
   },
   //lọc theo nhiều tiêu chí
    async getByCriteria(req, res, next) {
-    try {
-      const {
-        country,
-        type,
-        rating,
-        genre,
-        version,
-        year,
-        age_rating,
-        limit,
-        offset,
-      } = req.query;
+  try {
+    const {
+      country,
+      is_series,   // giữ lại cái này
+      genre,
+      version,
+      year,
+      age_rating,
+      limit,
+      offset,
+    } = req.query;
 
-      const result = await filmsService.findByCriteria({
-        country,
-        type,
-        rating,
-        genre,
-        version,
-        year,
-        age_rating,
-        limit: parseInt(limit) || 50,
-        offset: parseInt(offset) || 0,
-      });
+    console.log(req.query);
 
-      const response = responseSuccess(
-        result,
-        "Get films by criteria successfully"
-      );
-      res.status(response.statusCode).json(response);
-    } catch (err) {
-      const response = responseError(err.message, 500, err.stack);
-      res.status(response.statusCode).json(response);
-    }
-  },
+    const result = await filmsService.findByCriteria({
+      country,
+      is_series,
+      genre,
+      version,
+      year,
+      age_rating,
+      limit: parseInt(limit) || 50,
+      offset: parseInt(offset) || 0,
+    });
+
+    const response = responseSuccess(
+      result,
+      "Get films by criteria successfully"
+    );
+    res.status(response.statusCode).json(response);
+  } catch (err) {
+    const response = responseError(err.message, 500, err.stack);
+    res.status(response.statusCode).json(response);
+  }
+},
   //theo phim lẻ
   async findSingleMovies(req, res, next) {
     try {

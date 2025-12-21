@@ -26,12 +26,12 @@ export default function WatchMovie() {
   const [subscriptionValid, setSubscriptionValid] = useState(false);
   const [checkingAccess, setCheckingAccess] = useState(true);
   const [accessGranted, setAccessGranted] = useState(false);
-  
+
   // UseEffect chính - Kiểm tra tất cả theo thứ tự
   useEffect(() => {
     const checkAccessAndLoadFilm = async () => {
       setCheckingAccess(true);
-      
+      window.scrollTo(0, 0);
       // Phải đợi user context load xong trước
       if (user === undefined) {
         return; // Vẫn đang load user context
@@ -39,14 +39,14 @@ export default function WatchMovie() {
 
       // Bước 1: Kiểm tra đăng nhập trước - chặn ngay lập tức
       if (!user) {
-        setAgeError('Bạn cần đăng nhập để xem phim.');
+        setAgeError("Bạn cần đăng nhập để xem phim.");
         setAgeVerified(false);
         setSubscriptionValid(false);
         setCheckingAccess(false);
         setAccessGranted(false);
-        toast.error('Vui lòng đăng nhập để xem phim!');
+        toast.error("Vui lòng đăng nhập để xem phim!");
         setTimeout(() => {
-          navigate('/auth');
+          navigate("/auth");
         }, 2000);
         return;
       }
@@ -59,7 +59,7 @@ export default function WatchMovie() {
 
       // Bước 3: Tải dữ liệu phim (chỉ khi gói cước hợp lệ)
       // Phim sẽ được tải trong checkSubscription
-      
+
       // Tải danh sách phim gợi ý
       fetchFilms();
     };
@@ -76,18 +76,18 @@ export default function WatchMovie() {
 
   const checkSubscription = async () => {
     setCheckingAccess(true);
-    
+
     try {
       // Kiểm tra xem user có gói cước hoạt động không
       if (!user.plan_id) {
-        setAgeError('Bạn cần đăng ký gói cước để xem phim.');
+        setAgeError("Bạn cần đăng ký gói cước để xem phim.");
         setAgeVerified(false);
         setSubscriptionValid(false);
         setCheckingAccess(false);
         setAccessGranted(false);
-        toast.error('Bạn cần đăng ký gói cước để xem phim!');
+        toast.error("Bạn cần đăng ký gói cước để xem phim!");
         setTimeout(() => {
-          navigate('/subscription');
+          navigate("/subscription");
         }, 2000);
         return false;
       }
@@ -95,24 +95,27 @@ export default function WatchMovie() {
       // Kiểm tra gói cước còn hạn không
       const res = await api.get(`/invoices?user_id=${user.id}`);
       const invoices = res.data.data || [];
-      
+
       // Tìm hoá đơn hoạt động cho gói hiện tại
-      const activeInvoice = invoices.find(inv => 
-        inv.plan_id === user.plan_id && 
-        inv.status === 'completed' &&
-        inv.end_date && 
-        new Date(inv.end_date) > new Date()
+      const activeInvoice = invoices.find(
+        (inv) =>
+          inv.plan_id === user.plan_id &&
+          inv.status === "completed" &&
+          inv.end_date &&
+          new Date(inv.end_date) > new Date()
       );
 
       if (!activeInvoice) {
-        setAgeError('Gói cước của bạn đã hết hạn. Vui lòng gia hạn để tiếp tục xem phim.');
+        setAgeError(
+          "Gói cước của bạn đã hết hạn. Vui lòng gia hạn để tiếp tục xem phim."
+        );
         setAgeVerified(false);
         setSubscriptionValid(false);
         setCheckingAccess(false);
         setAccessGranted(false);
-        toast.error('Gói cước của bạn đã hết hạn! Vui lòng gia hạn.');
+        toast.error("Gói cước của bạn đã hết hạn! Vui lòng gia hạn.");
         setTimeout(() => {
-          navigate('/subscription');
+          navigate("/subscription");
         }, 2000);
         return false;
       }
@@ -120,20 +123,20 @@ export default function WatchMovie() {
       // Gói cước hợp lệ
       setSubscriptionValid(true);
       setCheckingAccess(false);
-      
+
       // Bây giờ mới tải dữ liệu phim
       await fetchFilm();
       await fetchFilms();
-      
+
       return true;
     } catch (error) {
-      console.error('Lỗi kiểm tra gói cước:', error);
-      setAgeError('Không thể kiểm tra gói cước. Vui lòng thử lại sau.');
+      console.error("Lỗi kiểm tra gói cước:", error);
+      setAgeError("Không thể kiểm tra gói cước. Vui lòng thử lại sau.");
       setAgeVerified(false);
       setSubscriptionValid(false);
       setCheckingAccess(false);
       setAccessGranted(false);
-      toast.error('Không thể kiểm tra gói cước. Vui lòng thử lại!');
+      toast.error("Không thể kiểm tra gói cước. Vui lòng thử lại!");
       return false;
     }
   };
@@ -141,11 +144,11 @@ export default function WatchMovie() {
   const verifyAge = () => {
     // Kiểm tra xem user đã có ngày sinh chưa
     if (!user.birthday) {
-      setAgeError('Bạn cần cập nhật ngày sinh trong hồ sơ để có thể xem phim.');
+      setAgeError("Bạn cần cập nhật ngày sinh trong hồ sơ để có thể xem phim.");
       setAgeVerified(false);
       setAccessGranted(false);
       setTimeout(() => {
-        navigate('/');
+        navigate("/");
       }, 3000);
       return;
     }
@@ -153,7 +156,9 @@ export default function WatchMovie() {
     // Kiểm tra xem tuổi của user có đủ để xem phim này không
     if (!canWatchFilm(user.birthday, film.age_rating)) {
       const requiredAge = parseAgeRating(film.age_rating);
-      setAgeError(`Phim này yêu cầu độ tuổi ${requiredAge}+. Bạn không đủ tuổi để xem nội dung này.`);
+      setAgeError(
+        `Phim này yêu cầu độ tuổi ${requiredAge}+. Bạn không đủ tuổi để xem nội dung này.`
+      );
       setAgeVerified(false);
       setAccessGranted(false);
       toast.error(`Bạn phải từ ${requiredAge} tuổi trở lên để xem phim này!`);
@@ -175,7 +180,7 @@ export default function WatchMovie() {
       toast.error("Không thể tải phim");
       // Nếu không thể tải phim, chuyển về trang chủ
       setTimeout(() => {
-        navigate('/');
+        navigate("/");
       }, 2000);
     } finally {
       setLoading(false);
@@ -210,21 +215,23 @@ export default function WatchMovie() {
 
   return (
     <Layout>
-      <div className="grid grid-cols-6 grid-rows-10 gap-4 text-white">
+      <div className="grid grid-cols-6 auto-rows-min gap-4 text-white">
         <div className="col-span-4 row-span-4 h-full flex items-center justify-center">
           <div className="border-3 border-gray-600 rounded-lg opacity-75">
             {checkingAccess || !film ? (
               <div className="w-full h-full min-h-[400px] flex items-center justify-center bg-gray-900 rounded-lg p-8">
                 <div className="text-center">
                   <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-yellow-400 mx-auto mb-4"></div>
-                  <p className="text-gray-400">Đang kiểm tra quyền truy cập...</p>
+                  <p className="text-gray-400">
+                    Đang kiểm tra quyền truy cập...
+                  </p>
                 </div>
               </div>
             ) : accessGranted && ageVerified && subscriptionValid && film ? (
               <VideoPlayer
                 videoUrl={
-                  film.episodes?.find((ep) => ep.id === Number(episodeId))?.video_url ||
-                  film.episodes?.[0]?.video_url
+                  film.episodes?.find((ep) => ep.id === Number(episodeId))
+                    ?.video_url || film.episodes?.[0]?.video_url
                 }
                 filmId={film.id}
                 currentViewCount={film.view_count}
@@ -238,34 +245,41 @@ export default function WatchMovie() {
                     </div>
                   </div>
                   <h3 className="text-2xl font-bold text-white mb-3">
-                    {!user ? 'Yêu cầu đăng nhập' : 
-                     !user.plan_id || !subscriptionValid ? 'Yêu cầu gói cước' : 
-                     'Nội dung bị giới hạn độ tuổi'}
+                    {!user
+                      ? "Yêu cầu đăng nhập"
+                      : !user.plan_id || !subscriptionValid
+                      ? "Yêu cầu gói cước"
+                      : "Nội dung bị giới hạn độ tuổi"}
                   </h3>
                   <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 mb-4">
                     <div className="flex items-start gap-3">
-                      <AlertCircle size={20} className="text-red-500 shrink-0 mt-0.5" />
+                      <AlertCircle
+                        size={20}
+                        className="text-red-500 shrink-0 mt-0.5"
+                      />
                       <p className="text-red-400 text-sm text-left">
-                        {ageError || 'Quyền truy cập bị từ chối'}
+                        {ageError || "Quyền truy cập bị từ chối"}
                       </p>
                     </div>
                   </div>
                   <p className="text-gray-400 text-sm mb-6">
-                    {!user ? 'Vui lòng đăng nhập để truy cập nội dung.' : 
-                     !user.plan_id || !subscriptionValid ? 'Đăng ký gói cước để xem không giới hạn.' : 
-                     'Đây là biện pháp bảo vệ nội dung theo độ tuổi.'}
+                    {!user
+                      ? "Vui lòng đăng nhập để truy cập nội dung."
+                      : !user.plan_id || !subscriptionValid
+                      ? "Đăng ký gói cước để xem không giới hạn."
+                      : "Đây là biện pháp bảo vệ nội dung theo độ tuổi."}
                   </p>
                   <div className="flex gap-3 justify-center">
                     {!user ? (
                       <>
                         <button
-                          onClick={() => navigate('/auth')}
+                          onClick={() => navigate("/auth")}
                           className="px-6 py-3 bg-yellow-400 hover:bg-yellow-500 text-black font-semibold rounded-lg transition-all duration-200"
                         >
                           Đăng nhập
                         </button>
                         <button
-                          onClick={() => navigate('/')}
+                          onClick={() => navigate("/")}
                           className="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white font-semibold rounded-lg transition-all duration-200"
                         >
                           Quay về
@@ -274,13 +288,13 @@ export default function WatchMovie() {
                     ) : !user.plan_id || !subscriptionValid ? (
                       <>
                         <button
-                          onClick={() => navigate('/subscription')}
+                          onClick={() => navigate("/subscription")}
                           className="px-6 py-3 bg-yellow-400 hover:bg-yellow-500 text-black font-semibold rounded-lg transition-all duration-200"
                         >
                           Xem gói cước
                         </button>
                         <button
-                          onClick={() => navigate('/')}
+                          onClick={() => navigate("/")}
                           className="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white font-semibold rounded-lg transition-all duration-200"
                         >
                           Quay về
@@ -288,7 +302,7 @@ export default function WatchMovie() {
                       </>
                     ) : (
                       <button
-                        onClick={() => navigate('/')}
+                        onClick={() => navigate("/")}
                         className="px-6 py-3 bg-yellow-400 hover:bg-yellow-500 text-black font-semibold rounded-lg transition-all duration-200"
                       >
                         Quay về Trang chủ
@@ -312,6 +326,15 @@ export default function WatchMovie() {
         </div>
         <div className="col-span-2 row-span-6 row-start-5">
           <div className="flex flex-col space-y-4 text-white">
+            <div className="flex gap-3">
+              <h2 className="text-xl font-semibold mb-2">
+                Lượt xem: {film.view_count}
+              </h2>
+              <h2 className="text-xl font-semibold mb-2">
+                Đánh giá trung bình: {film.average_rating}/10
+              </h2>
+            </div>
+
             {/* Tên phim */}
             <h1 className="text-3xl font-bold">{film.title}</h1>
 
@@ -360,7 +383,7 @@ export default function WatchMovie() {
               />
               <p className="text-sm">Bình luận</p>
             </Link>
-             <FavoriteButton filmId={film.id} userId={user.id} />
+            <FavoriteButton filmId={film.id} userId={user.id} />
             <Link className="flex flex-col items-center cursor-pointer hover:text-blue-400">
               <img
                 src="../public/images/Share.png"

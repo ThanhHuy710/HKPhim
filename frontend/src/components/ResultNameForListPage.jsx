@@ -20,8 +20,8 @@ export default function ResultNameForListPage({ type, name }) {
       return " Dành cho bạn";
     } else if (type == "favorites") {
       return " Top yêu thích";
-    } else {
-      return " Danh sách phim";
+    } else if(type=="criteria") {
+      return "Lọc theo nhiều tiêu chí";
     }
   };
   return (

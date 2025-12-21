@@ -92,7 +92,7 @@ model films {
   average_rating   Decimal?      @default(0.00) @db.Decimal(3, 2)
   original_name    String?       @db.VarChar(255)
   episodes         episodes[]
-  favorites        favorites[]  
+  favorites        favorites[]
   feedbacks        feedbacks[]
   film_genres      film_genres[]
   views            views[]
@@ -144,13 +144,13 @@ model users {
   fullname    String?     @db.VarChar(255)
   phonenumber String?     @db.VarChar(20)
   email       String?     @unique(map: "email") @db.VarChar(255)
-  avatar      String?     @db.Text
   city        String?     @db.VarChar(255)
   gender      String?     @db.VarChar(50)
   interest    String?     @db.VarChar(255)
   birthday    DateTime?   @db.Date
   created_at  DateTime    @default(now()) @db.Timestamp(0)
   updated_at  DateTime    @default(now()) @db.Timestamp(0)
+  avatar      String?     @db.Text
   cart        cart[]
   favorites   favorites[]
   feedbacks   feedbacks[]
