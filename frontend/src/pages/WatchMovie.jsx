@@ -18,7 +18,7 @@ export default function WatchMovie() {
   const navigate = useNavigate();
   const query = new URLSearchParams(search);
   const episodeId = query.get("episode"); // ep.id
-  const { user, updateUser } = useAuth();
+  const { user } = useAuth();
   const [film, setFilm] = useState(null);
   const [loading, setLoading] = useState(true);
   const [films, setFilms] = useState([]);
@@ -74,6 +74,7 @@ export default function WatchMovie() {
     };
 
     checkAccessAndLoadFilm();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, id, episodeId]);
 
   // Xác thực độ tuổi khi phim được tải
@@ -81,6 +82,7 @@ export default function WatchMovie() {
     if (film && user && subscriptionValid) {
       verifyAge();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [film, user?.birthday]);
 
   const checkSubscription = async () => {
@@ -241,6 +243,7 @@ export default function WatchMovie() {
   useEffect(() => {
     if (!id) return;
     fetchComments();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
   if (loading) {
     return (

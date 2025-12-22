@@ -1,5 +1,3 @@
-import { useNavigate } from "react-router-dom";
-
 export default function AvataCard({ actor }) {
   const handleClick = () => {
     window.location.href = `/search/actor/?name=${actor}`;

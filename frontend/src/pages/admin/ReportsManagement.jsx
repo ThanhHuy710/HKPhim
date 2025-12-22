@@ -132,6 +132,7 @@ export default function ReportsManagement() {
     }
   };
 
+  // eslint-disable-next-line no-unused-vars
   const StatCard = ({ icon: Icon, label, value, color, format = 'number' }) => (
     <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-lg hover:shadow-xl transition-shadow">
       <div className="flex items-center justify-between">

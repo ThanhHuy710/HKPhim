@@ -109,7 +109,7 @@ export const filmsService = {
     limit = 50,
     offset = 0,
   }) {
-    console.log("is_series",is_series)
+    console.log("is_series", is_series);
     const filter = {};
 
     if (country) {

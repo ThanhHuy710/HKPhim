@@ -27,10 +27,10 @@ export const usersController = {
       res.status(response.statusCode).json(response);
     } catch (error) {
       console.error("Update user error:", error);
-      res.status(500).json({ 
-        success: false, 
+      res.status(500).json({
+        success: false,
         message: error.message || "Lỗi khi cập nhật người dùng",
-        error: error.toString()
+        error: error.toString(),
       });
     }
   },
@@ -42,10 +42,10 @@ export const usersController = {
       res.status(response.statusCode).json(response);
     } catch (error) {
       console.error("Update password error:", error);
-      res.status(500).json({ 
-        success: false, 
+      res.status(500).json({
+        success: false,
         message: error.message || "Lỗi khi đổi mật khẩu",
-        error: error.toString()
+        error: error.toString(),
       });
     }
   },

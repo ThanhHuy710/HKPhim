@@ -62,6 +62,7 @@ export default function ListPage() {
   // Lắng nghe thay đổi type + query string
   useEffect(() => {
     fetchFilm();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [type, name]);
 
   return (

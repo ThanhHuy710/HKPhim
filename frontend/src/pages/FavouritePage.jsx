@@ -15,6 +15,7 @@ const userId = query.get("userId");
     if (userId) {
       fetchFilmsByUser();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
 
   const fetchFilmsByUser = async () => {

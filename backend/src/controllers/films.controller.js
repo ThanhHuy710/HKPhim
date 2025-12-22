@@ -1,7 +1,4 @@
-import {
-  responseSuccess,
-  responseError,
-} from "../common/helper/function.helper.js";
+import { responseSuccess, responseError } from "../common/helper/function.helper.js";
 import { filmsService } from "../services/films.services.js";
 
 export const filmsController = {
@@ -45,42 +42,39 @@ export const filmsController = {
     }
   },
   //lọc theo nhiều tiêu chí
-   async getByCriteria(req, res, next) {
-  try {
-    const {
-      country,
-      is_series,   // giữ lại cái này
-      genre,
-      version,
-      year,
-      age_rating,
-      limit,
-      offset,
-    } = req.query;
+  async getByCriteria(req, res, next) {
+    try {
+      const {
+        country,
+        is_series, // giữ lại cái này
+        genre,
+        version,
+        year,
+        age_rating,
+        limit,
+        offset,
+      } = req.query;
 
-    console.log(req.query);
+      console.log(req.query);
 
-    const result = await filmsService.findByCriteria({
-      country,
-      is_series,
-      genre,
-      version,
-      year,
-      age_rating,
-      limit: parseInt(limit) || 50,
-      offset: parseInt(offset) || 0,
-    });
+      const result = await filmsService.findByCriteria({
+        country,
+        is_series,
+        genre,
+        version,
+        year,
+        age_rating,
+        limit: parseInt(limit) || 50,
+        offset: parseInt(offset) || 0,
+      });
 
-    const response = responseSuccess(
-      result,
-      "Get films by criteria successfully"
-    );
-    res.status(response.statusCode).json(response);
-  } catch (err) {
-    const response = responseError(err.message, 500, err.stack);
-    res.status(response.statusCode).json(response);
-  }
-},
+      const response = responseSuccess(result, "Get films by criteria successfully");
+      res.status(response.statusCode).json(response);
+    } catch (err) {
+      const response = responseError(err.message, 500, err.stack);
+      res.status(response.statusCode).json(response);
+    }
+  },
   //theo phim lẻ
   async findSingleMovies(req, res, next) {
     try {
@@ -143,7 +137,7 @@ export const filmsController = {
   },
   //theo tên
   async findByTitle(req, res, next) {
-     try {
+    try {
       const title = req.params.title;
       const limit = parseInt(req.query.limit) || 50;
       const offset = parseInt(req.query.offset) || 0;
@@ -157,7 +151,7 @@ export const filmsController = {
   },
   //theo diễn viên
   async findByActor(req, res, next) {
-     try {
+    try {
       const actor = req.params.actor;
       const limit = parseInt(req.query.limit) || 50;
       const offset = parseInt(req.query.offset) || 0;
@@ -171,7 +165,7 @@ export const filmsController = {
   },
   //theo đạo diễn
   async findByDirector(req, res, next) {
-     try {
+    try {
       const director = req.params.director;
       const limit = parseInt(req.query.limit) || 50;
       const offset = parseInt(req.query.offset) || 0;
@@ -195,9 +189,9 @@ export const filmsController = {
 
       // tách chuỗi actor thành mảng, lọc theo keyword
       const actors = films
-        .flatMap(f => f.actor.split(","))   // tách thành mảng
-        .map(a => a.trim())                 // bỏ khoảng trắng
-        .filter(a => a.toLowerCase().includes(keyword.toLowerCase()));
+        .flatMap((f) => f.actor.split(",")) // tách thành mảng
+        .map((a) => a.trim()) // bỏ khoảng trắng
+        .filter((a) => a.toLowerCase().includes(keyword.toLowerCase()));
 
       // loại bỏ trùng lặp
       const uniqueActors = [...new Set(actors)];
@@ -221,9 +215,9 @@ export const filmsController = {
 
       // tách chuỗi director thành mảng, lọc theo keyword
       const directors = films
-        .flatMap(f => f.directeur.split(","))   // tách thành mảng
-        .map(d => d.trim())                 // bỏ khoảng trắng
-        .filter(d => d.toLowerCase().includes(keyword.toLowerCase()));
+        .flatMap((f) => f.directeur.split(",")) // tách thành mảng
+        .map((d) => d.trim()) // bỏ khoảng trắng
+        .filter((d) => d.toLowerCase().includes(keyword.toLowerCase()));
 
       // loại bỏ trùng lặp
       const uniqueDirectors = [...new Set(directors)];
@@ -250,42 +244,41 @@ export const filmsController = {
     }
   },
   //theo quốc gia
-    async findByCountry(req, res, next) {
-  try {
-    const country = req.params.country; 
-    const limit = parseInt(req.query.limit) || 50;
-    const offset = parseInt(req.query.offset) || 0;
+  async findByCountry(req, res, next) {
+    try {
+      const country = req.params.country;
+      const limit = parseInt(req.query.limit) || 50;
+      const offset = parseInt(req.query.offset) || 0;
 
-    const result = await filmsService.findByCountry(country, limit, offset);
+      const result = await filmsService.findByCountry(country, limit, offset);
 
-    const response = responseSuccess(result, "Get movies by country successfully");
-    res.status(response.statusCode).json(response);
-  } catch (err) {
-    const response = responseError(err.message, 500, err.stack);
-    res.status(response.statusCode).json(response);
-  }
-},
+      const response = responseSuccess(result, "Get movies by country successfully");
+      res.status(response.statusCode).json(response);
+    } catch (err) {
+      const response = responseError(err.message, 500, err.stack);
+      res.status(response.statusCode).json(response);
+    }
+  },
   listByViews: async (req, res) => {
-  const result = await filmsService.listByViews();
-  res.json(responseSuccess(result, "List films by views"));
-},
+    const result = await filmsService.listByViews();
+    res.json(responseSuccess(result, "List films by views"));
+  },
 
-listByRating: async (req, res) => {
-  const result = await filmsService.listByRating();
-  res.json(responseSuccess(result, "List films by rating"));
-},
+  listByRating: async (req, res) => {
+    const result = await filmsService.listByRating();
+    res.json(responseSuccess(result, "List films by rating"));
+  },
 
-listRecommended: async (req, res) => {
-  const result = await filmsService.listRecommended(req.user?.id);
-  res.json(responseSuccess(result, "List recommended films"));
-},
+  listRecommended: async (req, res) => {
+    const result = await filmsService.listRecommended(req.user?.id);
+    res.json(responseSuccess(result, "List recommended films"));
+  },
 
-listByFavorites: async (req, res) => {
-  const result = await filmsService.listByFavorites();
-  res.json(responseSuccess(result, "List films by favorites"));
-},
+  listByFavorites: async (req, res) => {
+    const result = await filmsService.listByFavorites();
+    res.json(responseSuccess(result, "List films by favorites"));
+  },
 
-  
   // CRUD
   create: async function (req, res, next) {
     const result = await filmsService.create(req);
@@ -301,28 +294,19 @@ listByFavorites: async (req, res) => {
 
   findOne: async function (req, res, next) {
     const result = await filmsService.findOne(req);
-    const response = responseSuccess(
-      result,
-      `Get films #${req.params.id} successfully`
-    );
+    const response = responseSuccess(result, `Get films #${req.params.id} successfully`);
     res.status(response.statusCode).json(response);
   },
 
   update: async function (req, res, next) {
     const result = await filmsService.update(req);
-    const response = responseSuccess(
-      result,
-      `Update films #${req.params.id} successfully`
-    );
+    const response = responseSuccess(result, `Update films #${req.params.id} successfully`);
     res.status(response.statusCode).json(response);
   },
 
   remove: async function (req, res, next) {
     const result = await filmsService.remove(req);
-    const response = responseSuccess(
-      result,
-      `Remove films #${req.params.id} successfully`
-    );
+    const response = responseSuccess(result, `Remove films #${req.params.id} successfully`);
     res.status(response.statusCode).json(response);
-  }
+  },
 };

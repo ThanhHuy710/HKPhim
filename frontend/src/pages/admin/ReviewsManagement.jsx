@@ -20,13 +20,9 @@ export default function ReviewsManagement() {
   const fetchReviews = async () => {
     try {
       setLoading(true);
-      const [reviewsRes, filmsRes] = await Promise.all([
-        api.get("/feedbacks"),
-        api.get("/films"),
-      ]);
+      const reviewsRes = await api.get("/feedbacks");
 
       const reviewsData = reviewsRes.data.data || [];
-      const filmsData = filmsRes.data.data || [];
       const reviewsOnly = reviewsData.filter(review => review.rating); // Chỉ lấy những feedback có rating
 
       setReviews(reviewsOnly);
@@ -78,6 +74,7 @@ export default function ReviewsManagement() {
     }
   };
 
+  // eslint-disable-next-line no-unused-vars
   const StatCard = ({ icon: Icon, label, value, color, subtitle }) => (
     <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-lg hover:shadow-xl transition-shadow">
       <div className="flex items-center justify-between">

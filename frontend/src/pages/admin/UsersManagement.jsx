@@ -78,19 +78,6 @@ export default function UsersManagement() {
     setIsModalOpen(true);
   };
 
-  const openEditModal = (user) => {
-    setEditingUser(user);
-    setFormData({
-      username: user.username || "",
-      email: user.email || "",
-      password: "",
-      fullname: user.fullname || "",
-      avatar: user.avatar || "",
-      role: user.role || "user"
-    });
-    setIsModalOpen(true);
-  };
-
   const closeModal = () => {
     setIsModalOpen(false);
     setEditingUser(null);

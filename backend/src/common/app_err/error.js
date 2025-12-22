@@ -15,8 +15,8 @@ export const error = (err, req, res, next) => {
   }
 
   // Đảm bảo code luôn là số hợp lệ
-  const statusCode = typeof err.code === 'number' ? err.code : statusCodes.INTERNAL_SERVER_ERROR;
-  
+  const statusCode = typeof err.code === "number" ? err.code : statusCodes.INTERNAL_SERVER_ERROR;
+
   const response = responseError(err.message, statusCode, err.stack);
   res.status(response.statusCode).json(response);
 };

@@ -24,7 +24,7 @@ export default function SearchPage() {
         // - Support filters: genre, country, year
         const res = await api.get(`/tasks/search?q=${query}`);
         setResults(res.data.films || []);
-      } catch (error) {
+      } catch {
         toast.error("Lỗi khi tìm kiếm");
       } finally {
         setLoading(false);

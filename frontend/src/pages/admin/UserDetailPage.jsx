@@ -35,6 +35,7 @@ export default function UserDetailPage() {
   useEffect(() => {
     fetchUserData();
     fetchReviews();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const fetchUserData = async () => {
@@ -83,7 +84,7 @@ export default function UserDetailPage() {
     e.preventDefault();
     
     // Kiểm tra form
-    if (!formData.username || !formData.email) {
+    if (!profileData.username || !profileData.email) {
       toast.error("Vui lòng nhập mật khẩu cũ!");
       return;
     }
@@ -189,30 +190,6 @@ export default function UserDetailPage() {
   const cancelDeleteUser = () => {
     setShowDeleteUserConfirm(false);
     setDeleteUserId(null);
-  };
-
-  const handleAvatarUpload = (e) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      // Tạm thời chỉ hỗ trợ nhập URL, không upload file
-      toast.info("Vui lòng nhập URL ảnh đại diện thay vì upload file");
-      e.target.value = ""; // Reset input sau khi chọn file
-      return;
-      
-      /* TODO: Implement file upload to server/cloudinary
-      const formData = new FormData();
-      formData.append('avatar', file);
-      
-      api.post('/upload/avatar', formData)
-        .then(res => {
-          setProfileData({ ...profileData, avatar: res.data.url });
-          toast.success("Ảnh đã được tải lên!");
-        })
-        .catch(err => {
-          toast.error("Upload ảnh thất bại!");
-        });
-      */
-    }
   };
 
   if (loading) {

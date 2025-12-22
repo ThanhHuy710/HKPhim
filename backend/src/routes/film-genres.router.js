@@ -9,17 +9,17 @@ filmGenresRouter.post("/", async (req, res) => {
   try {
     const { film_id, genres_id } = req.body;
     const result = await prisma.film_genres.create({
-      data: { film_id, genres_id }
+      data: { film_id, genres_id },
     });
-    res.status(201).json({ 
-      statusCode: 201, 
-      message: "Created successfully", 
-      data: result 
+    res.status(201).json({
+      statusCode: 201,
+      message: "Created successfully",
+      data: result,
     });
   } catch (error) {
-    res.status(500).json({ 
-      statusCode: 500, 
-      message: error.message 
+    res.status(500).json({
+      statusCode: 500,
+      message: error.message,
     });
   }
 });
@@ -29,16 +29,16 @@ filmGenresRouter.delete("/film/:filmId", async (req, res) => {
   try {
     const filmId = parseInt(req.params.filmId);
     await prisma.film_genres.deleteMany({
-      where: { film_id: filmId }
+      where: { film_id: filmId },
     });
-    res.status(200).json({ 
-      statusCode: 200, 
-      message: "Deleted successfully" 
+    res.status(200).json({
+      statusCode: 200,
+      message: "Deleted successfully",
     });
   } catch (error) {
-    res.status(500).json({ 
-      statusCode: 500, 
-      message: error.message 
+    res.status(500).json({
+      statusCode: 500,
+      message: error.message,
     });
   }
 });

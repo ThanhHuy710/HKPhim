@@ -114,6 +114,7 @@ export default function MovieDetail() {
     };
 
     checkAccess();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, id]);
 
   const handleBirthdayUpdate = (updatedUser) => {
@@ -126,6 +127,7 @@ export default function MovieDetail() {
     if (film && user && user.birthday && hasAccess) {
       verifyAge();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [film, user?.birthday, hasAccess]);
 
   const verifyAge = () => {
@@ -212,6 +214,7 @@ export default function MovieDetail() {
   useEffect(() => {
     if (!id) return;
     fetchComments();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
   const getEmbedUrl = (url) => {
     // lấy VIDEO_ID từ link gốc

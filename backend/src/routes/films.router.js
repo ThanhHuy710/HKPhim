@@ -10,9 +10,9 @@ filmsRouter.get("/series", filmsController.findSeries);
 filmsRouter.get("/genre/:genre", filmsController.findByGenre);
 filmsRouter.get("/country/:country", filmsController.findByCountry);
 filmsRouter.get("/title/:title", filmsController.findByTitle);
-filmsRouter.get("/actor/:actor", filmsController.findByActor);      // danh sách phim theo actor
+filmsRouter.get("/actor/:actor", filmsController.findByActor); // danh sách phim theo actor
 filmsRouter.get("/director/:director", filmsController.findByDirector); // danh sách phim theo director
-filmsRouter.get("/actors/:actor", filmsController.findActors);      // danh sách diễn viên theo keyword
+filmsRouter.get("/actors/:actor", filmsController.findActors); // danh sách diễn viên theo keyword
 filmsRouter.get("/directors/:director", filmsController.findDirectors); // danh sách đạo diễn theo keyword
 filmsRouter.get("/year/:year", filmsController.findByYear);
 filmsRouter.get("/views", filmsController.listByViews);

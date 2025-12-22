@@ -18,6 +18,7 @@ export default function PurchaseHistoryPage() {
     } else {
       setLoading(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const fetchPurchases = async () => {

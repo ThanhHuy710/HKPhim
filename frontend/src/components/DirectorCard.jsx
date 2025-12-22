@@ -1,5 +1,3 @@
-import { useNavigate } from "react-router-dom";
-
 export default function DirectorCard({ director }) {
   const handleClick = () => {
     window.location.href = `/search/director/?name=${director}`;

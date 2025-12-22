@@ -47,24 +47,36 @@ export const usersService = {
 
   update: async function (req) {
     const id = Number(req.params.id);
-    
+
     // Get current user to check if birthday already exists
     const currentUser = await prisma.users.findUnique({
       where: { id },
-      select: { birthday: true }
+      select: { birthday: true },
     });
-    
+
     // Chỉ cho phép update các trường cụ thể (theo schema)
-    const allowedFields = ['username', 'email', 'fullname', 'avatar', 'role', 'phonenumber', 'city', 'gender', 'interest', 'plan_id', 'birthday'];
+    const allowedFields = [
+      "username",
+      "email",
+      "fullname",
+      "avatar",
+      "role",
+      "phonenumber",
+      "city",
+      "gender",
+      "interest",
+      "plan_id",
+      "birthday",
+    ];
     const updateData = {};
-    
-    allowedFields.forEach(field => {
+
+    allowedFields.forEach((field) => {
       if (req.body[field] !== undefined) {
         // Prevent birthday change if it's already set (for child protection)
-        if (field === 'birthday') {
+        if (field === "birthday") {
           if (currentUser.birthday) {
             // Birthday already exists, don't allow change
-            console.log('Birthday change blocked - already set for user protection');
+            console.log("Birthday change blocked - already set for user protection");
             return;
           }
           // First time setting birthday - validate and convert
@@ -76,7 +88,7 @@ export const usersService = {
         }
       }
     });
-    
+
     return await prisma.users.update({
       where: { id },
       data: updateData,
@@ -86,10 +98,10 @@ export const usersService = {
   updatePassword: async function (req) {
     const id = Number(req.params.id);
     const { oldPassword, newPassword } = req.body;
-    
+
     // Lấy thông tin user hiện tại
     const user = await prisma.users.findUnique({
-      where: { id }
+      where: { id },
     });
 
     if (!user) {
@@ -98,7 +110,7 @@ export const usersService = {
 
     // Kiểm tra mật khẩu cũ bằng bcrypt
     const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
-    
+
     if (!isPasswordValid) {
       throw new Error("Mật khẩu cũ không chính xác");
     }
@@ -107,10 +119,10 @@ export const usersService = {
     if (!newPassword || newPassword.trim() === "") {
       throw new Error("Mật khẩu mới không được để trống");
     }
-    
+
     // Hash mật khẩu mới
     const hashedPassword = await bcrypt.hash(newPassword, 10);
-    
+
     return await prisma.users.update({
       where: { id },
       data: { password: hashedPassword },

@@ -23,6 +23,7 @@ export function useFilms(filters = {}) {
     };
 
     fetchFilms();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(filters)]);
 
   return { films, loading, error };

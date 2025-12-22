@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(cors({ origin: "http://localhost:5173" }));
 
 // Serve static files from public folder
-app.use(express.static('public'));
+app.use(express.static("public"));
 
 app.use(passport.initialize());
 initStrategyGoogleOauth20();

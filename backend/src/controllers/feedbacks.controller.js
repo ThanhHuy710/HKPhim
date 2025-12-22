@@ -30,7 +30,6 @@ export const feedbacksController = {
     // Gọi cập nhật điểm trung bình
     await filmsService.updateAverageRating(req.body.film_id);
     res.status(response.statusCode).json(response);
-
   },
 
   remove: async function (req, res, next) {

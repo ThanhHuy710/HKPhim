@@ -51,21 +51,20 @@ export const favoritesService = {
   },
   //findbyFilmIdAndUserId
   findbyFilmIdAndUserId: async function (req) {
-  const { filmId, userId } = req.params;
-  return await prisma.favorites.findFirst({
-    where: {
-      film_id: Number(filmId),
-      user_id: Number(userId),
-    },
-  });
-},
+    const { filmId, userId } = req.params;
+    return await prisma.favorites.findFirst({
+      where: {
+        film_id: Number(filmId),
+        user_id: Number(userId),
+      },
+    });
+  },
   //findByUserId
   findByUserId: async function (req) {
-  const { userId } = req.params;
-  return await prisma.favorites.findMany({
-    where: { user_id: Number(userId) },
-    include: { films: true },
-  });
-}
-
+    const { userId } = req.params;
+    return await prisma.favorites.findMany({
+      where: { user_id: Number(userId) },
+      include: { films: true },
+    });
+  },
 };

@@ -5,12 +5,12 @@ async function resetAdminPassword() {
   try {
     const newPassword = "123456";
     const hashPassword = bcrypt.hashSync(newPassword, 10);
-    
+
     const admin = await prisma.users.update({
       where: { email: "admin@example.com" },
-      data: { password: hashPassword }
+      data: { password: hashPassword },
     });
-    
+
     console.log("✅ Đã reset mật khẩu admin thành công!");
     console.log("Email:", admin.email);
     console.log("Mật khẩu mới:", newPassword);

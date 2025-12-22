@@ -54,8 +54,6 @@ export default function Banner() {
   }
 
   const currentMovie = films[currentSlide];
-  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % films.length);
-  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + films.length) % films.length);
 
   const handleWatchClick = async (filmId) => {
     // Kiểm tra nếu user đã đăng nhập

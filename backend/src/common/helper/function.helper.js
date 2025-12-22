@@ -7,11 +7,11 @@ export const responseSuccess = (data, message = "ok", statusCode = 200) => {
   };
 };
 
-export const responseError = (message="Internal Sever Error", statusCode=500,stack) => {
-    return {
-        status: "error",
-        statusCode: statusCode,
-        message: message,
-        stack :stack 
-    }
-}
+export const responseError = (message = "Internal Sever Error", statusCode = 500, stack) => {
+  return {
+    status: "error",
+    statusCode: statusCode,
+    message: message,
+    stack: stack,
+  };
+};

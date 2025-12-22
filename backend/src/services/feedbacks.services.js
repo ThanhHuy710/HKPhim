@@ -13,7 +13,7 @@ export const feedbacksService = {
     const where = {};
     if (user_id) where.user_id = user_id;
     if (film_id) where.film_id = film_id;
-    
+
     // Type filter: comment có rating null, review có rating không null
     if (type === "comment") {
       where.rating = null;
