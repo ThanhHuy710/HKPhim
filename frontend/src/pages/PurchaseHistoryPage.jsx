@@ -11,6 +11,7 @@ export default function PurchaseHistoryPage() {
   const navigate = useNavigate();
   const [purchases, setPurchases] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [totalRemainingDays, setTotalRemainingDays] = useState(0);
 
   useEffect(() => {
     if (user) {
@@ -27,6 +28,20 @@ export default function PurchaseHistoryPage() {
       // Lọc chỉ lấy hóa đơn của user hiện tại
       const userInvoices = (res.data.data || []).filter(invoice => invoice.user_id === user.id);
       setPurchases(userInvoices);
+
+      // Tính tổng số ngày còn lại từ tất cả invoices completed
+      const completedInvoices = userInvoices.filter(invoice => invoice.status === 'completed');
+      let totalRemaining = 0;
+      completedInvoices.forEach(invoice => {
+        const end = new Date(invoice.end_date);
+        const now = new Date();
+        const diffTime = end - now;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        if (diffDays > 0) {
+          totalRemaining += diffDays;
+        }
+      });
+      setTotalRemainingDays(totalRemaining);
     } catch (error) {
       console.error("Error:", error);
       toast.error("Không thể tải lịch sử mua hàng");
@@ -46,7 +61,21 @@ export default function PurchaseHistoryPage() {
     });
   };
 
-  const getRemainingDays = (endDate) => {
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'completed':
+        return 'bg-green-500/20 text-green-400 border-green-500';
+      case 'pending':
+        return 'bg-yellow-500/20 text-yellow-400 border-yellow-500';
+      case 'failed':
+        return 'bg-red-500/20 text-red-400 border-red-500';
+      default:
+        return 'bg-gray-500/20 text-gray-400 border-gray-500';
+    }
+  };
+
+  const getRemainingDaysForInvoice = (endDate) => {
     if (!endDate) return 'N/A';
     const end = new Date(endDate);
     const now = new Date();
@@ -59,19 +88,6 @@ export default function PurchaseHistoryPage() {
       return 'Hết hạn hôm nay';
     } else {
       return `Còn ${diffDays} ngày`;
-    }
-  };
-
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'completed':
-        return 'bg-green-500/20 text-green-400 border-green-500';
-      case 'pending':
-        return 'bg-yellow-500/20 text-yellow-400 border-yellow-500';
-      case 'failed':
-        return 'bg-red-500/20 text-red-400 border-red-500';
-      default:
-        return 'bg-gray-500/20 text-gray-400 border-gray-500';
     }
   };
 
@@ -124,6 +140,27 @@ export default function PurchaseHistoryPage() {
           <div className="flex items-center gap-3 mb-8">
             <Receipt size={32} className="text-yellow-400" />
             <h1 className="text-4xl font-bold text-white">Lịch sử mua hàng</h1>
+          </div>
+
+          {/* Tổng số ngày còn lại */}
+          <div className="bg-gray-800/50 backdrop-blur-md border border-gray-700 rounded-xl p-6 mb-8">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Calendar size={24} className="text-yellow-400" />
+                <div>
+                  <h3 className="text-lg font-semibold text-white">Thời gian còn lại</h3>
+                  <p className="text-sm text-gray-400">Tổng từ tất cả gói đã mua</p>
+                </div>
+              </div>
+              <div className="text-right">
+                <div className={`text-3xl font-bold ${totalRemainingDays > 0 ? 'text-green-400' : 'text-red-400'}`}>
+                  {totalRemainingDays > 0 ? `${totalRemainingDays} ngày` : 'Đã hết hạn'}
+                </div>
+                {totalRemainingDays > 0 && totalRemainingDays <= 7 && (
+                  <p className="text-sm text-yellow-400">Sắp hết hạn</p>
+                )}
+              </div>
+            </div>
           </div>
 
           {purchases.length === 0 ? (
@@ -190,11 +227,11 @@ export default function PurchaseHistoryPage() {
                     <div className="flex items-center justify-between text-xs text-gray-400">
                       <span>Mã đơn hàng: #{purchase.id}</span>
                       <span className={`font-medium ${
-                        getRemainingDays(purchase.end_date) === 'Đã hết hạn' ? 'text-red-400' :
-                        getRemainingDays(purchase.end_date).includes('Còn') && parseInt(getRemainingDays(purchase.end_date).match(/\d+/)?.[0]) <= 7 ? 'text-yellow-400' :
+                        getRemainingDaysForInvoice(purchase.end_date) === 'Đã hết hạn' ? 'text-red-400' :
+                        getRemainingDaysForInvoice(purchase.end_date) === 'Hết hạn hôm nay' ? 'text-yellow-400' :
                         'text-green-400'
                       }`}>
-                        {getRemainingDays(purchase.end_date)}
+                        {getRemainingDaysForInvoice(purchase.end_date)}
                       </span>
                     </div>
                   </div>

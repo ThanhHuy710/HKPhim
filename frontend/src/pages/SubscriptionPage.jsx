@@ -57,27 +57,28 @@ export default function SubscriptionPage() {
       return;
     }
 
-    // Kiểm tra nếu user đã có gói và chưa hết hạn
-    if (user.plan_id && user.plan_id !== plan.id) {
-      // Kiểm tra thời hạn gói hiện tại
+    // Kiểm tra nếu user đã có gói
+    if (user.plan_id) {
       try {
         const invoicesRes = await api.get("/invoices");
-        const userInvoices = invoicesRes.data.data.filter(inv => inv.user_id === user.id);
-        const latestInvoice = userInvoices[userInvoices.length - 1];
+        const userInvoices = invoicesRes.data.data.filter(inv => inv.user_id === user.id && inv.status === 'completed');
+        const activeInvoices = userInvoices.filter(inv => new Date(inv.end_date) > new Date());
+        const numActive = activeInvoices.length;
         
-        if (latestInvoice && latestInvoice.end_date) {
-          const endDate = new Date(latestInvoice.end_date);
-          const now = new Date();
-          
-          if (endDate > now) {
-            const daysLeft = Math.ceil((endDate - now) / (1000 * 60 * 60 * 24));
-            toast.warning(`Bạn đang sử dụng gói hiện tại (còn ${daysLeft} ngày). Mua gói mới sẽ thay thế gói cũ.`, {
-              duration: 5000
-            });
-          }
+        if (numActive > 0) {
+          toast.info(`Bạn đang có ${numActive} gói cước đang còn thời hạn . Mua thêm sẽ tăng tổng thời gian xem phim.`, {
+            duration: 4000
+          });
+        } else {
+          toast.info("Bạn sẽ mua thêm gói cước mới.", {
+            duration: 3000
+          });
         }
       } catch (error) {
         console.error("Error checking invoices:", error);
+        toast.info("Bạn sẽ mua thêm gói cước mới.", {
+          duration: 3000
+        });
       }
     }
 
@@ -90,20 +91,13 @@ export default function SubscriptionPage() {
     
     setProcessing(true);
     try {
-      // Tính ngày bắt đầu và kết thúc
-      const startDate = new Date();
-      const endDate = new Date();
-      endDate.setDate(endDate.getDate() + (selectedPlan.duration_days || 30));
-      
-      // Tạo hóa đơn
+      // Tạo hóa đơn (backend sẽ tính toán start_date và end_date)
       await api.post("/invoices", {
         user_id: user.id,
         plan_id: selectedPlan.id,
         total_price: parseFloat((selectedPlan.price * 1000).toFixed(2)),
         payment_method: "card",
-        status: "completed",
-        start_date: startDate.toISOString(),
-        end_date: endDate.toISOString()
+        status: "completed"
       });
 
       // Cập nhật plan_id cho user
@@ -301,7 +295,7 @@ export default function SubscriptionPage() {
                 <div className="flex items-start gap-3 bg-yellow-500/10 border border-yellow-500/50 rounded-xl p-4">
                   <AlertCircle size={20} className="text-yellow-400 shrink-0 mt-0.5" />
                   <p className="text-sm text-yellow-200">
-                    Gói mới sẽ thay thế gói hiện tại của bạn
+                    Gói mới sẽ cộng thêm thời gian vào gói hiện tại của bạn
                   </p>
                 </div>
               )}

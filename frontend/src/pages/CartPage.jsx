@@ -57,20 +57,13 @@ export default function CartPage() {
       // Lấy gói cuối cùng trong giỏ hàng để kích hoạt
       const lastItem = cartItems[cartItems.length - 1];
       
-      // Tính toán ngày bắt đầu và kết thúc (ISO-8601 DateTime format)
-      const startDate = new Date();
-      const endDate = new Date();
-      endDate.setDate(endDate.getDate() + (lastItem.plans.duration_days || 30));
-      
-      // Tạo hóa đơn cho giao dịch
+      // Tạo hóa đơn cho giao dịch (backend sẽ tính toán start_date và end_date)
       await api.post("/invoices", {
         user_id: user.id,
         plan_id: lastItem.plan_id,
         total_price: parseFloat((lastItem.plans.price * 1000).toFixed(2)), // Chuyển đổi sang VND dạng Decimal
         payment_method: "card",
-        status: "completed",
-        start_date: startDate.toISOString(),
-        end_date: endDate.toISOString()
+        status: "completed"
       });
 
       // Cập nhật plan_id cho user

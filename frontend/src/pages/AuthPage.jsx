@@ -182,8 +182,16 @@ export default function AuthPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-      <div className="relative w-full max-w-5xl h-[700px] rounded-3xl shadow-2xl overflow-hidden">
+    <div className="min-h-screen bg-linear-to-br from-gray-900 via-black to-gray-900 relative overflow-hidden flex items-center justify-center p-4">
+     
+      <div className="absolute inset-0 bg-[url(../../public/images/Banner.png)] bg-cover bg-center opacity-10"></div>
+      <div className="absolute inset-0 bg-linear-to-r from-black/80 via-black/60 to-transparent"></div>
+
+      
+      <div className="absolute top-20 left-10 w-32 h-32 bg-white/5 rounded-full blur-xl animate-pulse"></div>
+      <div className="absolute bottom-20 right-10 w-48 h-48 bg-gray-400/5 rounded-full blur-2xl animate-pulse delay-1000"></div>
+      <div className="absolute top-1/2 left-1/3 w-24 h-24 bg-white/5 rounded-full blur-lg animate-bounce delay-500"></div>
+      <div className="relative w-full max-w-5xl h-[700px] rounded-3xl shadow-2xl overflow-hidden z-10">
         
         {/* Container chứa 2 form */}
         <div className="relative w-full h-full flex">

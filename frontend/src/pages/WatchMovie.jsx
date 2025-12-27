@@ -103,28 +103,30 @@ export default function WatchMovie() {
         return false;
       }
 
-      // Kiểm tra gói cước còn hạn không
+      // Kiểm tra tổng thời gian còn lại từ tất cả gói cước
       const res = await api.get(`/invoices?user_id=${user.id}`);
       const invoices = res.data.data || [];
 
-      // Tìm hoá đơn hoạt động cho gói hiện tại
-      const activeInvoice = invoices.find(
-        (inv) =>
-          inv.plan_id === user.plan_id &&
-          inv.status === "completed" &&
-          inv.end_date &&
-          new Date(inv.end_date) > new Date()
-      );
+      // Tính tổng số ngày còn lại từ tất cả invoices completed
+      const completedInvoices = invoices.filter(inv => inv.status === 'completed');
+      let totalRemainingDays = 0;
+      completedInvoices.forEach(invoice => {
+        const end = new Date(invoice.end_date);
+        const now = new Date();
+        const diffTime = end - now;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        if (diffDays > 0) {
+          totalRemainingDays += diffDays;
+        }
+      });
 
-      if (!activeInvoice) {
-        setAgeError(
-          "Gói cước của bạn đã hết hạn. Vui lòng gia hạn để tiếp tục xem phim."
-        );
+      if (totalRemainingDays <= 0) {
+        setAgeError("Tất cả gói cước của bạn đã hết hạn. Vui lòng gia hạn để tiếp tục xem phim.");
         setAgeVerified(false);
         setSubscriptionValid(false);
         setCheckingAccess(false);
         setAccessGranted(false);
-        toast.error("Gói cước của bạn đã hết hạn! Vui lòng gia hạn.");
+        toast.error("Tất cả gói cước của bạn đã hết hạn! Vui lòng gia hạn.");
         setTimeout(() => {
           navigate("/subscription");
         }, 2000);
