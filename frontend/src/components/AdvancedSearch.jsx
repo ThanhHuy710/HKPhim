@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import api from "../lib/axios";
 import { toast } from "sonner";
 import { countries } from "../lib/Array";
@@ -13,7 +12,6 @@ export default function AdvancedSearch({AvSearch}) {
     country: "",
     year: "",
   });
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchGenres = async () => {
@@ -55,7 +53,7 @@ export default function AdvancedSearch({AvSearch}) {
         params.append(key, value);
       }
     });
-    navigate(`/search/criteria?${params.toString()}`);
+    window.location.href = `/search/criteria?${params.toString()}`;
     AvSearch(); //gọi ()=>setActiveAvSearch(false) 
   };
 

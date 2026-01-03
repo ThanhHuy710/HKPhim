@@ -22,7 +22,7 @@ import SubscriptionPage from "./pages/SubscriptionPage.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
 import FavouritePage from "./pages/FavouritePage.jsx";
 import PurchaseHistoryPage from "./pages/PurchaseHistoryPage.jsx";
-
+import HistoryPage from "./pages/HistoryPage.jsx";
 function App() {
   return (
     <AuthProvider>
@@ -44,6 +44,7 @@ function App() {
           <Route path="/subscription" element={<SubscriptionPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/favorites" element={<FavouritePage />} />
+          <Route path="/history" element={<HistoryPage />} />
           <Route path="/purchase-history" element={<PurchaseHistoryPage />} />
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/google/callback" element={<GoogleCallback />} />

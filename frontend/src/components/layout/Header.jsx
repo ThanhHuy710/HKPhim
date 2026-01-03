@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { Search, ChevronDown, User, LogOut, Lock, Heart, Settings, CreditCard, ShoppingCart, Receipt } from "lucide-react";
+import { Search, ChevronDown, User, LogOut, Lock, Heart, Settings, CreditCard, ShoppingCart, Receipt,History } from "lucide-react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useEffect, useState, useRef } from "react";
 import { toast } from "sonner";
@@ -57,10 +57,6 @@ export default function Header() {
 
         {/* Navigation - Left aligned after logo */}
         <nav className="hidden lg:flex items-center space-x-10 ml-16">
-          {/* <Link to="/phim-moi" className="text-white font-medium hover:text-yellow-400 transition-all duration-200 relative group">
-            <span className="relative z-10">Phim mới</span>
-            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-yellow-400 group-hover:w-full transition-all duration-300"></span>
-          </Link> */}
           <Link to="/search/series" className="text-white font-medium hover:text-yellow-400 transition-all duration-200 relative group">
             <span className="relative z-10">Phim bộ</span>
             <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-yellow-400 group-hover:w-full transition-all duration-300"></span>
@@ -69,10 +65,6 @@ export default function Header() {
             <span className="relative z-10">Phim lẻ</span>
             <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-yellow-400 group-hover:w-full transition-all duration-300"></span>
           </Link>
-          {/* <Link to="/subscription" className="text-white font-medium hover:text-yellow-400 transition-all duration-200 relative group">
-            <span className="relative z-10">Gói cước</span>
-            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-yellow-400 group-hover:w-full transition-all duration-300"></span>
-          </Link> */}
 
           {/* Dropdown Thể loại*/}
           <div className="relative group" ref={genreRef}>
@@ -223,6 +215,14 @@ export default function Header() {
                     >
                       <Heart size={20} />
                       <span>Yêu thích</span>
+                    </Link>
+                     <Link
+                      to={`/history?userId=${user.id}`}
+                      className="flex items-center gap-4 px-5 py-3 text-sm font-medium text-white hover:bg-yellow-400/10 hover:text-yellow-400 transition-all duration-200 border-b border-gray-800"
+                      onClick={() => setOpenUserMenu(false)}
+                    >
+                      <History size={20} />
+                      <span>Lịch sử</span>
                     </Link>
               
                   </div>

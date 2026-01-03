@@ -20,8 +20,25 @@ export const viewsService = {
   },
 
   create: async function (req) {
-    return await prisma.views.create({
-      data: req.body,
+    const { film_id, episode_id, user_id, progress } = req.body;
+    return await prisma.views.upsert({
+      where: {
+        film_id_episode_id_user_id: {
+          film_id: Number(film_id),
+          episode_id: Number(episode_id),
+          user_id: Number(user_id),
+        },
+      },
+      update: {
+        progress: Number(progress),
+        viewed_at: new Date(),
+      },
+      create: {
+        film_id: Number(film_id),
+        episode_id: Number(episode_id),
+        user_id: Number(user_id),
+        progress: Number(progress),
+      },
     });
   },
 
@@ -49,6 +66,14 @@ export const viewsService = {
     const id = Number(req.params.id);
     return await prisma.views.delete({
       where: { id },
+    });
+  },
+  //findByUserId
+  findByUserId: async function (req) {
+    const { userId } = req.params;
+    return await prisma.views.findMany({
+      where: { user_id: Number(userId) },
+      include: { films: true },
     });
   },
 };

@@ -6,7 +6,7 @@ import api from "../lib/axios";
 export default function SeasonAndEpisodes({ film }) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [seasons, setSeasons] = useState([]); // khởi tạo mảng
+  const [seasons, setSeasons] = useState([]);
   const [selectedFilmId, setSelectedFilmId] = useState(film?.id ?? null);
 
   const fetchSeasons = async (filmObj) => {

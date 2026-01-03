@@ -163,15 +163,16 @@ model users {
 
 model views {
   id         Int       @id @default(autoincrement())
-  film_id    Int?
-  episode_id Int?
-  user_id    Int?
+  film_id    Int
+  episode_id Int
+  user_id    Int
   viewed_at  DateTime  @default(now()) @db.Timestamp(0)
   progress   Int?
   films      films?    @relation(fields: [film_id], references: [id], onDelete: Cascade, map: "views_ibfk_1")
   episodes   episodes? @relation(fields: [episode_id], references: [id], onDelete: Cascade, map: "views_ibfk_2")
   users      users?    @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "views_ibfk_3")
 
+  @@unique([film_id, episode_id, user_id], map: "unique_view")
   @@index([episode_id], map: "episode_id")
   @@index([film_id], map: "film_id")
   @@index([user_id], map: "user_id")

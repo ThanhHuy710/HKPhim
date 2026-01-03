@@ -55,7 +55,7 @@ export default function Banner() {
 
   const currentMovie = films[currentSlide];
 
-  const handleWatchClick = async (filmId) => {
+  const handleWatchClick = async (film) => {
     // Kiểm tra nếu user đã đăng nhập
     if (!user) {
       toast.error('Vui lòng đăng nhập để xem phim!');
@@ -95,7 +95,7 @@ export default function Banner() {
       }
 
       // Tất cả kiểm tra đã pass, chuyển đến trang xem phim
-      navigate(`/watch/${filmId}`);
+      navigate(`/watch/${film.id}?episode=${film.episodes[0]?.id || ""}`);
     } catch (error) {
       console.error('Error checking subscription:', error);
       toast.error('Không thể kiểm tra gói cước. Vui lòng thử lại!');
@@ -162,7 +162,7 @@ export default function Banner() {
             {/* Action Buttons - Modern Design */}
             <div className="flex gap-4 pt-4 animate-fadeIn" style={{ animationDelay: '0.3s' }}>
               <button 
-                onClick={() => handleWatchClick(currentMovie.id)}
+                onClick={() => handleWatchClick(currentMovie)}
                 className="group flex items-center gap-3 px-8 py-3.5 bg-white text-black text-sm font-bold rounded-lg hover:bg-gray-100 transition-all duration-300 active:scale-95 shadow-2xl hover:shadow-white/30"
               >
                 <Play className="w-5 h-5 fill-black group-hover:scale-110 transition-transform duration-300" />

@@ -12797,9 +12797,9 @@ export namespace Prisma {
 
   export type ViewsGroupByOutputType = {
     id: number
-    film_id: number | null
-    episode_id: number | null
-    user_id: number | null
+    film_id: number
+    episode_id: number
+    user_id: number
     viewed_at: Date
     progress: number | null
     _count: ViewsCountAggregateOutputType | null
@@ -12862,9 +12862,9 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
-      film_id: number | null
-      episode_id: number | null
-      user_id: number | null
+      film_id: number
+      episode_id: number
+      user_id: number
       viewed_at: Date
       progress: number | null
     }, ExtArgs["result"]["views"]>
@@ -13463,7 +13463,7 @@ export namespace Prisma {
     /**
      * The data needed to create a views.
      */
-    data?: XOR<viewsCreateInput, viewsUncheckedCreateInput>
+    data: XOR<viewsCreateInput, viewsUncheckedCreateInput>
   }
 
   /**
@@ -14731,9 +14731,9 @@ export namespace Prisma {
     OR?: viewsWhereInput[]
     NOT?: viewsWhereInput | viewsWhereInput[]
     id?: IntFilter<"views"> | number
-    film_id?: IntNullableFilter<"views"> | number | null
-    episode_id?: IntNullableFilter<"views"> | number | null
-    user_id?: IntNullableFilter<"views"> | number | null
+    film_id?: IntFilter<"views"> | number
+    episode_id?: IntFilter<"views"> | number
+    user_id?: IntFilter<"views"> | number
     viewed_at?: DateTimeFilter<"views"> | Date | string
     progress?: IntNullableFilter<"views"> | number | null
     films?: XOR<FilmsNullableScalarRelationFilter, filmsWhereInput> | null
@@ -14743,9 +14743,9 @@ export namespace Prisma {
 
   export type viewsOrderByWithRelationInput = {
     id?: SortOrder
-    film_id?: SortOrderInput | SortOrder
-    episode_id?: SortOrderInput | SortOrder
-    user_id?: SortOrderInput | SortOrder
+    film_id?: SortOrder
+    episode_id?: SortOrder
+    user_id?: SortOrder
     viewed_at?: SortOrder
     progress?: SortOrderInput | SortOrder
     films?: filmsOrderByWithRelationInput
@@ -14755,24 +14755,25 @@ export namespace Prisma {
 
   export type viewsWhereUniqueInput = Prisma.AtLeast<{
     id?: number
+    film_id_episode_id_user_id?: viewsFilm_idEpisode_idUser_idCompoundUniqueInput
     AND?: viewsWhereInput | viewsWhereInput[]
     OR?: viewsWhereInput[]
     NOT?: viewsWhereInput | viewsWhereInput[]
-    film_id?: IntNullableFilter<"views"> | number | null
-    episode_id?: IntNullableFilter<"views"> | number | null
-    user_id?: IntNullableFilter<"views"> | number | null
+    film_id?: IntFilter<"views"> | number
+    episode_id?: IntFilter<"views"> | number
+    user_id?: IntFilter<"views"> | number
     viewed_at?: DateTimeFilter<"views"> | Date | string
     progress?: IntNullableFilter<"views"> | number | null
     films?: XOR<FilmsNullableScalarRelationFilter, filmsWhereInput> | null
     episodes?: XOR<EpisodesNullableScalarRelationFilter, episodesWhereInput> | null
     users?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
-  }, "id">
+  }, "id" | "film_id_episode_id_user_id">
 
   export type viewsOrderByWithAggregationInput = {
     id?: SortOrder
-    film_id?: SortOrderInput | SortOrder
-    episode_id?: SortOrderInput | SortOrder
-    user_id?: SortOrderInput | SortOrder
+    film_id?: SortOrder
+    episode_id?: SortOrder
+    user_id?: SortOrder
     viewed_at?: SortOrder
     progress?: SortOrderInput | SortOrder
     _count?: viewsCountOrderByAggregateInput
@@ -14787,9 +14788,9 @@ export namespace Prisma {
     OR?: viewsScalarWhereWithAggregatesInput[]
     NOT?: viewsScalarWhereWithAggregatesInput | viewsScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"views"> | number
-    film_id?: IntNullableWithAggregatesFilter<"views"> | number | null
-    episode_id?: IntNullableWithAggregatesFilter<"views"> | number | null
-    user_id?: IntNullableWithAggregatesFilter<"views"> | number | null
+    film_id?: IntWithAggregatesFilter<"views"> | number
+    episode_id?: IntWithAggregatesFilter<"views"> | number
+    user_id?: IntWithAggregatesFilter<"views"> | number
     viewed_at?: DateTimeWithAggregatesFilter<"views"> | Date | string
     progress?: IntNullableWithAggregatesFilter<"views"> | number | null
   }
@@ -15572,9 +15573,9 @@ export namespace Prisma {
 
   export type viewsUncheckedCreateInput = {
     id?: number
-    film_id?: number | null
-    episode_id?: number | null
-    user_id?: number | null
+    film_id: number
+    episode_id: number
+    user_id: number
     viewed_at?: Date | string
     progress?: number | null
   }
@@ -15589,18 +15590,18 @@ export namespace Prisma {
 
   export type viewsUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
-    film_id?: NullableIntFieldUpdateOperationsInput | number | null
-    episode_id?: NullableIntFieldUpdateOperationsInput | number | null
-    user_id?: NullableIntFieldUpdateOperationsInput | number | null
+    film_id?: IntFieldUpdateOperationsInput | number
+    episode_id?: IntFieldUpdateOperationsInput | number
+    user_id?: IntFieldUpdateOperationsInput | number
     viewed_at?: DateTimeFieldUpdateOperationsInput | Date | string
     progress?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type viewsCreateManyInput = {
     id?: number
-    film_id?: number | null
-    episode_id?: number | null
-    user_id?: number | null
+    film_id: number
+    episode_id: number
+    user_id: number
     viewed_at?: Date | string
     progress?: number | null
   }
@@ -15612,9 +15613,9 @@ export namespace Prisma {
 
   export type viewsUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
-    film_id?: NullableIntFieldUpdateOperationsInput | number | null
-    episode_id?: NullableIntFieldUpdateOperationsInput | number | null
-    user_id?: NullableIntFieldUpdateOperationsInput | number | null
+    film_id?: IntFieldUpdateOperationsInput | number
+    episode_id?: IntFieldUpdateOperationsInput | number
+    user_id?: IntFieldUpdateOperationsInput | number
     viewed_at?: DateTimeFieldUpdateOperationsInput | Date | string
     progress?: NullableIntFieldUpdateOperationsInput | number | null
   }
@@ -16392,6 +16393,12 @@ export namespace Prisma {
   export type EpisodesNullableScalarRelationFilter = {
     is?: episodesWhereInput | null
     isNot?: episodesWhereInput | null
+  }
+
+  export type viewsFilm_idEpisode_idUser_idCompoundUniqueInput = {
+    film_id: number
+    episode_id: number
+    user_id: number
   }
 
   export type viewsCountOrderByAggregateInput = {
@@ -17769,8 +17776,8 @@ export namespace Prisma {
 
   export type viewsUncheckedCreateWithoutEpisodesInput = {
     id?: number
-    film_id?: number | null
-    user_id?: number | null
+    film_id: number
+    user_id: number
     viewed_at?: Date | string
     progress?: number | null
   }
@@ -17866,9 +17873,9 @@ export namespace Prisma {
     OR?: viewsScalarWhereInput[]
     NOT?: viewsScalarWhereInput | viewsScalarWhereInput[]
     id?: IntFilter<"views"> | number
-    film_id?: IntNullableFilter<"views"> | number | null
-    episode_id?: IntNullableFilter<"views"> | number | null
-    user_id?: IntNullableFilter<"views"> | number | null
+    film_id?: IntFilter<"views"> | number
+    episode_id?: IntFilter<"views"> | number
+    user_id?: IntFilter<"views"> | number
     viewed_at?: DateTimeFilter<"views"> | Date | string
     progress?: IntNullableFilter<"views"> | number | null
   }
@@ -18566,8 +18573,8 @@ export namespace Prisma {
 
   export type viewsUncheckedCreateWithoutFilmsInput = {
     id?: number
-    episode_id?: number | null
-    user_id?: number | null
+    episode_id: number
+    user_id: number
     viewed_at?: Date | string
     progress?: number | null
   }
@@ -19236,8 +19243,8 @@ export namespace Prisma {
 
   export type viewsUncheckedCreateWithoutUsersInput = {
     id?: number
-    film_id?: number | null
-    episode_id?: number | null
+    film_id: number
+    episode_id: number
     viewed_at?: Date | string
     progress?: number | null
   }
@@ -19636,8 +19643,8 @@ export namespace Prisma {
 
   export type viewsCreateManyEpisodesInput = {
     id?: number
-    film_id?: number | null
-    user_id?: number | null
+    film_id: number
+    user_id: number
     viewed_at?: Date | string
     progress?: number | null
   }
@@ -19651,16 +19658,16 @@ export namespace Prisma {
 
   export type viewsUncheckedUpdateWithoutEpisodesInput = {
     id?: IntFieldUpdateOperationsInput | number
-    film_id?: NullableIntFieldUpdateOperationsInput | number | null
-    user_id?: NullableIntFieldUpdateOperationsInput | number | null
+    film_id?: IntFieldUpdateOperationsInput | number
+    user_id?: IntFieldUpdateOperationsInput | number
     viewed_at?: DateTimeFieldUpdateOperationsInput | Date | string
     progress?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type viewsUncheckedUpdateManyWithoutEpisodesInput = {
     id?: IntFieldUpdateOperationsInput | number
-    film_id?: NullableIntFieldUpdateOperationsInput | number | null
-    user_id?: NullableIntFieldUpdateOperationsInput | number | null
+    film_id?: IntFieldUpdateOperationsInput | number
+    user_id?: IntFieldUpdateOperationsInput | number
     viewed_at?: DateTimeFieldUpdateOperationsInput | Date | string
     progress?: NullableIntFieldUpdateOperationsInput | number | null
   }
@@ -19696,8 +19703,8 @@ export namespace Prisma {
 
   export type viewsCreateManyFilmsInput = {
     id?: number
-    episode_id?: number | null
-    user_id?: number | null
+    episode_id: number
+    user_id: number
     viewed_at?: Date | string
     progress?: number | null
   }
@@ -19796,16 +19803,16 @@ export namespace Prisma {
 
   export type viewsUncheckedUpdateWithoutFilmsInput = {
     id?: IntFieldUpdateOperationsInput | number
-    episode_id?: NullableIntFieldUpdateOperationsInput | number | null
-    user_id?: NullableIntFieldUpdateOperationsInput | number | null
+    episode_id?: IntFieldUpdateOperationsInput | number
+    user_id?: IntFieldUpdateOperationsInput | number
     viewed_at?: DateTimeFieldUpdateOperationsInput | Date | string
     progress?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type viewsUncheckedUpdateManyWithoutFilmsInput = {
     id?: IntFieldUpdateOperationsInput | number
-    episode_id?: NullableIntFieldUpdateOperationsInput | number | null
-    user_id?: NullableIntFieldUpdateOperationsInput | number | null
+    episode_id?: IntFieldUpdateOperationsInput | number
+    user_id?: IntFieldUpdateOperationsInput | number
     viewed_at?: DateTimeFieldUpdateOperationsInput | Date | string
     progress?: NullableIntFieldUpdateOperationsInput | number | null
   }
@@ -20006,8 +20013,8 @@ export namespace Prisma {
 
   export type viewsCreateManyUsersInput = {
     id?: number
-    film_id?: number | null
-    episode_id?: number | null
+    film_id: number
+    episode_id: number
     viewed_at?: Date | string
     progress?: number | null
   }
@@ -20113,16 +20120,16 @@ export namespace Prisma {
 
   export type viewsUncheckedUpdateWithoutUsersInput = {
     id?: IntFieldUpdateOperationsInput | number
-    film_id?: NullableIntFieldUpdateOperationsInput | number | null
-    episode_id?: NullableIntFieldUpdateOperationsInput | number | null
+    film_id?: IntFieldUpdateOperationsInput | number
+    episode_id?: IntFieldUpdateOperationsInput | number
     viewed_at?: DateTimeFieldUpdateOperationsInput | Date | string
     progress?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type viewsUncheckedUpdateManyWithoutUsersInput = {
     id?: IntFieldUpdateOperationsInput | number
-    film_id?: NullableIntFieldUpdateOperationsInput | number | null
-    episode_id?: NullableIntFieldUpdateOperationsInput | number | null
+    film_id?: IntFieldUpdateOperationsInput | number
+    episode_id?: IntFieldUpdateOperationsInput | number
     viewed_at?: DateTimeFieldUpdateOperationsInput | Date | string
     progress?: NullableIntFieldUpdateOperationsInput | number | null
   }
