@@ -1,5 +1,11 @@
 import { useEffect, useState, useRef } from "react";
-import { Trash2, RefreshCw, MoreHorizontal, Lock, AlertCircle } from "lucide-react";
+import {
+  Trash2,
+  RefreshCw,
+  MoreHorizontal,
+  Lock,
+  AlertCircle,
+} from "lucide-react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import api from "../lib/axios";
 import { toast } from "sonner";
@@ -37,7 +43,7 @@ export default function MovieDetail() {
   useEffect(() => {
     const checkAccess = async () => {
       setCheckingAccess(true);
-      window.scrollTo(0,0);
+      window.scrollTo(0, 0);
       // Đợi user context load xong
       if (user === undefined) {
         return;
@@ -134,7 +140,9 @@ export default function MovieDetail() {
     // Kiểm tra xem tuổi của user có đủ để xem phim này không
     if (!canWatchFilm(user.birthday, film.age_rating)) {
       const requiredAge = parseAgeRating(film.age_rating);
-      setAgeError(`Phim này yêu cầu độ tuổi ${requiredAge}+. Bạn không đủ tuổi để xem nội dung này.`);
+      setAgeError(
+        `Phim này yêu cầu độ tuổi ${requiredAge}+. Bạn không đủ tuổi để xem nội dung này.`
+      );
       setAgeVerified(false);
       toast.error(`Bạn phải từ ${requiredAge} tuổi trở lên để xem phim này!`);
       return;
@@ -200,12 +208,12 @@ export default function MovieDetail() {
     setDeleteInProgress(true);
     try {
       await api.delete(`/feedbacks/${deleteModalId}`);
-      setComments(prev => prev.filter(c => c.id !== deleteModalId));
-      toast.success('Xóa bình luận thành công');
+      setComments((prev) => prev.filter((c) => c.id !== deleteModalId));
+      toast.success("Xóa bình luận thành công");
       setDeleteModalId(null);
     } catch (error) {
-      console.error('Lỗi xóa bình luận:', error);
-      toast.error('Xóa bình luận thất bại');
+      console.error("Lỗi xóa bình luận:", error);
+      toast.error("Xóa bình luận thất bại");
     } finally {
       setDeleteInProgress(false);
     }
@@ -311,17 +319,25 @@ export default function MovieDetail() {
       {showBirthdayModal && (
         <RequireBirthdayModal user={user} onUpdate={handleBirthdayUpdate} />
       )}
-      
+
       <div className="grid grid-cols-6 grid-rows-10 gap-4 text-white">
         <div className="col-span-4 row-span-4">
           {ageVerified ? (
-            <iframe
-              src={getEmbedUrl(film.poster_video_url)}
-              title="YouTube video"
-              className="w-full h-[280px] md:h-[520px] lg:h-[640px] rounded-md bg-black"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
+            film.poster_video_url ? (
+              <iframe
+                src={getEmbedUrl(film.poster_video_url)}
+                title="YouTube video"
+                className="w-full h-[280px] md:h-[520px] lg:h-[640px] rounded-md bg-black"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            ) : (
+              <img
+                src="../public/images/imgNotAvailable.png"
+                alt="Not Available"
+                className="w-full"
+              />
+            )
           ) : (
             <div className="w-full h-full min-h-[400px] flex items-center justify-center bg-gray-900 rounded-lg p-8">
               <div className="text-center max-w-md">
@@ -335,9 +351,12 @@ export default function MovieDetail() {
                 </h3>
                 <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 mb-4">
                   <div className="flex items-start gap-3">
-                    <AlertCircle size={20} className="text-red-500 shrink-0 mt-0.5" />
+                    <AlertCircle
+                      size={20}
+                      className="text-red-500 shrink-0 mt-0.5"
+                    />
                     <p className="text-red-400 text-sm text-left">
-                      {ageError || 'Quyền truy cập bị từ chối'}
+                      {ageError || "Quyền truy cập bị từ chối"}
                     </p>
                   </div>
                 </div>
@@ -346,7 +365,7 @@ export default function MovieDetail() {
                 </p>
                 <div className="flex gap-3 justify-center">
                   <button
-                    onClick={() => navigate('/')}
+                    onClick={() => navigate("/")}
                     className="px-6 py-3 bg-yellow-400 hover:bg-yellow-500 text-black font-semibold rounded-lg transition-all duration-200"
                   >
                     Quay về Trang chủ
@@ -369,8 +388,12 @@ export default function MovieDetail() {
         <div className="col-span-2 row-span-6 row-start-5">
           <div className="flex flex-col space-y-4 text-white">
             <div className="flex gap-3">
-                <h2 className="text-xl font-semibold mb-2">Lượt xem: {film.view_count}</h2>
-                <h2 className="text-xl font-semibold mb-2">Đánh giá trung bình: {film.average_rating}/10</h2>
+              <h2 className="text-xl font-semibold mb-2">
+                Lượt xem: {film.view_count}
+              </h2>
+              <h2 className="text-xl font-semibold mb-2">
+                Đánh giá trung bình: {film.average_rating}/10
+              </h2>
             </div>
 
             {/* Tên phim */}
@@ -411,13 +434,16 @@ export default function MovieDetail() {
             <button
               type="button"
               onClick={() => {
-                  if (commentsRef.current) {
-                    // use scrollIntoView so CSS `scroll-margin-top` is respected
-                    commentsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                  }
-                  // focus shortly after scroll starts
-                  setTimeout(() => commentInputRef.current?.focus(), 400);
-                }}
+                if (commentsRef.current) {
+                  // use scrollIntoView so CSS `scroll-margin-top` is respected
+                  commentsRef.current.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                  });
+                }
+                // focus shortly after scroll starts
+                setTimeout(() => commentInputRef.current?.focus(), 400);
+              }}
               className="flex flex-col items-center cursor-pointer hover:text-blue-400 transition-transform active:scale-95"
             >
               <img
@@ -427,7 +453,7 @@ export default function MovieDetail() {
               />
               <p className="text-sm">Bình luận</p>
             </button>
-             <FavoriteButton filmId={film.id} userId={user.id} />
+            <FavoriteButton filmId={film.id} userId={user.id} />
             <Link className="flex flex-col items-center cursor-pointer hover:text-blue-400">
               <img
                 src="../public/images/Share.png"
@@ -456,14 +482,21 @@ export default function MovieDetail() {
           </div>
         </div>
       </div>
-      
+
       {/* Comments Section - moved below entire layout to avoid overlap */}
-      <div id="comments" ref={commentsRef} className="mt-6 max-w-4xl mx-auto text-white scroll-offset-target">
+      <div
+        id="comments"
+        ref={commentsRef}
+        className="mt-6 max-w-4xl mx-auto text-white scroll-offset-target"
+      >
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-4">
             <h2 className="text-2xl font-bold flex items-center gap-2">
-              <span className="w-7 h-7 bg-gray-800 rounded-full flex items-center justify-center">💬</span>
-              Bình luận <span className="text-gray-400 text-sm">({comments.length})</span>
+              <span className="w-7 h-7 bg-gray-800 rounded-full flex items-center justify-center">
+                💬
+              </span>
+              Bình luận{" "}
+              <span className="text-gray-400 text-sm">({comments.length})</span>
             </h2>
           </div>
         </div>
@@ -474,8 +507,22 @@ export default function MovieDetail() {
               const val = i + 1;
               const filled = hoverRating ? val <= hoverRating : val <= rating;
               return (
-                <button key={val} onMouseEnter={() => setHoverRating(val)} onMouseLeave={() => setHoverRating(0)} onClick={() => setRating(val)} className="p-1">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill={filled ? '#F59E0B' : 'none'} stroke="#F59E0B" strokeWidth="1.5" className="inline-block">
+                <button
+                  key={val}
+                  onMouseEnter={() => setHoverRating(val)}
+                  onMouseLeave={() => setHoverRating(0)}
+                  onClick={() => setRating(val)}
+                  className="p-1"
+                >
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill={filled ? "#F59E0B" : "none"}
+                    stroke="#F59E0B"
+                    strokeWidth="1.5"
+                    className="inline-block"
+                  >
                     <path d="M12 .587l3.668 7.431L24 9.748l-6 5.857L19.335 24 12 20.201 4.665 24 6 15.605 0 9.748l8.332-1.73z" />
                   </svg>
                 </button>
@@ -493,31 +540,38 @@ export default function MovieDetail() {
               className="w-full p-4 rounded-lg bg-gray-800 text-white min-h-[120px] resize-none"
               maxLength={1000}
             />
-            <div className="absolute right-4 top-4 text-gray-400 text-xs">{commentText.length}/1000</div>
+            <div className="absolute right-4 top-4 text-gray-400 text-xs">
+              {commentText.length}/1000
+            </div>
           </div>
 
           <div className="flex items-center justify-end mt-3">
             <div className="flex items-center gap-3">
-              <button onClick={async () => {
-                if (!user) { navigate('/auth'); return; }
-                if (!commentText.trim() && rating === 0) return;
-                try {
-                  const payload = { film_id: Number(id) };
-                  if (commentText.trim()) payload.comment = commentText.trim();
-                  if (rating > 0) payload.rating = rating;
-                  payload.user_id = user.id;
-                  const res = await api.post('/feedbacks', payload);
-                  setComments(prev => [res.data.data, ...prev]);
-                  setCommentText('');
-                  setRating(0);
-                } catch (error) {
-                  console.error('Lỗi gửi bình luận/đánh giá:', error);
-                  toast.error('Gửi bình luận thất bại');
-                }
-              }} className="flex items-center gap-2 px-4 py-2 bg-yellow-400 text-black font-semibold rounded-md">
+              <button
+                onClick={async () => {
+                  if (!user) {
+                    navigate("/auth");
+                    return;
+                  }
+                  if (!commentText.trim() && rating === 0) return;
+                  try {
+                    const payload = { film_id: Number(id) };
+                    if (commentText.trim())
+                      payload.comment = commentText.trim();
+                    if (rating > 0) payload.rating = rating;
+                    payload.user_id = user.id;
+                    const res = await api.post("/feedbacks", payload);
+                    setComments((prev) => [res.data.data, ...prev]);
+                    setCommentText("");
+                    setRating(0);
+                  } catch (error) {
+                    console.error("Lỗi gửi bình luận/đánh giá:", error);
+                    toast.error("Gửi bình luận thất bại");
+                  }
+                }}
+                className="flex items-center gap-2 px-4 py-2 bg-yellow-400 text-black font-semibold rounded-md"
+              >
                 <span>Gửi</span>
-                
-              
               </button>
             </div>
           </div>
@@ -530,28 +584,61 @@ export default function MovieDetail() {
             comments.map((c) => (
               <div key={c.id} className="flex gap-4 p-4 bg-gray-900 rounded-lg">
                 <div className="w-12">
-                  <img src={c.users?.avatar || '/images/default-avatar.png'} alt="avatar" className="w-12 h-12 rounded-full object-cover" />
+                  <img
+                    src={c.users?.avatar || "/images/default-avatar.png"}
+                    alt="avatar"
+                    className="w-12 h-12 rounded-full object-cover"
+                  />
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center justify-between mb-1">
                     <div className="flex items-center gap-3">
-                      <div className="font-semibold">{c.users?.fullname || c.users?.username || 'Người dùng'}</div>
+                      <div className="font-semibold">
+                        {c.users?.fullname || c.users?.username || "Người dùng"}
+                      </div>
                       {c.rating ? (
                         <div className="flex items-center gap-1 text-sm text-yellow-400">
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="#F59E0B" stroke="#F59E0B" strokeWidth="1"><path d="M12 .587l3.668 7.431L24 9.748l-6 5.857L19.335 24 12 20.201 4.665 24 6 15.605 0 9.748l8.332-1.73z"/></svg>
-                          <span className="text-xs text-gray-200">{c.rating}/10</span>
+                          <svg
+                            width="14"
+                            height="14"
+                            viewBox="0 0 24 24"
+                            fill="#F59E0B"
+                            stroke="#F59E0B"
+                            strokeWidth="1"
+                          >
+                            <path d="M12 .587l3.668 7.431L24 9.748l-6 5.857L19.335 24 12 20.201 4.665 24 6 15.605 0 9.748l8.332-1.73z" />
+                          </svg>
+                          <span className="text-xs text-gray-200">
+                            {c.rating}/10
+                          </span>
                         </div>
                       ) : null}
-                      <div className="text-xs text-gray-400">{new Date(c.created_at).toLocaleString('vi-VN')}</div>
+                      <div className="text-xs text-gray-400">
+                        {new Date(c.created_at).toLocaleString("vi-VN")}
+                      </div>
                     </div>
                     <div className="flex items-center gap-2 text-gray-400">
-                      <button title="Làm mới" className="rounded-full bg-gray-800 w-8 h-8 flex items-center justify-center"><RefreshCw size={14} /></button>
-                      <button title="Tùy chọn" className="rounded-full bg-gray-800 w-8 h-8 flex items-center justify-center"><MoreHorizontal size={14} /></button>
-                      { (c.users?.id === user?.id || c.user_id === user?.id) && (
-                        <button title="Xóa" onClick={() => handleDeleteFeedback(c.id)} className="rounded-full bg-red-700 hover:bg-red-600 w-8 h-8 flex items-center justify-center">
+                      <button
+                        title="Làm mới"
+                        className="rounded-full bg-gray-800 w-8 h-8 flex items-center justify-center"
+                      >
+                        <RefreshCw size={14} />
+                      </button>
+                      <button
+                        title="Tùy chọn"
+                        className="rounded-full bg-gray-800 w-8 h-8 flex items-center justify-center"
+                      >
+                        <MoreHorizontal size={14} />
+                      </button>
+                      {(c.users?.id === user?.id || c.user_id === user?.id) && (
+                        <button
+                          title="Xóa"
+                          onClick={() => handleDeleteFeedback(c.id)}
+                          className="rounded-full bg-red-700 hover:bg-red-600 w-8 h-8 flex items-center justify-center"
+                        >
                           <Trash2 size={14} />
                         </button>
-                      ) }
+                      )}
                     </div>
                   </div>
                   <div className="text-gray-200">{c.comment}</div>
@@ -563,14 +650,34 @@ export default function MovieDetail() {
       </div>
       {deleteModalId !== null && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => { if(!deleteInProgress) setDeleteModalId(null); }} />
+          <div
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            onClick={() => {
+              if (!deleteInProgress) setDeleteModalId(null);
+            }}
+          />
           <div className="bg-gray-900 text-white rounded-lg p-6 z-10 w-full max-w-md mx-4">
-            <h3 className="text-lg font-semibold mb-2">Xác nhận xóa bình luận</h3>
-            <p className="text-sm text-gray-300 mb-4">Bạn có chắc muốn xóa bình luận này? Hành động này không thể hoàn tác.</p>
+            <h3 className="text-lg font-semibold mb-2">
+              Xác nhận xóa bình luận
+            </h3>
+            <p className="text-sm text-gray-300 mb-4">
+              Bạn có chắc muốn xóa bình luận này? Hành động này không thể hoàn
+              tác.
+            </p>
             <div className="flex justify-end gap-3">
-              <button onClick={() => setDeleteModalId(null)} disabled={deleteInProgress} className="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded">Hủy</button>
-              <button onClick={confirmDeleteFeedback} disabled={deleteInProgress} className="px-4 py-2 bg-red-600 hover:bg-red-500 rounded text-white">
-                {deleteInProgress ? 'Đang xóa...' : 'Xóa'}
+              <button
+                onClick={() => setDeleteModalId(null)}
+                disabled={deleteInProgress}
+                className="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded"
+              >
+                Hủy
+              </button>
+              <button
+                onClick={confirmDeleteFeedback}
+                disabled={deleteInProgress}
+                className="px-4 py-2 bg-red-600 hover:bg-red-500 rounded text-white"
+              >
+                {deleteInProgress ? "Đang xóa..." : "Xóa"}
               </button>
             </div>
           </div>
