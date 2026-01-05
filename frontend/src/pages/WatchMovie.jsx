@@ -285,6 +285,11 @@ export default function WatchMovie() {
                 }
                 filmId={film.id}
                 currentViewCount={film.view_count}
+                userId={user.id}
+                episodeId={
+                  film.episodes?.find((ep) => ep.id === Number(episodeId))
+                    ?.id || film.episodes?.[0]?.id
+                }
               />
             ) : (
               <div className="w-full h-full min-h-[400px] flex items-center justify-center bg-gray-900 rounded-lg p-8">

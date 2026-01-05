@@ -9,5 +9,5 @@ viewsRouter.get("/", viewsController.findAll);
 viewsRouter.get("/:id", viewsController.findOne);
 viewsRouter.patch("/:id", viewsController.update);
 viewsRouter.delete("/:id", viewsController.remove);
-
+viewsRouter.get("/user/:userId", viewsController.findByUserId);
 export default viewsRouter;

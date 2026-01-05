@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Hls from "hls.js";
 import api from "../lib/axios";
 
-export default function VideoPlayer({ videoUrl, filmId, currentViewCount }) {
+export default function VideoPlayer({ videoUrl, filmId, currentViewCount, userId, episodeId }) {
   const videoRef = useRef(null);
   const [viewPosted, setViewPosted] = useState(false);
 
@@ -24,15 +24,23 @@ export default function VideoPlayer({ videoUrl, filmId, currentViewCount }) {
 
     // Nếu đã xem >= 10s và chưa gọi API thì gọi
     if (video.currentTime >= 10 && !viewPosted) {
+      
       try {
+        console.log("me", filmId, userId, episodeId);
+        // Tăng view_count trên server
         await api.patch(`/films/${filmId}`, {
           view_count: currentViewCount + 1,
         });
+        // Ghi nhận view vào bảng views
+        await api.post(`/views`, { film_id: filmId, 
+          episode_id: Number(episodeId), 
+          user_id: userId, 
+          progress: 10 
+        });
 
         setViewPosted(true); // tránh gọi nhiều lần
-        console.log("Đã tăng view_count sau 10s");
       } catch (err) {
-        console.error("Không thể tăng view_count:", err);
+        console.error("lỗi ở phía server", err);
       }
     }
   };
